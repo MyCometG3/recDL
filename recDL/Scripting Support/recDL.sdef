@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<!--
+ recDL.sdef
+ recDL
+ 
+ Created by Takashi Mochizuki on 2017/10/08.
+ Copyright (c) 2017年 MyCometG3. All rights reserved.
+
+ /* This software is released under the MIT License, see LICENSE.txt. */
+ 
+-->
+<dictionary xmlns:xi="http://www.w3.org/2003/XInclude" title="recDL Terminology">
+    <xi:include href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef" xpointer="xpointer(/dictionary/suite)"/>
+
+    <!-- ###################################################################################################### -->
+    
+    <suite name="recDL Suite" code="RecD" description="recDL Script Suite">
+        <enumeration name="saveable file format" code="savf" hidden="yes">
+            <enumerator name="dummy" code="RecF" description="A dummy file format." />
+        </enumeration>
+        
+        <command name="restart session" code="RecDRest" description="Restart capture session.">
+            <cocoa class="recDL.CustomCommand"/>
+        </command>
+        
+        <command name="stop recording" code="RecDStop" description="Stop recording DV input.">
+            <cocoa class="recDL.CustomCommand"/>
+        </command>
+        
+        <command name="start recording" code="RecDStrt" description="Start recording DV input into QuickTime movie.">
+            <cocoa class="recDL.CustomCommand"/>
+            <parameter name="in" code="kfil" type="file" optional="yes" description="The file in which to write the recording.">
+                <cocoa key="fileURL"/>
+            </parameter>
+            <parameter name="limit in seconds" code="ksec" type="real" optional="yes" description="Limit the recording duration in seconds.">
+                <cocoa key="maxSeconds"/>
+            </parameter>
+            <parameter name="autoQuit" code="atQt" type="boolean" optional="yes" description="Quit application after recording is completed.">
+                <cocoa key="autoQuit"/>
+            </parameter>
+        </command>
+
+        <class-extension extends="application">
+            <cocoa class="NSApplication" />
+            
+            <property name="currentSession" code="ASes" type="sessionInfo" access="r" description="Default capture session.">
+                <cocoa key="sessionItem" />
+            </property>
+            <property name="currentRecording" code="ARec" type="recordingInfo" access="r" description="Default recording information.">
+                <cocoa key="recordingItem" />
+            </property>
+            <property name="movie folder" code="AFld" type="file" access="rw" description="Default Movie folder.">
+                <cocoa key="folderURL"/>
+            </property>
+            <property name="videoPreview" code="AVPr" type="boolean" access="rw" description="Preview Video state.">
+                <cocoa key="useVideoPreview"/>
+            </property>
+            <property name="audioPreview" code="AAPr" type="boolean" access="rw" description="Preview Audio state.">
+                <cocoa key="useAudioPreview"/>
+            </property>
+            <responds-to command="restart session">
+                <cocoa method="handleRestartSession:"/>
+            </responds-to>
+            <responds-to command="stop recording">
+                <cocoa method="handleStopRecord:"/>
+            </responds-to>
+            <responds-to command="start recording">
+                <cocoa method="handleStartRecord:"/>
+            </responds-to>
+        </class-extension>
+        
+        <class name="recordingInfo" code="RItm" description="A recording item." inherits="item">
+            <cocoa class="recDL.RDL1Recording" />
+            <property name="name" code="pnam" type="text" access="r" description="The name of the recording.">
+                <cocoa key="name" />
+            </property>
+            <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the recording.">
+                <cocoa key="uniqueID" />
+            </property>
+            <property name="running" code="Rnng" type="boolean" access="r" description="Boolean if the recording is running.">
+                <cocoa key="running" />
+            </property>
+            <property name="duration in seconds" code="DSec" type="number" access="r" description="Current/Last recording duration.">
+                <cocoa key="durationInSec" />
+            </property>
+            <property name="start date" code="StrD" type="date" access="r" description="Timestamp when last recording started.">
+                <cocoa key="startDate" />
+            </property>
+            <property name="end date" code="EndD" type="date" access="r" description="Timestamp when last recording finished.">
+                <cocoa key="endDate" />
+            </property>
+            <property name="file" code="file" type="file" access="r" description="Its location on disk, if it has one.">
+                <cocoa key="fileURL"/>
+            </property>
+        </class>
+        
+        <class name="sessionInfo" code="SItm" description="A capture session." inherits="item">
+            <cocoa class="recDL.RDL1Session" />
+            <property name="name" code="pnam" type="text" access="r" description="The name of the session">
+                <cocoa key="name" />
+            </property>
+            <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the session.">
+                <cocoa key="uniqueID" />
+            </property>
+            <property name="running" code="Rnng" type="boolean" access="r" description="Boolean if the capture session is running.">
+                <cocoa key="running" />
+            </property>
+            <property name="currentDevice" code="Devi" type="deviceInfo" access="r" description="The DeckLink Device">
+                <cocoa key="currentDevice" />
+            </property>
+            
+            <!-- TODO -->
+<!--        <element type="deviceInfo" access="r">-->
+<!--            <cocoa key="deviceList" />-->
+<!--        </element>-->
+        </class>
+        
+        <class name="deviceInfo" code="dInf" description="AVCaptureDevice information." inherits="item">
+            <cocoa class="recDL.RDL1DeviceInfo" />
+            <property name="name" code="pnam" type="text" access="r" description="The name of the item.">
+                <cocoa key="name" />
+            </property>
+            <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the item.">
+                <cocoa key="uniqueID" />
+            </property>
+
+            <property name="modelName" code="ModN" type="text" access="r" description="modelName">
+                <cocoa key="modelName"/>
+            </property>
+            <property name="displayName" code="DisN" type="text" access="r" description="displayName">
+                <cocoa key="displayName"/>
+            </property>
+            <property name="persistentID" code="PerI" type="integer" access="r" description="persistentID">
+                <cocoa key="persistentID"/>
+            </property>
+            <property name="topologicalID" code="TopI" type="integer" access="r" description="topologicalID">
+                <cocoa key="topologicalID"/>
+            </property>
+            
+            <property name="supportFlag" code="sFlg" type="integer" access="r" description="supportFlag">
+                <cocoa key="supportFlag"/>
+            </property>
+            <property name="supportCapture" code="sCap" type="boolean" access="r" description="supportCapture">
+                <cocoa key="supportCapture"/>
+            </property>
+            <property name="supportPlayback" code="sPly" type="boolean" access="r" description="supportPlayback">
+                <cocoa key="supportPlayback"/>
+            </property>
+            <property name="supportKeying" code="sKey" type="boolean" access="r" description="supportKeying">
+                <cocoa key="supportKeying"/>
+            </property>
+            <property name="supportInputFormatDetection" code="sIFD" type="boolean" access="r" description="supportInputFormatDetection">
+                <cocoa key="supportInputFormatDetection"/>
+            </property>
+            
+            <!--
+             <element type="supportedOutputVideoSetting" access="r">
+             <cocoa key="outputVideoSettingArray" />
+             </element>
+            <property name="outputVideoSetting" code="ouVS" type="videoSetting" access="r" description="outputVideoSetting">
+                <cocoa key="outputVideoSetting"/>
+            </property>
+            <property name="outputAudioSetting" code="ouAS" type="audioSetting" access="r" description="outputAudioSetting">
+                <cocoa key="outputAudioSetting"/>
+            </property>
+             -->
+
+            <element type="supportedInputVideoSetting" access="r">
+                <cocoa key="inputVideoSettingArray" />
+            </element>
+            <property name="inputVideoSetting" code="inVS" type="videoSetting" access="r" description="inputVideoSetting">
+                <cocoa key="inputVideoSetting"/>
+            </property>
+            <property name="inputAudioSetting" code="inAS" type="audioSetting" access="r" description="inputAudioSetting">
+                <cocoa key="inputAudioSetting"/>
+            </property>
+        </class>
+        
+        <!--
+        <class name="supportedOutputVideoSetting" code="sOVS" description="supported output videoSetting." inherits="videoSetting">
+            <cocoa class="recDL.RDL1VideoSetting" />
+        </class>
+         -->
+
+        <class name="supportedInputVideoSetting" code="sIVS" description="supported input videoSetting." inherits="videoSetting">
+            <cocoa class="recDL.RDL1VideoSetting" />
+        </class>
+        
+        <class name="videoSetting" code="VidS" description="videoSetting." inherits="item">
+            <cocoa class="recDL.RDL1VideoSetting" />
+            <property name="name" code="pnam" type="text" access="r" description="The name of the item.">
+                <cocoa key="name" />
+            </property>
+            <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the item.">
+                <cocoa key="uniqueID" />
+            </property>
+
+            <property name="width" code="Widt" type="integer" access="r" description="width">
+                <cocoa key="width"/>
+            </property>
+            <property name="height" code="Heig" type="integer" access="r" description="height">
+                <cocoa key="height"/>
+            </property>
+            <property name="modeName" code="ModN" type="text" access="r" description="modeName">
+                <cocoa key="modeName"/>
+            </property>
+            <property name="duration" code="Dura" type="integer" access="r" description="duration">
+                <cocoa key="duration"/>
+            </property>
+            <property name="timeScale" code="TSca" type="integer" access="r" description="timeScale">
+                <cocoa key="timeScale"/>
+            </property>
+            <property name="displayMode" code="disM" type="text" access="r" description="displayMode">
+                <cocoa key="displayMode"/>
+            </property>
+            <property name="fieldDominance" code="fDom" type="text" access="r" description="fieldDominance">
+                <cocoa key="fieldDominance"/>
+            </property>
+            <property name="displayModeFlag" code="diMF" type="integer" access="r" description="displayModeFlag">
+                <cocoa key="displayModeFlag"/>
+            </property>
+            <property name="isHD" code="isHD" type="boolean" access="r" description="isHD">
+                <cocoa key="isHD"/>
+            </property>
+            <property name="useVITC" code="VitC" type="boolean" access="r" description="useVITC">
+                <cocoa key="useVITC"/>
+            </property>
+            <property name="useRP188" code="Rp18" type="boolean" access="r" description="useRP188">
+                <cocoa key="useRP188"/>
+            </property>
+            <property name="pixelFormat" code="pixF" type="text" access="r" description="pixelFormat">
+                <cocoa key="pixelFormat"/>
+            </property>
+            <property name="inputFlag" code="iFlg" type="integer" access="r" description="inputFlag">
+                <cocoa key="inputFlag"/>
+            </property>
+            <property name="outputFlag" code="oFlg" type="integer" access="r" description="outputFlag">
+                <cocoa key="outputFlag"/>
+            </property>
+            <property name="displayModeSupport" code="diMS" type="integer" access="r" description="displayModeSupport">
+                <cocoa key="displayModeSupport"/>
+            </property>
+            <property name="rowBytes" code="rowB" type="integer" access="r" description="rowBytes">
+                <cocoa key="rowBytes"/>
+            </property>
+        </class>
+        
+        <class name="audioSetting" code="AudS" description="audioSetting." inherits="item">
+            <cocoa class="recDL.RDL1AudioSetting" />
+            <property name="name" code="pnam" type="text" access="r" description="The name of the item.">
+                <cocoa key="name" />
+            </property>
+            <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the item.">
+                <cocoa key="uniqueID" />
+            </property>
+
+            <property name="sampleSize" code="sSiz" type="integer" access="r" description="sampleSize">
+                <cocoa key="sampleSize"/>
+            </property>
+            <property name="channelCount" code="cCnt" type="integer" access="r" description="channelCount">
+                <cocoa key="channelCount"/>
+            </property>
+            <property name="sampleType" code="sTyp" type="integer" access="r" description="sampleType">
+                <cocoa key="sampleType"/>
+            </property>
+            <property name="sampleRate" code="sRat" type="integer" access="r" description="sampleRate">
+                <cocoa key="sampleRate"/>
+            </property>
+        </class>
+
+    </suite>
+    
+</dictionary>

@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1647766E1F889C7D0024D780 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1647766D1F889C7D0024D780 /* AppDelegate.swift */; };
+		164776701F889C7D0024D780 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1647766F1F889C7D0024D780 /* Assets.xcassets */; };
+		164776731F889C7D0024D780 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 164776711F889C7D0024D780 /* MainMenu.xib */; };
+		1647767F1F88D6700024D780 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1647767E1F88D6700024D780 /* Constants.swift */; };
+		164F6A591FDD0A7700152716 /* DLABCaptureManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */; };
+		164F6A5A1FDD0A7700152716 /* DLABridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1647767D1F889CA70024D780 /* DLABridging.framework */; };
+		164F6A5C1FDD0B1A00152716 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F6A5B1FDD0B1A00152716 /* CoreVideo.framework */; };
+		164F6A5E1FDD0B2700152716 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F6A5D1FDD0B2700152716 /* CoreMedia.framework */; };
+		1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B1C31FDBF3B600EBA4DD /* PrefController.swift */; };
+		16A4C6B31F89AF000027F5EA /* recDL.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 16A4C6B21F89AF000027F5EA /* recDL.sdef */; };
+		16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */; };
+		16A4C6B71F89B1390027F5EA /* RDL1Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */; };
+		16A4C6B91F89B14C0027F5EA /* RDL1DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B81F89B14C0027F5EA /* RDL1DeviceInfo.swift */; };
+		16A4C6BB1F89BAF10027F5EA /* RDL1VideoSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6BA1F89BAF10027F5EA /* RDL1VideoSetting.swift */; };
+		16A4C6BD1F89BB050027F5EA /* RDL1AudioSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6BC1F89BB050027F5EA /* RDL1AudioSetting.swift */; };
+		16ADBB901FE63CA000FB7747 /* DLABridging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1647767D1F889CA70024D780 /* DLABridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		16ADBB921FE63CA000FB7747 /* DLABCaptureManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		16CF53841FA4890B003D16F6 /* CustomCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CF53831FA4890B003D16F6 /* CustomCommand.swift */; };
+		16CF53861FA4A305003D16F6 /* NSApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CF53851FA4A305003D16F6 /* NSApplicationExtension.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		16ADBB931FE63CA000FB7747 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				16ADBB921FE63CA000FB7747 /* DLABCaptureManager.framework in Embed Frameworks */,
+				16ADBB901FE63CA000FB7747 /* DLABridging.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DLABCaptureManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1647766A1F889C7D0024D780 /* recDL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = recDL.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1647766D1F889C7D0024D780 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1647766F1F889C7D0024D780 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		164776721F889C7D0024D780 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		164776741F889C7D0024D780 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		164776751F889C7D0024D780 /* recDL.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = recDL.entitlements; sourceTree = "<group>"; };
+		1647767D1F889CA70024D780 /* DLABridging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DLABridging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1647767E1F88D6700024D780 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		164F6A5B1FDD0B1A00152716 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		164F6A5D1FDD0B2700152716 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		1658B1C31FDBF3B600EBA4DD /* PrefController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefController.swift; sourceTree = "<group>"; };
+		1658B1C51FDD0A2400EBA4DD /* DeckLinkAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeckLinkAPI.framework; path = ../../../../../../Library/Frameworks/DeckLinkAPI.framework; sourceTree = "<group>"; };
+		16A4C6B21F89AF000027F5EA /* recDL.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = recDL.sdef; sourceTree = "<group>"; };
+		16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Session.swift; sourceTree = "<group>"; };
+		16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Recording.swift; sourceTree = "<group>"; };
+		16A4C6B81F89B14C0027F5EA /* RDL1DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1DeviceInfo.swift; sourceTree = "<group>"; };
+		16A4C6BA1F89BAF10027F5EA /* RDL1VideoSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1VideoSetting.swift; sourceTree = "<group>"; };
+		16A4C6BC1F89BB050027F5EA /* RDL1AudioSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1AudioSetting.swift; sourceTree = "<group>"; };
+		16CF53831FA4890B003D16F6 /* CustomCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommand.swift; sourceTree = "<group>"; };
+		16CF53851FA4A305003D16F6 /* NSApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSApplicationExtension.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		164776671F889C7D0024D780 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				164F6A5E1FDD0B2700152716 /* CoreMedia.framework in Frameworks */,
+				164F6A5C1FDD0B1A00152716 /* CoreVideo.framework in Frameworks */,
+				164F6A591FDD0A7700152716 /* DLABCaptureManager.framework in Frameworks */,
+				164F6A5A1FDD0A7700152716 /* DLABridging.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		164776611F889C7D0024D780 = {
+			isa = PBXGroup;
+			children = (
+				1647766C1F889C7D0024D780 /* recDL */,
+				1647766B1F889C7D0024D780 /* Products */,
+				1647767B1F889CA70024D780 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		1647766B1F889C7D0024D780 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1647766A1F889C7D0024D780 /* recDL.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1647766C1F889C7D0024D780 /* recDL */ = {
+			isa = PBXGroup;
+			children = (
+				1647766F1F889C7D0024D780 /* Assets.xcassets */,
+				164776711F889C7D0024D780 /* MainMenu.xib */,
+				164776741F889C7D0024D780 /* Info.plist */,
+				164776751F889C7D0024D780 /* recDL.entitlements */,
+				1647766D1F889C7D0024D780 /* AppDelegate.swift */,
+				1647767E1F88D6700024D780 /* Constants.swift */,
+				1658B1C31FDBF3B600EBA4DD /* PrefController.swift */,
+				16A4C6C41F8B7BD20027F5EA /* Scripting Support */,
+			);
+			path = recDL;
+			sourceTree = "<group>";
+		};
+		1647767B1F889CA70024D780 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				164F6A5D1FDD0B2700152716 /* CoreMedia.framework */,
+				164F6A5B1FDD0B1A00152716 /* CoreVideo.framework */,
+				1658B1C51FDD0A2400EBA4DD /* DeckLinkAPI.framework */,
+				161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */,
+				1647767D1F889CA70024D780 /* DLABridging.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		16A4C6C41F8B7BD20027F5EA /* Scripting Support */ = {
+			isa = PBXGroup;
+			children = (
+				16A4C6B21F89AF000027F5EA /* recDL.sdef */,
+				16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */,
+				16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */,
+				16A4C6B81F89B14C0027F5EA /* RDL1DeviceInfo.swift */,
+				16A4C6BA1F89BAF10027F5EA /* RDL1VideoSetting.swift */,
+				16A4C6BC1F89BB050027F5EA /* RDL1AudioSetting.swift */,
+				16CF53831FA4890B003D16F6 /* CustomCommand.swift */,
+				16CF53851FA4A305003D16F6 /* NSApplicationExtension.swift */,
+			);
+			path = "Scripting Support";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		164776691F889C7D0024D780 /* recDL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 164776781F889C7D0024D780 /* Build configuration list for PBXNativeTarget "recDL" */;
+			buildPhases = (
+				164776661F889C7D0024D780 /* Sources */,
+				164776671F889C7D0024D780 /* Frameworks */,
+				164776681F889C7D0024D780 /* Resources */,
+				16ADBB931FE63CA000FB7747 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = recDL;
+			productName = recDL;
+			productReference = 1647766A1F889C7D0024D780 /* recDL.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		164776621F889C7D0024D780 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0900;
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = MyCometG3;
+				TargetAttributes = {
+					164776691F889C7D0024D780 = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 164776651F889C7D0024D780 /* Build configuration list for PBXProject "recDL" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 164776611F889C7D0024D780;
+			productRefGroup = 1647766B1F889C7D0024D780 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				164776691F889C7D0024D780 /* recDL */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		164776681F889C7D0024D780 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16A4C6B31F89AF000027F5EA /* recDL.sdef in Resources */,
+				164776701F889C7D0024D780 /* Assets.xcassets in Resources */,
+				164776731F889C7D0024D780 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		164776661F889C7D0024D780 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16CF53841FA4890B003D16F6 /* CustomCommand.swift in Sources */,
+				16A4C6B71F89B1390027F5EA /* RDL1Recording.swift in Sources */,
+				16CF53861FA4A305003D16F6 /* NSApplicationExtension.swift in Sources */,
+				16A4C6BD1F89BB050027F5EA /* RDL1AudioSetting.swift in Sources */,
+				16A4C6B91F89B14C0027F5EA /* RDL1DeviceInfo.swift in Sources */,
+				1647766E1F889C7D0024D780 /* AppDelegate.swift in Sources */,
+				1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */,
+				16A4C6BB1F89BAF10027F5EA /* RDL1VideoSetting.swift in Sources */,
+				1647767F1F88D6700024D780 /* Constants.swift in Sources */,
+				16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		164776711F889C7D0024D780 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				164776721F889C7D0024D780 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		164776761F889C7D0024D780 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		164776771F889C7D0024D780 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+			};
+			name = Release;
+		};
+		164776791F889C7D0024D780 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = recDL/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		1647767A1F889C7D0024D780 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = recDL/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		164776651F889C7D0024D780 /* Build configuration list for PBXProject "recDL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				164776761F889C7D0024D780 /* Debug */,
+				164776771F889C7D0024D780 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		164776781F889C7D0024D780 /* Build configuration list for PBXNativeTarget "recDL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				164776791F889C7D0024D780 /* Debug */,
+				1647767A1F889C7D0024D780 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 164776621F889C7D0024D780 /* Project object */;
+}
