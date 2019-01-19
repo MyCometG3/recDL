@@ -33,9 +33,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var targetPath : String? = nil
     
     private var iconActiveState = false
-    private let iconIdle = NSImage(named:NSImage.Name(Keys.idle))
-    private let iconInactive = NSImage(named:NSImage.Name(Keys.inactive))
-    private let iconActive = NSImage(named:NSImage.Name(Keys.active))
+    private let iconIdle = NSImage(named:Keys.idle)
+    private let iconInactive = NSImage(named:Keys.inactive)
+    private let iconActive = NSImage(named:Keys.active)
     
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var parentView: CaptureVideoPreview! //NSView!
@@ -54,7 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Scripting support
     /* ============================================ */
     
-    override func application(_ sender :NSApplication, delegateHandlesKey key :String) -> Bool {
+    func application(_ sender :NSApplication, delegateHandlesKey key :String) -> Bool {
         // print("\(#file) \(#line) \(#function)")
         
         let supportedParameter = [Keys.sessionItem,
@@ -217,7 +217,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Show window now
         window.titleVisibility = .hidden
-        _ = window.setFrameAutosaveName(NSWindow.FrameAutosaveName(Keys.previewWindow))
+        _ = window.setFrameAutosaveName(Keys.previewWindow)
         window.makeKeyAndOrderFront(self)
         
         // Ensure CALayer for the ParentView
