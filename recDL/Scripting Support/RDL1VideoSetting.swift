@@ -32,7 +32,6 @@ class RDL1VideoSetting: NSObject {
     public var pixelFormat :String? = nil
     public var inputFlag :Int = 0
     public var outputFlag :Int = 0
-    public var displayModeSupport :Int = 0
     public var rowBytes :Int = 0
     
     //
@@ -63,7 +62,6 @@ class RDL1VideoSetting: NSObject {
         pixelFormat = NSFileTypeForHFSTypeCode(videoSetting.pixelFormat.rawValue)
         inputFlag = Int(videoSetting.inputFlag.rawValue)
         outputFlag = Int(videoSetting.outputFlag.rawValue)
-        displayModeSupport = Int(videoSetting.displayModeSupport.rawValue)
         rowBytes = Int(videoSetting.rowBytes)
     }
     
