@@ -86,6 +86,8 @@ enum Keys {
     static let clapOffsetV = "clapOffsetV"
     static let videoTimeScale = "videoTimeScale"
     static let timeCodeFormat = "timeCodeFormat"
+    static let videoConnection = "videoConnection"
+    static let audioConnection = "audioConnection"
 
     static let videoEncode = "videoEncode"
     static let videoEncoder = "videoEncoder"
@@ -116,4 +118,8 @@ enum Keys {
     static let inactive = "inactive"
     static let active = "active"
 
+    // Pref popup buttons
+    static let enableDisplayMode = "enableDisplayMode"
+    static let enableVideoConnection = "enableVideoConnection"
+    static let enableAudioConnection = "enableAudioConnection"
 }

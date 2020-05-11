@@ -50,6 +50,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var accessoryView: NSView!
     
+    private var deviceInfo : [String:Any]? = nil
+    private var availableSettingInfo : [String:Any]? = nil
+    private var expectedStyle : [VideoStyle]? = nil
+    private var availableVideo : Int = 0
+    private var availableAudio : Int = 0
+
     /* ============================================ */
     // MARK: - Scripting support
     /* ============================================ */
@@ -187,6 +193,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyValues[Keys.clapOffsetV] = 0         // SD:+8..-8, HD:+16..-16
         keyValues[Keys.videoTimeScale] = 30000  // Video media track time resolution
         keyValues[Keys.timeCodeFormat] = 0      // 0:None, 32:tmcd, 64:tc64
+        
+        keyValues[Keys.videoConnection] = DLABVideoConnection.sVideo.rawValue
+        keyValues[Keys.audioConnection] = DLABAudioConnection.analogRCA.rawValue
         
         keyValues[Keys.videoEncode] = true      // false:2vuy, true:encode
         keyValues[Keys.videoEncoder] = 1        // 1:ProRes422,2:ProRes422LT,3:ProRes422Proxy
@@ -342,7 +351,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func updateAspectRatio(_ sender: AnyObject) {
-        print("\(#file) \(#line) \(#function)")
+        // print("\(#file) \(#line) \(#function)")
         
         if sender is NSMenuItem {
             let ratioTag = (sender as! NSMenuItem).tag
@@ -505,10 +514,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             guard let _ = manager.findFirstDevice() else { return }
             
-            // TODO: add input port selection (audio/video)
-            
             let displayModeRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.displayMode))
             guard let displayMode = DLABDisplayMode(rawValue: displayModeRaw) else { return }
+            
+            let videoConnectionRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.videoConnection))
+            let videoConnection = DLABVideoConnection(rawValue: videoConnectionRaw)
+            
+            let audioConnectionRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.audioConnection))
+            let audioConnection = DLABAudioConnection(rawValue: audioConnectionRaw)
             
             let pixelFormatRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.pixelFormat))
             guard let pixelFormat = DLABPixelFormat(rawValue: pixelFormatRaw) else { return }
@@ -521,6 +534,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let audioChannel : UInt32  = UInt32(defaults.integer(forKey: Keys.audioChannel))
             
             manager.displayMode = displayMode
+            manager.videoConnection = videoConnection
+            manager.audioConnection = audioConnection
             manager.pixelFormat = pixelFormat
             manager.videoStyle = videoStyle
             
@@ -1260,5 +1275,472 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             print("ERROR: Failed to removePreviewLayer()")
         }
+    }
+    
+    /* ======================================================================================== */
+    // MARK: - Preferences window support
+    /* ======================================================================================== */
+    
+    public func deviceDescription() -> String {
+        var desc:String = "ERROR: DeviceInfo is not available."
+        if let deviceInfo = deviceInfo {
+            let modelName = deviceInfo["modelName"] as! String
+            let displayName = deviceInfo["displayName"] as! String
+            let persistentID = deviceInfo["persistentID"] as! Int64
+            let topologicalID = deviceInfo["topologicalID"] as! Int64
+            desc = "DeviceInfo = \(persistentID):\(topologicalID)\n \(modelName),\n \(displayName)"
+        }
+        return desc
+    }
+    
+    public func displayModeDescription() -> String {
+        var desc:String = "ERROR: displayMode is not available."
+        if let selectedDisplayMode = displayModeCurrent(), let settingInfo = settingInfoCurrent() {
+            if let displayMode = displayModeFrom(settingInfo), selectedDisplayMode == displayMode {
+                // create description from settingInfo
+                let name = settingInfo["name"] as! String
+                let typeString = settingInfo["displayMode"] as! String
+                let width = settingInfo["width"] as! Int
+                let height = settingInfo["height"] as! Int
+                let duration = settingInfo["duration"] as! Int64
+                let timeScale = settingInfo["timeScale"] as! Int64
+                let fieldDominance = settingInfo["fieldDominance"] as! String
+                var fdString:String = "Unknown"
+                switch fieldDominance {
+                case NSFileTypeForHFSTypeCode(DLABFieldDominance.lowerFieldFirst.rawValue):
+                    fdString = "lowerFieldFirst"
+                case NSFileTypeForHFSTypeCode(DLABFieldDominance.upperFieldFirst.rawValue):
+                    fdString = "upperFieldFirst"
+                case NSFileTypeForHFSTypeCode(DLABFieldDominance.progressiveFrame.rawValue):
+                    fdString = "progressiveFrame"
+                case NSFileTypeForHFSTypeCode(DLABFieldDominance.progressiveSegmentedFrame.rawValue):
+                    fdString = "progressiveSegmentedFrame"
+                default:
+                    fdString = "Unknown";
+                }
+                desc = "DisplayMode = \(name),\n \(typeString), \(width)x\(height), \(duration)/\(timeScale),\n \(fdString)"
+            }
+        }
+        return desc
+    }
+    
+    public func updateDisplayModeMenu(_ menu:NSMenu) -> Int {
+        // Show only supported displayMode menu depends on Device
+        var selectedTag = -1
+        guard queryDeviceIfRequired() else { return selectedTag }
+        
+        if let list:[String:Any] = availableSettingInfo, list.count > 0 {
+            // previous selectedTag
+            selectedTag = defaults.integer(forKey: Keys.displayMode)
+            
+            let sortedKeys = list.keys.sorted()
+            menu.removeAllItems()
+            for key:String in sortedKeys {
+                let settingInfo:[String:Any] = list[key] as! [String:Any]
+                if let displayMode:DLABDisplayMode = displayModeFrom(settingInfo) {
+                    let menuTitle = NSFileTypeForHFSTypeCode(displayMode.rawValue) + ": " + key
+                    let menuItem = NSMenuItem(title: menuTitle, action: nil, keyEquivalent: "")
+                    menuItem.tag = Int(displayMode.rawValue)
+                    
+                    menu.addItem(menuItem)
+                }
+            }
+            
+            if menu.item(withTag: selectedTag) == nil {
+                let menuItem = menu.item(at: 0)!
+                selectedTag = menuItem.tag
+            }
+            
+            defaults.setValue(true, forKey: Keys.enableDisplayMode)
+            defaults.setValue(selectedTag, forKey: Keys.displayMode)
+        } else {
+            defaults.setValue(false, forKey: Keys.enableDisplayMode)
+        }
+        return selectedTag
+    }
+    
+    public func updateVideoConnectionMenu(_ menu:NSMenu) -> Int {
+        // Show unsupported connection menutitle in red color
+        let size = NSFont.smallSystemFontSize
+        let font = NSFont.menuFont(ofSize: size)
+        let attrYes:[NSAttributedString.Key : Any] = [ .font: font ]
+        let attrNo:[NSAttributedString.Key : Any] = [ .font: font, .foregroundColor: NSColor.red ]
+        
+        var selectedTag = -1
+        guard queryDeviceIfRequired() else { return selectedTag }
+
+        if let manager = manager, let device = manager.currentDevice {
+            if let numberValue = try? device.intValue(for: .configurationVideoInputConnection) {
+                selectedTag = numberValue.intValue
+            }
+            if let numberValue = try? device.intValue(for: .videoInputConnections) {
+                let availableConnection:Int = numberValue.intValue
+                for menuItem in menu.items {
+                    menuItem.state = (menuItem.tag == selectedTag) ? .on : .off
+
+                    let ready = (availableConnection & menuItem.tag) > 0
+                    let fontAttr = (ready ? attrYes : attrNo)
+                    menuItem.attributedTitle = NSAttributedString(string: menuItem.title,
+                                                                  attributes: fontAttr)
+                }
+            }
+            
+            defaults.setValue(true, forKey: Keys.enableVideoConnection)
+            // defaults.set(selectedTag, forKey: Keys.videoConnection)
+        } else {
+            defaults.setValue(false, forKey: Keys.enableVideoConnection)
+        }
+        return selectedTag
+    }
+    
+    public func updateAudioConnectionMenu(_ menu:NSMenu) -> Int {
+        // Show unsupported connection menutitle in red color
+        let size = NSFont.smallSystemFontSize
+        let font = NSFont.menuFont(ofSize: size)
+        let attrYes:[NSAttributedString.Key : Any] = [ .font: font ]
+        let attrNo:[NSAttributedString.Key : Any] = [ .font: font, .foregroundColor: NSColor.red ]
+        
+        var selectedTag = -1
+        guard queryDeviceIfRequired() else { return selectedTag }
+        
+        if let manager = manager, let device = manager.currentDevice {
+            if let numberValue = try? device.intValue(for: .configurationAudioInputConnection) {
+                selectedTag = numberValue.intValue
+            }
+            if let numberValue = try? device.intValue(for: .audioInputConnections) {
+                let availableConnection:UInt32 = numberValue.uint32Value
+                for menuItem in menu.items {
+                    menuItem.state = (menuItem.tag == selectedTag) ? .on : .off
+                    
+                    let ready = (availableConnection & UInt32(menuItem.tag)) > 0
+                    let fontAttr = (ready ? attrYes : attrNo)
+                    menuItem.attributedTitle = NSAttributedString(string: menuItem.title,
+                                                                  attributes: fontAttr)
+                }
+            }
+            
+            defaults.setValue(true, forKey: Keys.enableAudioConnection)
+            // defaults.set(selectedTag, forKey: Keys.audioConnection)
+        } else {
+            defaults.setValue(false, forKey: Keys.enableAudioConnection)
+        }
+        return selectedTag
+    }
+    
+    public func verifyCompatibility() -> (Bool, Bool) {
+        let displayMode = DLABDisplayMode.init(rawValue: UInt32(defaults.integer(forKey: Keys.displayMode)))
+        let vsString:String? = defaults.string(forKey: Keys.videoStyle)
+        let clap = NSPoint(x: defaults.integer(forKey: Keys.clapOffsetH),
+                                   y: defaults.integer(forKey: Keys.clapOffsetV))
+        if let vsString = vsString {
+            let videoStyle = VideoStyle.init(rawValue: vsString)
+            if let displayMode = displayMode, let videoStyle = videoStyle {
+                let okStyle:Bool = verifyVideoStyleOf(videoStyle, for: displayMode)
+                let okClap:Bool = verifyClapOf(clap, for: videoStyle)
+                
+                return (okStyle, okClap)
+            }
+        }
+        return (false, false)
+    }
+    
+    public func resetStyleCurrent() -> Bool {
+        if let settingInfo = settingInfoCurrent() {
+            return applyFrom(settingInfo)
+        }
+        return false
+    }
+    
+    /* ==================================================================================== */
+    //MARK: -
+    /* ==================================================================================== */
+
+    private func queryDeviceIfRequired() -> Bool {
+        let required = (deviceInfo == nil) || (availableSettingInfo == nil)
+        if required {
+            return queryDevice()
+        } else {
+            return true
+        }
+    }
+    
+    private func queryDevice() -> Bool {
+        // initialize properties
+        deviceInfo = nil
+        availableSettingInfo = nil
+        availableVideo = 0
+        availableAudio = 0
+        expectedStyle = nil
+
+        if let manager = manager, let device = manager.currentDevice {
+            // deviceInfo
+            deviceInfo = manager.deviceInfo(device: device)
+            
+            // availableModes
+            var settingInfoList:[String:Any] = [:]
+            if let inputList = manager.inputVideoSettingList(device: device) {
+                let expectedDisplayModes = displayModeList()
+                for setting in inputList {
+                    // Filter out unsupported displayModes
+                    if expectedDisplayModes.contains(setting.displayMode) {
+                        // Register settingInfo list
+                        let name:String = setting.name
+                        let settingInfo:[String:Any] = manager.videoSettingInfo(setting: setting)
+                        settingInfoList.updateValue(settingInfo, forKey: name)
+                    } else {
+                        let osTypeValue:UInt32 = setting.displayMode.rawValue
+                        let strValue:String = NSFileTypeForHFSTypeCode(osTypeValue)!
+                        print("Skipped DLABDisplayMode: " + setting.name + "/" + strValue)
+                    }
+                }
+            }
+            if settingInfoList.count > 0 {
+                availableSettingInfo = settingInfoList
+            }
+            
+            // video connections
+            if let numberValue = try? device.intValue(for: .videoInputConnections) {
+                availableVideo = numberValue.intValue
+            }
+            
+            // audio connections
+            if let numberValue = try? device.intValue(for: .audioInputConnections) {
+                availableAudio = numberValue.intValue
+            }
+        }
+        
+        if deviceInfo != nil && availableSettingInfo != nil &&
+            (availableVideo > 0 || availableAudio > 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    private func displayModeCurrent() -> DLABDisplayMode? {
+        let dmValue:UInt32 = UInt32(defaults.integer(forKey: Keys.displayMode))
+        if let currentDisplayMode = DLABDisplayMode(rawValue:dmValue) {
+            return currentDisplayMode
+        } else {
+            return nil
+        }
+    }
+    
+    private func settingInfoCurrent() -> [String:Any]? {
+        if let currentDisplayMode = displayModeCurrent(),
+            let list:[String:Any] = availableSettingInfo, list.count > 0
+        {
+            for item in list.values {
+                let settingInfo = item as! [String:Any]
+                let displayMode = displayModeFrom(settingInfo)
+                if let displayMode = displayMode, displayMode == currentDisplayMode {
+                    return settingInfo
+                }
+            }
+        }
+        return nil
+    }
+    
+    private func displayModeFrom(_ settingInfo:[String:Any]) -> DLABDisplayMode? {
+        if let strValue = settingInfo["displayMode"] as? String {
+            let uint32Value:OSType = NSHFSTypeCodeFromFileType(strValue)
+            let displayMode = DLABDisplayMode.init(rawValue: uint32Value)
+            return displayMode
+        } else {
+            return nil
+        }
+    }
+    
+    private func fieldDominanceFrom(_ settingInfo:[String:Any]) -> DLABFieldDominance? {
+        if let strValue = settingInfo["fieldDominance"] as? String {
+            let uint32Value:OSType = NSHFSTypeCodeFromFileType(strValue)
+            let fieldDominance = DLABFieldDominance.init(rawValue: uint32Value)
+            return fieldDominance
+        } else {
+            return nil
+        }
+    }
+    
+    private func pixelSizeFrom(_ settingInfo:[String:Any]) -> NSSize? {
+        if let numWidth = settingInfo["width"] as? NSNumber,
+            let numHeight = settingInfo["height"] as? NSNumber
+        {
+            return NSSize(width: numWidth.intValue, height: numHeight.intValue)
+        } else {
+            return nil
+        }
+    }
+    
+    private func videoStyleListFor(_ settingInfo:[String:Any]) -> [VideoStyle]? {
+        if let size = pixelSizeFrom(settingInfo) {
+            return videoStyleListOf(size)
+        } else {
+            return nil
+        }
+    }
+    
+    private func verifyVideoStyleOf(_ videoStyle:VideoStyle, for targetDisplayMode:DLABDisplayMode) -> Bool {
+        // Size value of videoStyle
+        let videoStyleSize:NSSize = videoStyle.encodedSize()
+        var displayModeSize:NSSize = NSZeroSize
+        
+        // Size value of displayMode
+        if let list:[String:Any] = availableSettingInfo, list.count > 0 {
+            for value in list.values {
+                let settingInfo = value as! [String:Any]
+                if let displayMode = displayModeFrom(settingInfo), displayMode == targetDisplayMode {
+                    displayModeSize = pixelSizeFrom(settingInfo)!
+                    break
+                }
+            }
+        }
+        
+        let result:Bool = videoStyleSize.equalTo(displayModeSize)
+        return result
+    }
+    
+    private func defaultVideoStyleFrom(_ settingInfo:[String:Any]) -> VideoStyle? {
+        if let list = videoStyleListFor(settingInfo), list.count > 0 {
+            let defaultStyle = list.first!
+            return defaultStyle
+        }
+        return nil
+    }
+    
+    private func verifyClapOf(_ offset:NSPoint, for videoStyle: VideoStyle) -> Bool {
+        let encoded = videoStyle.encodedSize()
+        let visible = videoStyle.visibleSize()
+        let wRange = Int(encoded.width - visible.width) / 2
+        let hRange = Int(encoded.height - visible.height) / 2
+        
+        let offsetHOK = abs(Int(offset.x)) <= wRange
+        let offsetVOK = abs(Int(offset.y)) <= hRange
+        return (offsetHOK && offsetVOK)
+    }
+    
+    private func defaultClapFor(_ videoStyle:VideoStyle) -> NSPoint {
+        let encoded = videoStyle.encodedSize()
+        let visible = videoStyle.visibleSize()
+        let wRange = Int(encoded.width - visible.width) / 2
+        let hRange = Int(encoded.height - visible.height) / 2
+        
+        // clamp offsetH, offsetV to maximum clap rect
+        var offsetH:Int = defaults.integer(forKey: Keys.clapOffsetH)
+        var offsetV:Int = defaults.integer(forKey: Keys.clapOffsetV)
+        offsetH = min(max(-wRange, offsetH), wRange)
+        offsetV = min(max(-hRange, offsetV), hRange)
+        let newClap = NSPoint(x: offsetH, y: offsetV)
+        return newClap
+    }
+    
+    private func applyFrom(_ settingInfo:[String:Any]) -> Bool {
+        var success:Bool = true
+        
+        var newDisplayMode:DLABDisplayMode = .modeNTSC
+        if success, let valueFromSettingInfo = displayModeFrom(settingInfo) {
+            newDisplayMode = valueFromSettingInfo
+        } else {
+            success = false
+        }
+        
+        var newFieldDetail:Int = 0 // 0:SingleField, 1:BFF, 2:TFF
+        if success, let valueFromSettingInfo = fieldDominanceFrom(settingInfo) {
+            switch valueFromSettingInfo {
+            case DLABFieldDominance.progressiveFrame:
+                newFieldDetail = 0
+            case DLABFieldDominance.lowerFieldFirst:
+                newFieldDetail = 1
+            case DLABFieldDominance.upperFieldFirst:
+                newFieldDetail = 2
+            default:
+                success = false
+            }
+        }
+        
+        var newVideoStyle:VideoStyle? = nil
+        if success, let defaultVideoStyle = defaultVideoStyleFrom(settingInfo) {
+            newVideoStyle = defaultVideoStyle
+        } else {
+            success = false
+        }
+        
+        var newOffset:NSPoint = NSZeroPoint
+        if success, let newVideoStyle = newVideoStyle {
+            // Clamp into supported clap offset rect
+            newOffset = defaultClapFor(newVideoStyle)
+        } else {
+            success = false
+        }
+        
+        if success {
+            // update userDefaults
+            defaults.set(newDisplayMode.rawValue, forKey: Keys.displayMode)
+            defaults.set(newFieldDetail, forKey: Keys.videoFieldDetail)
+            defaults.set(newVideoStyle?.rawValue, forKey: Keys.videoStyle)
+            defaults.set(newOffset.x, forKey: Keys.clapOffsetH)
+            defaults.set(newOffset.y, forKey: Keys.clapOffsetV)
+        }
+        
+        return success
+    }
+    
+    /* ==================================================================================== */
+    //MARK: -
+    /* ==================================================================================== */
+    
+    private func displayModeList() -> [DLABDisplayMode] {
+        // limited to: NTSC, PAL, HD1080, HD720
+        // Same order as in DeckLinkAPIModes.h
+        let list:[DLABDisplayMode] = [
+            // SD Modes
+            .modeNTSC, .modeNTSC2398, .modePAL, .modeNTSCp, .modePALp,
+            // HD 1080 Modes
+            .modeHD1080p2398, .modeHD1080p24, .modeHD1080p25, .modeHD1080p2997, .modeHD1080p30,
+            .modeHD1080p4795, .modeHD1080p48, .modeHD1080p50, .modeHD1080p5994, .modeHD1080p6000,
+            .modeHD1080p9590, .modeHD1080p96, .modeHD1080p100, .modeHD1080p11988, .modeHD1080p120,
+            .modeHD1080i50, .modeHD1080i5994, .modeHD1080i6000,
+            // HD 720 Modes
+            .modeHD720p50, .modeHD720p5994, .modeHD720p60,
+        ]
+        return list
+    }
+    
+    private func videoStyleListOf(_ size:NSSize) -> [VideoStyle]? {
+        var list:[VideoStyle] = [];
+        
+        // HD-1080
+        if NSEqualSizes(size, NSSize(width: 1920, height: 1080)) {
+            list = [.HD_1920_1080_Full, .HD_1920_1080_16_9]
+        }
+        if NSEqualSizes(size, NSSize(width: 1440, height: 1080)) {
+            list = [.HDV_HDCAM]
+        }
+        // HD-720
+        if NSEqualSizes(size, NSSize(width: 1280, height: 720)) {
+            list = [.HD_1280_720_Full, .HD_1280_720_16_9]
+        }
+        // SD-625/576
+        if NSEqualSizes(size, NSSize(width: 720, height: 576)) {
+            list = [.SD_720_576_16_9, .SD_720_576_4_3, .SD_625_13_5MHz_16_9, .SD_625_13_5MHz_4_3]
+        }
+        if NSEqualSizes(size, NSSize(width: 768, height: 576)) {
+            list = [.SD_768_576_Full]
+        }
+        // SD-525/486
+        if NSEqualSizes(size, NSSize(width: 720, height: 486)) {
+            list = [.SD_720_486_16_9, .SD_720_486_4_3, .SD_525_13_5MHz_16_9, .SD_525_13_5MHz_4_3]
+        }
+        if NSEqualSizes(size, NSSize(width: 640, height: 486)) {
+            list = [.SD_640_486_Full]
+        }
+        // SD-525/480
+        if NSEqualSizes(size, NSSize(width: 720, height: 480)) {
+            list = [.SD_720_480_16_9, .SD_720_480_4_3]
+        }
+        if NSEqualSizes(size, NSSize(width: 640, height: 480)) {
+            list = [.SD_640_480_Full]
+        }
+        
+        return (list.count > 0 ? list : nil)
     }
 }
