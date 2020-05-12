@@ -198,7 +198,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyValues[Keys.audioConnection] = DLABAudioConnection.analogRCA.rawValue
         
         keyValues[Keys.videoEncode] = true      // false:2vuy, true:encode
-        keyValues[Keys.videoEncoder] = 1        // 1:ProRes422,2:ProRes422LT,3:ProRes422Proxy
+        keyValues[Keys.videoEncoder] = 1
+        // 0:ProRes422HQ 1:ProRes422,2:ProRes422LT,3:ProRes422Proxy
         // 10:H.264, 11:H265, 0:Uncompressed
         keyValues[Keys.videoBitRate] = 25*1000  // videoBitRate (Kbps)
         keyValues[Keys.videoFieldDetail] = 1    // 0:SingleField, 1:BFF, 2:TFF
@@ -615,6 +616,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let def_audioEncoder = defaults.integer(forKey: Keys.audioEncoder)
             
             let compressVideo = (def_videoEncode)
+            let useProRes422HQ = (def_videoEncoder == 0)
             let useProRes422 = (def_videoEncoder == 1)
             let useProRes422LT = (def_videoEncoder == 2)
             let useProRes422Proxy = (def_videoEncoder == 3)
@@ -654,6 +656,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if compressVideo {
                 manager.encodeProRes422 = false
                 manager.encodeVideo = true
+                if useProRes422HQ {
+                    manager.encodeVideoCodecType = kCMVideoCodecType_AppleProRes422HQ
+                    manager.encodeVideoBitrate = 0
+                }
                 if useProRes422 {
                     manager.encodeVideoCodecType = kCMVideoCodecType_AppleProRes422
                     manager.encodeVideoBitrate = 0

@@ -977,7 +977,7 @@
                                                                 <rect key="frame" x="39" y="76" width="85" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="AAC Data Rate:" id="48Z-lu-he6">
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -986,7 +986,7 @@
                                                                 <rect key="frame" x="175" y="73" width="31" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Kbps" id="7JX-96-P1K">
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -999,7 +999,7 @@
                                                                         <real key="minimum" value="32"/>
                                                                         <real key="maximum" value="320"/>
                                                                     </numberFormatter>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -1017,7 +1017,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Encode Audio (AAC)" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="PAD-lo-Crj">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="updateAudioEncoder:" target="d3T-ds-NJz" id="fJq-D5-yVY"/>
@@ -1152,12 +1152,13 @@
                                                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="woL-Wb-Hcq">
                                                                 <rect key="frame" x="117" y="113" width="107" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="push" title="ProRes422" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="ykh-1z-9fH" id="AMq-Ga-p8B">
+                                                                <popUpButtonCell key="cell" type="push" title="ProRes422HQ" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ykh-1z-9fH" id="AMq-Ga-p8B">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="message" size="11"/>
                                                                     <menu key="menu" id="ALr-Ta-uuC">
                                                                         <items>
-                                                                            <menuItem title="ProRes422" state="on" tag="1" id="ykh-1z-9fH"/>
+                                                                            <menuItem title="ProRes422HQ" id="ykh-1z-9fH"/>
+                                                                            <menuItem title="ProRes422" state="on" tag="1" id="YuH-2K-glh"/>
                                                                             <menuItem title="ProRes422LT" tag="2" id="l5E-e4-Ct7"/>
                                                                             <menuItem title="ProRes422Proxy" tag="3" id="OFy-wB-IYH"/>
                                                                             <menuItem title="H.264/AVC" tag="10" id="xt1-Bh-zVN"/>
