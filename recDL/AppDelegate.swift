@@ -241,7 +241,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             previewLayer.backgroundColor = grayColor
         }
         
-        // TODO: startSession()
+        //
         parentView.verbose = true
         startSession()
         
@@ -914,6 +914,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     public func updateStatusDefault() {
         // print("\(#file) \(#line) \(#function)")
         
+        guard checkReadiness() else {
+            updateStatus("NOTICE: Please connect device and restart this application.")
+            return
+        }
+        
         // Show default status string
         updateStatus(nil)
         
@@ -1333,7 +1338,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     public func updateDisplayModeMenu(_ menu:NSMenu) -> Int {
         // Show only supported displayMode menu depends on Device
         var selectedTag = -1
-        guard queryDeviceIfRequired() else { return selectedTag }
+        guard checkReadiness() else { return selectedTag }
         
         if let list:[String:Any] = availableSettingInfo, list.count > 0 {
             // previous selectedTag
@@ -1358,9 +1363,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             
             defaults.setValue(true, forKey: Keys.enableDisplayMode)
-            defaults.setValue(selectedTag, forKey: Keys.displayMode)
         } else {
             defaults.setValue(false, forKey: Keys.enableDisplayMode)
+        }
+        if selectedTag >= 0 {
+            defaults.setValue(selectedTag, forKey: Keys.displayMode)
         }
         return selectedTag
     }
@@ -1373,7 +1380,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let attrNo:[NSAttributedString.Key : Any] = [ .font: font, .foregroundColor: NSColor.red ]
         
         var selectedTag = -1
-        guard queryDeviceIfRequired() else { return selectedTag }
+        guard checkReadiness() else { return selectedTag }
 
         if let manager = manager, let device = manager.currentDevice {
             if let numberValue = try? device.intValue(for: .configurationVideoInputConnection) {
@@ -1392,9 +1399,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             
             defaults.setValue(true, forKey: Keys.enableVideoConnection)
-            // defaults.set(selectedTag, forKey: Keys.videoConnection)
         } else {
             defaults.setValue(false, forKey: Keys.enableVideoConnection)
+        }
+        if selectedTag >= 0 {
+            defaults.setValue(selectedTag, forKey: Keys.videoConnection)
         }
         return selectedTag
     }
@@ -1407,7 +1416,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let attrNo:[NSAttributedString.Key : Any] = [ .font: font, .foregroundColor: NSColor.red ]
         
         var selectedTag = -1
-        guard queryDeviceIfRequired() else { return selectedTag }
+        guard checkReadiness() else { return selectedTag }
         
         if let manager = manager, let device = manager.currentDevice {
             if let numberValue = try? device.intValue(for: .configurationAudioInputConnection) {
@@ -1426,9 +1435,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             
             defaults.setValue(true, forKey: Keys.enableAudioConnection)
-            // defaults.set(selectedTag, forKey: Keys.audioConnection)
         } else {
             defaults.setValue(false, forKey: Keys.enableAudioConnection)
+        }
+        if selectedTag >= 0 {
+            defaults.setValue(selectedTag, forKey: Keys.audioConnection)
         }
         return selectedTag
     }
@@ -1457,11 +1468,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
-    /* ==================================================================================== */
-    //MARK: -
-    /* ==================================================================================== */
-
-    private func queryDeviceIfRequired() -> Bool {
+    public func checkReadiness() -> Bool {
         let required = (deviceInfo == nil) || (availableSettingInfo == nil)
         if required {
             return queryDevice()
@@ -1470,6 +1477,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    /* ==================================================================================== */
+    //MARK: -
+    /* ==================================================================================== */
+
     private func queryDevice() -> Bool {
         // initialize properties
         deviceInfo = nil
@@ -1674,17 +1685,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if success, let newVideoStyle = newVideoStyle {
             // Clamp into supported clap offset rect
             newOffset = defaultClapFor(newVideoStyle)
-        } else {
-            success = false
-        }
-        
-        if success {
+            
             // update userDefaults
             defaults.set(newDisplayMode.rawValue, forKey: Keys.displayMode)
             defaults.set(newFieldDetail, forKey: Keys.videoFieldDetail)
-            defaults.set(newVideoStyle?.rawValue, forKey: Keys.videoStyle)
+            defaults.set(newVideoStyle.rawValue, forKey: Keys.videoStyle)
             defaults.set(newOffset.x, forKey: Keys.clapOffsetH)
             defaults.set(newOffset.y, forKey: Keys.clapOffsetV)
+        } else {
+            success = false
         }
         
         return success

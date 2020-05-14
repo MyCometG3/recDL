@@ -44,18 +44,36 @@ class PrefController: NSViewController {
     @IBOutlet weak var menuVideoConnection: NSMenu!
     @IBOutlet weak var btnAudioConnection: NSPopUpButton!
     @IBOutlet weak var menuAudioConnection: NSMenu!
+    @IBOutlet weak var btnRestartSession: NSButton!
     
     @IBOutlet var descriptionText: NSTextView!
     @IBOutlet weak var vsErrorLabel: NSTextField!
     @IBOutlet weak var clapErrorLabel: NSTextField!
     
     private func setup() {
+        // Check device readiness
+        let ready = appDelegate.checkReadiness()
+        btnDisplayMode.isEnabled = ready
+        btnVideoConnection.isEnabled = ready
+        btnAudioConnection.isEnabled = ready
+        btnRestartSession.isEnabled = ready
+        guard ready else {
+            descriptionText.string = "ERROR: No DeckLink device is detected."
+            return
+        }
+        
+        //
         updateAudioEncoder(self)
         
         // Fill DisplayMode/VideoConnection/AudioConnection menu
-        _ = appDelegate.updateDisplayModeMenu(menuDisplayMode)
-        _ = appDelegate.updateVideoConnectionMenu(menuVideoConnection)
-        _ = appDelegate.updateAudioConnectionMenu(menuAudioConnection)
+        let dmSelection = appDelegate.updateDisplayModeMenu(menuDisplayMode)
+        let vcSelection = appDelegate.updateVideoConnectionMenu(menuVideoConnection)
+        let acSelection = appDelegate.updateAudioConnectionMenu(menuAudioConnection)
+        
+        // Workaround: Value binding may not work as expected
+        if dmSelection >= 0 { btnDisplayMode.selectItem(withTag: dmSelection) }
+        if vcSelection >= 0 { btnVideoConnection.selectItem(withTag: vcSelection) }
+        if acSelection >= 0 { btnAudioConnection.selectItem(withTag: acSelection) }
         
         //
         updateDescription()

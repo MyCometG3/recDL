@@ -33,6 +33,7 @@
                 <outlet property="appDelegate" destination="Voe-Tx-rLC" id="7qQ-tf-YdA"/>
                 <outlet property="btnAudioConnection" destination="AfU-p5-UXh" id="Aq7-uw-Bk7"/>
                 <outlet property="btnDisplayMode" destination="5Uz-vZ-I0V" id="3nr-BA-YTa"/>
+                <outlet property="btnRestartSession" destination="Q92-gt-71i" id="mHe-hU-8Ld"/>
                 <outlet property="btnVideoConnection" destination="CnT-3R-ghG" id="8LZ-P6-gwt"/>
                 <outlet property="buttonAudioEncode" destination="awg-fZ-TOx" id="mkT-DY-Ay6"/>
                 <outlet property="clapErrorLabel" destination="VFF-yX-rVv" id="JfI-f2-2t6"/>
@@ -948,7 +949,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" nonactivatingPanel="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="112" width="276" height="484"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <view key="contentView" id="gBu-Kk-mxK">
                 <rect key="frame" x="0.0" y="0.0" width="276" height="484"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -977,7 +978,7 @@
                                                                 <rect key="frame" x="39" y="76" width="85" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="AAC Data Rate:" id="48Z-lu-he6">
-                                                                    <font key="font" metaFont="menu" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -986,7 +987,7 @@
                                                                 <rect key="frame" x="175" y="73" width="31" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Kbps" id="7JX-96-P1K">
-                                                                    <font key="font" metaFont="menu" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -999,7 +1000,7 @@
                                                                         <real key="minimum" value="32"/>
                                                                         <real key="maximum" value="320"/>
                                                                     </numberFormatter>
-                                                                    <font key="font" metaFont="menu" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -1017,7 +1018,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Encode Audio (AAC)" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="PAD-lo-Crj">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="menu" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="updateAudioEncoder:" target="d3T-ds-NJz" id="fJq-D5-yVY"/>
