@@ -1444,6 +1444,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return selectedTag
     }
     
+    public func updateVideoStyleMenu(_ menu:NSMenu) {
+        // Show unsupported videoStyle menutitle in red color
+        let size = NSFont.smallSystemFontSize
+        let font = NSFont.menuFont(ofSize: size)
+        let attrYes:[NSAttributedString.Key : Any] = [ .font: font ]
+        let attrNo:[NSAttributedString.Key : Any] = [ .font: font, .foregroundColor: NSColor.red ]
+        
+        guard checkReadiness() else { return }
+        
+        let uint32Value = UInt32(defaults.integer(forKey: Keys.displayMode))
+        let displayMode = DLABDisplayMode(rawValue: uint32Value)!
+        
+        if let settingInfo:[String:Any] = settingInfoFor(displayMode),
+            let nativeSize = pixelSizeFrom(settingInfo)
+        {
+            let width = Int(nativeSize.width)
+            let height = Int(nativeSize.height)
+            let searchStr = String("\(width):\(height)")
+            
+            var optionStr:String? = nil
+            if nativeSize.equalTo(NSSize(width: 720, height: 486)) {
+                optionStr = "525 13.5"
+            } else
+            if nativeSize.equalTo(NSSize(width: 720, height: 576)) {
+                optionStr = "625 13.5"
+            } else
+            if nativeSize.equalTo(NSSize(width: 1440, height: 1080)) {
+                optionStr = "HDCAM"
+            }
+            
+            for menuItem in menu.items {
+                let title = menuItem.title
+                var sameSize = title.contains(searchStr)
+                if let optionStr = optionStr {
+                    sameSize = sameSize || title.contains(optionStr)
+                }
+                let fontAttr = (sameSize ? attrYes : attrNo)
+                menuItem.attributedTitle = NSAttributedString(string: title,
+                                                              attributes: fontAttr)
+            }
+        }
+    }
+    
     public func verifyCompatibility() -> (Bool, Bool) {
         let displayMode = DLABDisplayMode.init(rawValue: UInt32(defaults.integer(forKey: Keys.displayMode)))
         let vsString:String? = defaults.string(forKey: Keys.videoStyle)
@@ -1544,13 +1587,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func settingInfoCurrent() -> [String:Any]? {
-        if let currentDisplayMode = displayModeCurrent(),
-            let list:[String:Any] = availableSettingInfo, list.count > 0
-        {
+        if let currentDisplayMode = displayModeCurrent() {
+            return settingInfoFor(currentDisplayMode)
+        }
+        return nil
+    }
+
+    private func settingInfoFor(_ targetDisplayMode:DLABDisplayMode) -> [String:Any]? {
+        if let list:[String:Any] = availableSettingInfo, list.count > 0 {
             for item in list.values {
                 let settingInfo = item as! [String:Any]
                 let displayMode = displayModeFrom(settingInfo)
-                if let displayMode = displayMode, displayMode == currentDisplayMode {
+                if let displayMode = displayMode, displayMode == targetDisplayMode {
                     return settingInfo
                 }
             }

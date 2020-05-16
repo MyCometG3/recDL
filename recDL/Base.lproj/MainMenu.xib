@@ -41,6 +41,7 @@
                 <outlet property="menuAudioConnection" destination="NAD-A0-yZI" id="J3X-Aa-xue"/>
                 <outlet property="menuDisplayMode" destination="b7K-g4-lBe" id="5i0-lO-SDL"/>
                 <outlet property="menuVideoConnection" destination="wky-Bj-dvA" id="XDB-Fw-bBk"/>
+                <outlet property="menuVideoStyle" destination="rxF-IT-qPl" id="K7u-q8-bbp"/>
                 <outlet property="prefWindow" destination="ydn-FR-COG" id="pYe-C6-8Yo"/>
                 <outlet property="textAudioBitRate" destination="r0Z-TI-Tyl" id="o7S-Dx-PiV"/>
                 <outlet property="vsErrorLabel" destination="IGH-pT-L3K" id="YKi-cB-REZ"/>
@@ -676,7 +677,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="0.0" y="694" width="607" height="363"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <value key="minSize" type="size" width="320" height="180"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="607" height="363"/>
@@ -1153,13 +1154,13 @@
                                                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="woL-Wb-Hcq">
                                                                 <rect key="frame" x="117" y="113" width="107" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="push" title="ProRes422HQ" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ykh-1z-9fH" id="AMq-Ga-p8B">
+                                                                <popUpButtonCell key="cell" type="push" title="ProRes422HQ" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ykh-1z-9fH" id="AMq-Ga-p8B">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="message" size="11"/>
                                                                     <menu key="menu" id="ALr-Ta-uuC">
                                                                         <items>
-                                                                            <menuItem title="ProRes422HQ" id="ykh-1z-9fH"/>
-                                                                            <menuItem title="ProRes422" state="on" tag="1" id="YuH-2K-glh"/>
+                                                                            <menuItem title="ProRes422HQ" state="on" id="ykh-1z-9fH"/>
+                                                                            <menuItem title="ProRes422" tag="1" id="YuH-2K-glh"/>
                                                                             <menuItem title="ProRes422LT" tag="2" id="l5E-e4-Ct7"/>
                                                                             <menuItem title="ProRes422Proxy" tag="3" id="OFy-wB-IYH"/>
                                                                             <menuItem title="H.264/AVC" tag="10" id="xt1-Bh-zVN"/>

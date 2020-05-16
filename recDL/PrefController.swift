@@ -27,14 +27,12 @@ class PrefController: NSViewController {
     }
     
     @IBAction func updateDisplayMode(_ sender: Any) {
-        updateDescription()
-        updateErrorLabel()
+        refreshUI()
     }
     
     @IBAction func resetStyle(_ sender: Any) {
         if appDelegate.resetStyleCurrent() {
-            updateDescription()
-            updateErrorLabel()
+            refreshUI()
         }
     }
     
@@ -45,6 +43,7 @@ class PrefController: NSViewController {
     @IBOutlet weak var btnAudioConnection: NSPopUpButton!
     @IBOutlet weak var menuAudioConnection: NSMenu!
     @IBOutlet weak var btnRestartSession: NSButton!
+    @IBOutlet weak var menuVideoStyle: NSMenu!
     
     @IBOutlet var descriptionText: NSTextView!
     @IBOutlet weak var vsErrorLabel: NSTextField!
@@ -76,8 +75,17 @@ class PrefController: NSViewController {
         if acSelection >= 0 { btnAudioConnection.selectItem(withTag: acSelection) }
         
         //
+        refreshUI()
+    }
+    
+    private func refreshUI() {
+        updateVideoStyle()
         updateDescription()
         updateErrorLabel()
+    }
+    
+    private func updateVideoStyle() {
+        appDelegate.updateVideoStyleMenu(menuVideoStyle)
     }
     
     private func updateDescription() {
