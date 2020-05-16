@@ -5,7 +5,6 @@ recDL is a simple, AV capture application for Intensity Shuttle from Blackmagic 
 - __Requirement__: MacOS X 10.11 or later.
 - __Capture Device__: Blackmagic Intensity Shuttle (Other DeckLink devices may also work - not tested)
 - __Framework__: DLABridging + DLABCaptureManager (Embedded)
-- __Restriction__: Only 8 bit yuv is supported.
 - __Dependency__:DeckLinkAPI.framework from Blackmagic_Desktop_Video_Macintosh_11.4 or later.
 
 #### Basic feature
@@ -33,9 +32,9 @@ recDL is a simple, AV capture application for Intensity Shuttle from Blackmagic 
 - SMPTE timecode ready (* Depends on video source - VANC)
 
 #### Development environment
-- MacOS X 10.15.3 Catalina
-- Xcode 11.3.1
-- Swift 5.1.3
+- MacOS X 10.15.4 Catalina
+- Xcode 11.4.1
+- Swift 5.2
 
 #### License
 - The MIT License
