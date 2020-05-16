@@ -1789,58 +1789,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /* ==================================================================================== */
     
     private func displayModeList() -> [DLABDisplayMode] {
-        // limited to: NTSC, PAL, HD1080, HD720
-        // Same order as in DeckLinkAPIModes.h
-        let list:[DLABDisplayMode] = [
-            // SD Modes
-            .modeNTSC, .modeNTSC2398, .modePAL, .modeNTSCp, .modePALp,
-            // HD 1080 Modes
-            .modeHD1080p2398, .modeHD1080p24, .modeHD1080p25, .modeHD1080p2997, .modeHD1080p30,
-            .modeHD1080p4795, .modeHD1080p48, .modeHD1080p50, .modeHD1080p5994, .modeHD1080p6000,
-            .modeHD1080p9590, .modeHD1080p96, .modeHD1080p100, .modeHD1080p11988, .modeHD1080p120,
-            .modeHD1080i50, .modeHD1080i5994, .modeHD1080i6000,
-            // HD 720 Modes
-            .modeHD720p50, .modeHD720p5994, .modeHD720p60,
-        ]
+        var list:[DLABDisplayMode] = []
+        if let manager = manager {
+            list = manager.displayModeList()
+        }
         return list
     }
     
     private func videoStyleListOf(_ size:NSSize) -> [VideoStyle]? {
         var list:[VideoStyle] = [];
-        
-        // HD-1080
-        if NSEqualSizes(size, NSSize(width: 1920, height: 1080)) {
-            list = [.HD_1920_1080_Full, .HD_1920_1080_16_9]
+        if let manager = manager, let vsList = manager.videoStyleListOf(size) {
+            list = vsList
         }
-        if NSEqualSizes(size, NSSize(width: 1440, height: 1080)) {
-            list = [.HDV_HDCAM]
-        }
-        // HD-720
-        if NSEqualSizes(size, NSSize(width: 1280, height: 720)) {
-            list = [.HD_1280_720_Full, .HD_1280_720_16_9]
-        }
-        // SD-625/576
-        if NSEqualSizes(size, NSSize(width: 720, height: 576)) {
-            list = [.SD_720_576_16_9, .SD_720_576_4_3, .SD_625_13_5MHz_16_9, .SD_625_13_5MHz_4_3]
-        }
-        if NSEqualSizes(size, NSSize(width: 768, height: 576)) {
-            list = [.SD_768_576_Full]
-        }
-        // SD-525/486
-        if NSEqualSizes(size, NSSize(width: 720, height: 486)) {
-            list = [.SD_720_486_16_9, .SD_720_486_4_3, .SD_525_13_5MHz_16_9, .SD_525_13_5MHz_4_3]
-        }
-        if NSEqualSizes(size, NSSize(width: 640, height: 486)) {
-            list = [.SD_640_486_Full]
-        }
-        // SD-525/480
-        if NSEqualSizes(size, NSSize(width: 720, height: 480)) {
-            list = [.SD_720_480_16_9, .SD_720_480_4_3]
-        }
-        if NSEqualSizes(size, NSSize(width: 640, height: 480)) {
-            list = [.SD_640_480_Full]
-        }
-        
-        return (list.count > 0 ? list : nil)
+        return list
     }
 }
