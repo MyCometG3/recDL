@@ -44,10 +44,12 @@ class PrefController: NSViewController {
     @IBOutlet weak var menuAudioConnection: NSMenu!
     @IBOutlet weak var btnRestartSession: NSButton!
     @IBOutlet weak var menuVideoStyle: NSMenu!
+    @IBOutlet weak var menuFieldDominance: NSMenu!
     
     @IBOutlet var descriptionText: NSTextView!
     @IBOutlet weak var vsErrorLabel: NSTextField!
     @IBOutlet weak var clapErrorLabel: NSTextField!
+    @IBOutlet weak var fdErrorLabel: NSTextField!
     
     private func setup() {
         // Check device readiness
@@ -80,12 +82,17 @@ class PrefController: NSViewController {
     
     private func refreshUI() {
         updateVideoStyle()
+        updateFieldDominance()
         updateDescription()
         updateErrorLabel()
     }
     
     private func updateVideoStyle() {
         appDelegate.updateVideoStyleMenu(menuVideoStyle)
+    }
+    
+    private func updateFieldDominance() {
+        appDelegate.updateFieldDominanceMenu(menuFieldDominance)
     }
     
     private func updateDescription() {
@@ -97,9 +104,10 @@ class PrefController: NSViewController {
     }
     
     private func updateErrorLabel() {
-        let (videoStyleOK, clapOK) = appDelegate.verifyCompatibility()
+        let (videoStyleOK, clapOK, fdOK) = appDelegate.verifyCompatibility()
         vsErrorLabel.isHidden = videoStyleOK
         clapErrorLabel.isHidden = clapOK
+        fdErrorLabel.isHidden = fdOK
     }
     
     /* ============================================================================= */

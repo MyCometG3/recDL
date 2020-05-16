@@ -1487,21 +1487,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    public func verifyCompatibility() -> (Bool, Bool) {
+    public func updateFieldDominanceMenu(_ menu:NSMenu) {
+        // Show inconsistent fieldMode menutitle in red color
+        let size = NSFont.smallSystemFontSize
+        let font = NSFont.menuFont(ofSize: size)
+        let attrYes:[NSAttributedString.Key : Any] = [ .font: font ]
+        let attrNo:[NSAttributedString.Key : Any] = [ .font: font, .foregroundColor: NSColor.red ]
+        
+        guard checkReadiness() else { return }
+        
+        let uint32Value = UInt32(defaults.integer(forKey: Keys.displayMode))
+        let displayMode = DLABDisplayMode(rawValue: uint32Value)!
+        
+        if let settingInfo:[String:Any] = settingInfoFor(displayMode),
+            let nativeFD = fieldDominanceFrom(settingInfo)
+        {
+            for menuItem in menu.items {
+                // 0:SingleField, 1:BFF, 2:TFF
+                let fd = fieldDominanceForTag(menuItem.tag)
+                let sameFD = (fd == nativeFD)
+                let fontAttr = (sameFD ? attrYes : attrNo)
+                menuItem.attributedTitle = NSAttributedString(string: menuItem.title,
+                                                              attributes: fontAttr)
+            }
+        }
+    }
+    
+    public func verifyCompatibility() -> (Bool, Bool, Bool) {
         let displayMode = DLABDisplayMode.init(rawValue: UInt32(defaults.integer(forKey: Keys.displayMode)))
         let vsString:String? = defaults.string(forKey: Keys.videoStyle)
         let clap = NSPoint(x: defaults.integer(forKey: Keys.clapOffsetH),
                                    y: defaults.integer(forKey: Keys.clapOffsetV))
+        let fd = fieldDominanceForTag(defaults.integer(forKey: Keys.videoFieldDetail))
         if let vsString = vsString {
             let videoStyle = VideoStyle.init(rawValue: vsString)
             if let displayMode = displayMode, let videoStyle = videoStyle {
                 let okStyle:Bool = verifyVideoStyleOf(videoStyle, for: displayMode)
                 let okClap:Bool = verifyClapOf(clap, for: videoStyle)
+                let okFD:Bool = verifyFieldDominanceOf(fd, for: displayMode)
                 
-                return (okStyle, okClap)
+                return (okStyle, okClap, okFD)
             }
         }
-        return (false, false)
+        return (false, false, false)
     }
     
     public func resetStyleCurrent() -> Bool {
@@ -1626,6 +1654,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    private func fieldDominanceForTag(_ tag:Int) -> DLABFieldDominance {
+        let fdList:[DLABFieldDominance] =
+            [.progressiveFrame, .lowerFieldFirst, .upperFieldFirst]
+        let fd = fdList[tag]
+        return fd
+    }
+    
     private func pixelSizeFrom(_ settingInfo:[String:Any]) -> NSSize? {
         if let numWidth = settingInfo["width"] as? NSNumber,
             let numHeight = settingInfo["height"] as? NSNumber
@@ -1650,16 +1685,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var displayModeSize:NSSize = NSZeroSize
         
         // Size value of displayMode
-        if let list:[String:Any] = availableSettingInfo, list.count > 0 {
-            for value in list.values {
-                let settingInfo = value as! [String:Any]
-                if let displayMode = displayModeFrom(settingInfo), displayMode == targetDisplayMode {
-                    displayModeSize = pixelSizeFrom(settingInfo)!
-                    break
-                }
-            }
+        if let settingInfo = settingInfoFor(targetDisplayMode),
+            let pixelSize = pixelSizeFrom(settingInfo){
+            displayModeSize = pixelSize
         }
-        
         let result:Bool = videoStyleSize.equalTo(displayModeSize)
         return result
     }
@@ -1670,6 +1699,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return defaultStyle
         }
         return nil
+    }
+    
+    private func verifyFieldDominanceOf(_ fd:DLABFieldDominance, for targetDisplayMode:DLABDisplayMode) -> Bool {
+        if let settingInfo = settingInfoFor(targetDisplayMode) {
+            let nativeFD = fieldDominanceFrom(settingInfo)
+            return (fd == nativeFD)
+        }
+        return false
     }
     
     private func verifyClapOf(_ offset:NSPoint, for videoStyle: VideoStyle) -> Bool {
