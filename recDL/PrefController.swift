@@ -14,8 +14,34 @@ import Cocoa
 class PrefController: NSViewController {
     private lazy var defaults = UserDefaults.standard
     
+    /* ============================================================================= */
+    //MARK: - IBOutlet
+    /* ============================================================================= */
+    
     @IBOutlet weak var prefWindow :NSWindow!
     @IBOutlet weak var appDelegate :AppDelegate!
+    
+    @IBOutlet weak var btnDisplayMode: NSPopUpButton!
+    @IBOutlet weak var menuDisplayMode: NSMenu!
+    @IBOutlet weak var btnVideoConnection: NSPopUpButton!
+    @IBOutlet weak var menuVideoConnection: NSMenu!
+    @IBOutlet weak var btnAudioConnection: NSPopUpButton!
+    @IBOutlet weak var menuAudioConnection: NSMenu!
+    @IBOutlet weak var btnRestartSession: NSButton!
+    @IBOutlet weak var menuVideoStyle: NSMenu!
+    @IBOutlet weak var menuFieldDominance: NSMenu!
+    
+    @IBOutlet var descriptionText: NSTextView!
+    @IBOutlet weak var vsErrorLabel: NSTextField!
+    @IBOutlet weak var clapErrorLabel: NSTextField!
+    @IBOutlet weak var fdErrorLabel: NSTextField!
+
+    @IBOutlet weak var buttonAudioEncode: NSButton!
+    @IBOutlet weak var textAudioBitRate: NSTextField!
+    
+    /* ============================================================================= */
+    //MARK: - IBAction
+    /* ============================================================================= */
     
     @IBAction func showPreferences(_ sender: AnyObject) {
         prefWindow.makeKeyAndOrderFront(self)
@@ -35,21 +61,21 @@ class PrefController: NSViewController {
             refreshUI()
         }
     }
+
+    @IBAction func updateAudioEncoder(_ sender: Any) {
+        adjustAudioEncoder()
+    }
     
-    @IBOutlet weak var btnDisplayMode: NSPopUpButton!
-    @IBOutlet weak var menuDisplayMode: NSMenu!
-    @IBOutlet weak var btnVideoConnection: NSPopUpButton!
-    @IBOutlet weak var menuVideoConnection: NSMenu!
-    @IBOutlet weak var btnAudioConnection: NSPopUpButton!
-    @IBOutlet weak var menuAudioConnection: NSMenu!
-    @IBOutlet weak var btnRestartSession: NSButton!
-    @IBOutlet weak var menuVideoStyle: NSMenu!
-    @IBOutlet weak var menuFieldDominance: NSMenu!
+    @IBAction func restartSession(_ sender: Any) {
+        //
+        let userInfo : [String:Any]? = nil
+        let notification = Notification(name: .restartSessionNotificationKey, object: self, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
+    }
     
-    @IBOutlet var descriptionText: NSTextView!
-    @IBOutlet weak var vsErrorLabel: NSTextField!
-    @IBOutlet weak var clapErrorLabel: NSTextField!
-    @IBOutlet weak var fdErrorLabel: NSTextField!
+    /* ============================================================================= */
+    //MARK: - private func
+    /* ============================================================================= */
     
     private func setup() {
         // Check device readiness
@@ -63,9 +89,6 @@ class PrefController: NSViewController {
             return
         }
         
-        //
-        updateAudioEncoder(self)
-        
         // Fill DisplayMode/VideoConnection/AudioConnection menu
         let dmSelection = appDelegate.updateDisplayModeMenu(menuDisplayMode)
         let vcSelection = appDelegate.updateVideoConnectionMenu(menuVideoConnection)
@@ -75,6 +98,9 @@ class PrefController: NSViewController {
         if dmSelection >= 0 { btnDisplayMode.selectItem(withTag: dmSelection) }
         if vcSelection >= 0 { btnVideoConnection.selectItem(withTag: vcSelection) }
         if acSelection >= 0 { btnAudioConnection.selectItem(withTag: acSelection) }
+        
+        //
+        adjustAudioEncoder()
         
         //
         refreshUI()
@@ -110,13 +136,7 @@ class PrefController: NSViewController {
         fdErrorLabel.isHidden = fdOK
     }
     
-    /* ============================================================================= */
-    
-    @IBOutlet weak var buttonAudioEncode: NSButton!
-    @IBOutlet weak var textAudioBitRate: NSTextField!
-    
-    @IBAction func updateAudioEncoder(_ sender: Any) {
-        //let useAudioEncode :Bool = buttonAudioEncode.state == .on
+    private func adjustAudioEncoder() {
         let useAudioBitRate :Int = textAudioBitRate.integerValue
         
         if useAudioBitRate > 80 {
@@ -126,12 +146,5 @@ class PrefController: NSViewController {
         } else {
             defaults.set(3, forKey: Keys.audioEncoder)
         }
-    }
-    
-    @IBAction func restartSession(_ sender: Any) {
-        //
-        let userInfo : [String:Any]? = nil
-        let notification = Notification(name: .restartSessionNotificationKey, object: self, userInfo: userInfo)
-        NotificationCenter.default.post(notification)
     }
 }
