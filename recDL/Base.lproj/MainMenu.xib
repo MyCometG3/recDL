@@ -691,7 +691,7 @@
                     <textField hidden="YES" wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dOE-10-RDT">
                         <rect key="frame" x="10" y="10" width="41" height="20"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="border" title="Label" drawsBackground="YES" id="8L0-AZ-vMF">
-                            <font key="font" metaFont="label" size="13"/>
+                            <font key="font" metaFont="system"/>
                             <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         </textFieldCell>
@@ -725,7 +725,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="now" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" selectedItem="E1N-CR-X8N" id="qu7-VX-u03">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="label" size="13"/>
+                                <font key="font" metaFont="system"/>
                                 <menu key="menu" id="4EQ-Qb-I0G">
                                     <items>
                                         <menuItem title="now" state="on" tag="-1" id="E1N-CR-X8N">
@@ -773,7 +773,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="now" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" selectedItem="PDt-XX-bf0" id="Cmd-ur-5tB">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="label" size="13"/>
+                                <font key="font" metaFont="system"/>
                                 <menu key="menu" id="ClM-qW-Z4r">
                                     <items>
                                         <menuItem title="now" state="on" tag="-1" id="PDt-XX-bf0">
@@ -821,7 +821,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="1:1 - Square Pixel" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1001" imageScaling="proportionallyDown" inset="2" selectedItem="DEs-Pv-hMl" id="mm4-ad-wSy">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="label" size="13"/>
+                                <font key="font" metaFont="system"/>
                                 <menu key="menu" id="VF4-tT-z9b">
                                     <items>
                                         <menuItem title="1:1 - Square Pixel" state="on" tag="1001" id="DEs-Pv-hMl">
@@ -887,7 +887,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="roundTextured" title="@Video" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pq0-Um-Mb9">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                <font key="font" metaFont="label" size="13"/>
+                                <font key="font" metaFont="system"/>
                             </buttonCell>
                             <connections>
                                 <action selector="togglePreviewVideo:" target="Voe-Tx-rLC" id="gWN-6h-F6f"/>
@@ -908,7 +908,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="roundTextured" title="@Audio" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5kD-Mz-PUq">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                <font key="font" metaFont="label" size="13"/>
+                                <font key="font" metaFont="system"/>
                             </buttonCell>
                             <connections>
                                 <action selector="togglePreviewAudio:" target="Voe-Tx-rLC" id="8pq-fF-b2V"/>
@@ -929,7 +929,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="roundTextured" title="@Recording" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L7G-hI-5Bp">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                <font key="font" metaFont="label" size="13"/>
+                                <font key="font" metaFont="system"/>
                             </buttonCell>
                             <connections>
                                 <action selector="toggleRecording:" target="Voe-Tx-rLC" id="pSs-J3-e4S"/>
@@ -963,7 +963,7 @@
                         <tabViewItems>
                             <tabViewItem label="Tracks" identifier="" id="BlO-Wc-2Kq">
                                 <view key="view" id="7sr-Rt-pVU">
-                                    <rect key="frame" x="10" y="25" width="272" height="449"/>
+                                    <rect key="frame" x="10" y="29" width="272" height="445"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kte-qs-GNV">
@@ -981,7 +981,7 @@
                                                                 <rect key="frame" x="39" y="76" width="85" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="AAC Data Rate:" id="48Z-lu-he6">
-                                                                    <font key="font" metaFont="label" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -990,7 +990,7 @@
                                                                 <rect key="frame" x="175" y="73" width="31" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Kbps" id="7JX-96-P1K">
-                                                                    <font key="font" metaFont="label" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -1003,7 +1003,7 @@
                                                                         <real key="minimum" value="32"/>
                                                                         <real key="maximum" value="320"/>
                                                                     </numberFormatter>
-                                                                    <font key="font" metaFont="label" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -1021,7 +1021,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <buttonCell key="cell" type="check" title="Encode Audio (AAC)" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="PAD-lo-Crj">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="label" size="11"/>
+                                                                    <font key="font" metaFont="message" size="11"/>
                                                                 </buttonCell>
                                                                 <connections>
                                                                     <action selector="updateAudioEncoder:" target="d3T-ds-NJz" id="fJq-D5-yVY"/>
@@ -1410,18 +1410,30 @@
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mHI-Ay-rNW">
                                                         <rect key="frame" x="95" y="157" width="142" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="SD 720:486 16:9" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="40033" imageScaling="proportionallyDown" inset="2" selectedItem="phc-cg-78W" id="Drf-k7-5ua">
+                                                        <popUpButtonCell key="cell" type="push" title="SD 640:480 Full" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1001" imageScaling="proportionallyDown" inset="2" selectedItem="96y-oI-P5M" id="Drf-k7-5ua">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                             <menu key="menu" id="rxF-IT-qPl">
                                                                 <items>
-                                                                    <menuItem title="SD 640:480 Full" tag="1001" id="96y-oI-P5M"/>
-                                                                    <menuItem title="SD 640:486 Full" tag="1001" id="NgF-fC-g7R"/>
-                                                                    <menuItem title="SD 768:576 Full" tag="1001" id="2Ke-eV-TJE"/>
+                                                                    <menuItem title="SD 640:480 Full" state="on" tag="1001" id="96y-oI-P5M">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="SD 640:486 Full" tag="1001" id="NgF-fC-g7R">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="SD 768:576 Full" tag="1001" id="2Ke-eV-TJE">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
                                                                     <menuItem title="HD 1280:720:Full" tag="1001" id="eL5-Uf-sdE">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                     <menuItem title="HD 1920:1080 Full" tag="1001" id="fmh-8N-49f">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="CAM2k 2048:1556 Full" tag="1001" id="1KD-qx-ETy">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="DCI2k 2048:1080 Full" tag="1001" id="qgd-uu-9Uy">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                     <menuItem isSeparatorItem="YES" id="bpQ-8Z-07T"/>
@@ -1434,7 +1446,7 @@
                                                                     <menuItem title="SD 720:486 4:3" tag="10011" id="ZX7-qt-5co">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem title="SD 720:486 16:9" state="on" tag="40033" id="phc-cg-78W">
+                                                                    <menuItem title="SD 720:486 16:9" tag="40033" id="phc-cg-78W">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                     <menuItem title="SD 720:576 4:3" tag="12011" id="Kzc-5Y-zcO">
@@ -1454,11 +1466,39 @@
                                                                     <menuItem title="525 13.5MHz 4:3" tag="10011" id="1Xj-PR-q0e">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem title="525 13.5MHz 16:9" tag="40033" id="40w-mn-Ofa"/>
-                                                                    <menuItem title="625 13.5MHz 4:3" tag="59054" id="oGt-wj-iKE"/>
-                                                                    <menuItem title="625 13.5MHz 16:9" tag="118081" id="Sq8-Y1-uiP"/>
+                                                                    <menuItem title="525 13.5MHz 16:9" tag="40033" id="40w-mn-Ofa">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="625 13.5MHz 4:3" tag="59054" id="oGt-wj-iKE">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="625 13.5MHz 16:9" tag="118081" id="Sq8-Y1-uiP">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
                                                                     <menuItem isSeparatorItem="YES" id="5o2-NE-e3b"/>
-                                                                    <menuItem title="HDV/HDCAM" tag="4003" id="NPp-MT-46X"/>
+                                                                    <menuItem title="HDV/HDCAM" tag="4003" id="NPp-MT-46X">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="oAe-Zl-k8N"/>
+                                                                    <menuItem title="CAM2k 2048:1556 178" tag="1001" id="iOb-s7-4uw">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="CAM2k 2048:1556 185" tag="1001" id="0mH-dx-34p">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="CAM2k 2048:1556 235" tag="1001" id="CB2-ay-Zvn" userLabel="CAM2k 2048:1556">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="CAM2k 2048:1556 239" tag="1001" id="ucW-mP-rfa">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="eML-tZ-Jyg"/>
+                                                                    <menuItem title="DCI2k 2048:1080 185" tag="1001" id="dcY-TZ-f5J">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="DCI2k 2048:1080 239" tag="1001" id="bfo-h6-Oky">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
@@ -1750,7 +1790,7 @@
                     <rect key="frame" x="18" y="23" width="69" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Stop after:" id="tMy-aZ-pFZ">
-                        <font key="font" metaFont="label" size="13"/>
+                        <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -1759,7 +1799,7 @@
                     <rect key="frame" x="93" y="20" width="64" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="gGa-93-WOD">
-                        <font key="font" metaFont="label" size="13"/>
+                        <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -1768,7 +1808,7 @@
                     <rect key="frame" x="163" y="23" width="53" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="minutes" id="WKp-EJ-77U">
-                        <font key="font" metaFont="label" size="13"/>
+                        <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -1778,7 +1818,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Quit app after finished" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="abn-pa-N9s">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="label" size="13"/>
+                        <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <binding destination="aeJ-nD-3pN" name="value" keyPath="values.autoQuit" id="whk-fg-CUt"/>
