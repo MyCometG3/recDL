@@ -679,7 +679,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="0.0" y="694" width="607" height="363"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
             <value key="minSize" type="size" width="320" height="180"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="607" height="363"/>
@@ -952,7 +952,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" nonactivatingPanel="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="112" width="276" height="484"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
             <view key="contentView" id="gBu-Kk-mxK">
                 <rect key="frame" x="0.0" y="0.0" width="276" height="484"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -1239,7 +1239,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="checkParameterError:" target="d3T-ds-NJz" id="xds-Gt-KDT"/>
+                                                            <action selector="updateVideoStyle:" target="d3T-ds-NJz" id="xds-Gt-KDT"/>
                                                             <binding destination="aeJ-nD-3pN" name="value" keyPath="values.clapOffsetV" id="5ex-gY-oet">
                                                                 <dictionary key="options">
                                                                     <bool key="NSContinuouslyUpdatesValue" value="YES"/>
@@ -1260,7 +1260,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <action selector="checkParameterError:" target="d3T-ds-NJz" id="pV3-KD-Qch"/>
+                                                            <action selector="updateVideoStyle:" target="d3T-ds-NJz" id="pV3-KD-Qch"/>
                                                             <binding destination="aeJ-nD-3pN" name="value" keyPath="values.clapOffsetH" id="Xbf-oN-D6D">
                                                                 <dictionary key="options">
                                                                     <bool key="NSContinuouslyUpdatesValue" value="YES"/>
@@ -1503,7 +1503,7 @@
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <action selector="checkParameterError:" target="d3T-ds-NJz" id="JxH-5M-fMu"/>
+                                                            <action selector="updateVideoStyle:" target="d3T-ds-NJz" id="JxH-5M-fMu"/>
                                                             <binding destination="aeJ-nD-3pN" name="selectedValue" keyPath="values.videoStyle" id="C3t-fq-R2j"/>
                                                         </connections>
                                                     </popUpButton>
@@ -1522,7 +1522,7 @@
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <action selector="checkParameterError:" target="d3T-ds-NJz" id="sbg-yZ-60a"/>
+                                                            <action selector="updateVideoStyle:" target="d3T-ds-NJz" id="sbg-yZ-60a"/>
                                                             <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.videoFieldDetail" id="6Mp-75-BLZ"/>
                                                         </connections>
                                                     </popUpButton>

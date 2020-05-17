@@ -48,8 +48,8 @@ class PrefController: NSViewController {
         setup()
     }
     
-    @IBAction func checkParameterError(_ sender: Any) {
-        updateErrorLabel()
+    @IBAction func updateVideoStyle(_ sender: Any) {
+        refreshUI()
     }
     
     @IBAction func updateDisplayMode(_ sender: Any) {
@@ -125,7 +125,7 @@ class PrefController: NSViewController {
         let size = NSFont.systemFontSize(for: NSControl.ControlSize.mini)
         descriptionText.font = NSFont.userFixedPitchFont(ofSize: size)
         
-        let desc = "# " + appDelegate.deviceDescription() + "\n# " + appDelegate.displayModeDescription()
+        let desc = "# " + appDelegate.deviceDescription() + "\n# " + appDelegate.displayModeDescription() + "\n# " + appDelegate.videoStyleDescription()
         descriptionText.string = desc
     }
     

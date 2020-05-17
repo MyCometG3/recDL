@@ -1298,8 +1298,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let modelName = deviceInfo["modelName"] as! String
             let displayName = deviceInfo["displayName"] as! String
             let persistentID = deviceInfo["persistentID"] as! Int64
+            let deviceGroupID = deviceInfo["deviceGroupID"] as! Int64
             let topologicalID = deviceInfo["topologicalID"] as! Int64
-            desc = "DeviceInfo = \(persistentID):\(topologicalID)\n \(modelName),\n \(displayName)"
+            let numberOfSubDevices = deviceInfo["numberOfSubDevices"] as! Int64
+            let subDeviceIndex = deviceInfo["subDeviceIndex"] as! Int64
+            let profileID = deviceInfo["profileID"] as! Int64
+            let duplex = deviceInfo["duplex"] as! Int64
+            let duplexStr:String = NSFileTypeForHFSTypeCode(UInt32(duplex))
+            
+            desc = "DeviceInfo = \(persistentID):\(topologicalID):\(profileID)"
+            desc += " \(deviceGroupID):\(numberOfSubDevices):\(subDeviceIndex)"
+            desc += " \(duplexStr)"
+            
+            desc += "\n \(displayName)"
+            if modelName != displayName {
+                desc += ",\n \(modelName)"
+            }
         }
         return desc
     }
@@ -1329,7 +1343,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 default:
                     fdString = "Unknown";
                 }
-                desc = "DisplayMode = \(name),\n \(typeString), \(width)x\(height), \(duration)/\(timeScale),\n \(fdString)"
+                desc = "DisplayMode = \"\(name)\",\n \(typeString), \(width)x\(height), \(duration)/\(timeScale),\n \(fdString)"
+            }
+        }
+        return desc
+    }
+    
+    public func videoStyleDescription() -> String {
+        var desc:String = "ERROR: unknown videoStyle is specified."
+        let vsString:String? = defaults.string(forKey: Keys.videoStyle)
+        if let vsString = vsString {
+            let videoStyle = VideoStyle.init(rawValue: vsString)
+            if let videoStyle = videoStyle {
+                let name = videoStyle.rawValue
+                let encodedSize = videoStyle.encodedSize()
+                let encodedDesc = String(format: "encoded: %.1fx%.1f", encodedSize.width, encodedSize.height)
+                let visibleSize = videoStyle.visibleSize()
+                let visibleDesc = String(format: "visible: %.1fx%.1f", visibleSize.width, visibleSize.height)
+                let clapRangeH = Int((encodedSize.width - visibleSize.width) / 2)
+                let clapRangeV = Int((encodedSize.height - visibleSize.height) / 2)
+                let clapRangeDesc = String(format:"clapRange: +-%d/+-%d", clapRangeH, clapRangeV)
+                
+                desc = "VideoStyle = \"\(name)\",\n \(encodedDesc) \(visibleDesc) \(clapRangeDesc)"
             }
         }
         return desc
