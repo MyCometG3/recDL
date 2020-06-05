@@ -32,7 +32,7 @@ recDL is a simple, AV capture application for Intensity Shuttle from Blackmagic 
 - SMPTE timecode ready (* Depends on video source - VANC)
 
 #### Development environment
-- MacOS X 10.15.4 Catalina
+- MacOS X 10.15.5 Catalina
 - Xcode 11.5
 - Swift 5.2
 
