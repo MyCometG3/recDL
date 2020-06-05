@@ -78,6 +78,10 @@ class PrefController: NSViewController {
     /* ============================================================================= */
     
     private func setup() {
+        // Adjust detail text font size
+        let size:CGFloat = 9.8//NSFont.systemFontSize(for: NSControl.ControlSize.mini)
+        descriptionText.font = NSFont.userFixedPitchFont(ofSize: size)
+        
         // Check device readiness
         let ready = appDelegate.checkReadiness()
         btnDisplayMode.isEnabled = ready
@@ -122,9 +126,6 @@ class PrefController: NSViewController {
     }
     
     private func updateDescription() {
-        let size = NSFont.systemFontSize(for: NSControl.ControlSize.mini)
-        descriptionText.font = NSFont.userFixedPitchFont(ofSize: size)
-        
         let desc = "# " + appDelegate.deviceDescription() + "\n# " + appDelegate.displayModeDescription() + "\n# " + appDelegate.videoStyleDescription()
         descriptionText.string = desc
     }
