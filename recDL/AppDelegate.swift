@@ -540,10 +540,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             manager.audioDepth = audioDepth
             manager.audioChannels = audioChannel
             
-            let showAlternate = defaults.bool(forKey: Keys.showAlternate)
-            if !showAlternate {
-                manager.videoPreview = parentView // as? CaptureVideoPreview
-            }
+            addPreviewLayer()
             
             manager.captureStart()
         }
