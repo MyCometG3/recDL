@@ -52,10 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var deviceInfo : [String:Any]? = nil
     private var availableSettingInfo : [String:Any]? = nil
-    private var expectedStyle : [VideoStyle]? = nil
-    private var availableVideo : Int = 0
-    private var availableAudio : Int = 0
-
+    
     /* ============================================ */
     // MARK: - Scripting support
     /* ============================================ */
@@ -578,7 +575,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Start Session
         DispatchQueue.main.async(execute: {[unowned self] in
-            // TODO: Start session with proper input port (audio/video)
             self.defaults.set(false, forKey: Keys.showAlternate)
             
             self.startSession()
@@ -588,8 +584,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             // Update Toolbar button title
             self.setScale(-1)               // Update Popup Menu Selection
             self.setVolume(-1)              // Update Popup Menu Selection
-            
-            // TODO: Record proper input port to defaults
         })
     }
     
@@ -1416,29 +1410,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         var selectedTag = -1
         guard checkReadiness() else { return selectedTag }
-
+        
         if let manager = manager, let device = manager.currentDevice {
             if let numberValue = try? device.intValue(for: .configurationVideoInputConnection) {
                 selectedTag = numberValue.intValue
+                
+                defaults.setValue(selectedTag, forKey: Keys.videoConnection)
             }
-            if let numberValue = try? device.intValue(for: .videoInputConnections) {
+            if let numberValue = try? device.intValue(for: DLABAttribute.videoInputConnections) {
                 let availableConnection:Int = numberValue.intValue
                 for menuItem in menu.items {
-                    menuItem.state = (menuItem.tag == selectedTag) ? .on : .off
-
                     let ready = (availableConnection & menuItem.tag) > 0
                     let fontAttr = (ready ? attrYes : attrNo)
                     menuItem.attributedTitle = NSAttributedString(string: menuItem.title,
                                                                   attributes: fontAttr)
+                    menuItem.state = (menuItem.tag == selectedTag) ? .on : .off
                 }
             }
             
             defaults.setValue(true, forKey: Keys.enableVideoConnection)
         } else {
             defaults.setValue(false, forKey: Keys.enableVideoConnection)
-        }
-        if selectedTag >= 0 {
-            defaults.setValue(selectedTag, forKey: Keys.videoConnection)
         }
         return selectedTag
     }
@@ -1456,25 +1448,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let manager = manager, let device = manager.currentDevice {
             if let numberValue = try? device.intValue(for: .configurationAudioInputConnection) {
                 selectedTag = numberValue.intValue
+                
+                defaults.setValue(selectedTag, forKey: Keys.audioConnection)
             }
-            if let numberValue = try? device.intValue(for: .audioInputConnections) {
+            if let numberValue = try? device.intValue(for: DLABAttribute.audioInputConnections) {
                 let availableConnection:UInt32 = numberValue.uint32Value
                 for menuItem in menu.items {
-                    menuItem.state = (menuItem.tag == selectedTag) ? .on : .off
-                    
                     let ready = (availableConnection & UInt32(menuItem.tag)) > 0
                     let fontAttr = (ready ? attrYes : attrNo)
                     menuItem.attributedTitle = NSAttributedString(string: menuItem.title,
                                                                   attributes: fontAttr)
+                    menuItem.state = (menuItem.tag == selectedTag) ? .on : .off
                 }
             }
             
             defaults.setValue(true, forKey: Keys.enableAudioConnection)
         } else {
             defaults.setValue(false, forKey: Keys.enableAudioConnection)
-        }
-        if selectedTag >= 0 {
-            defaults.setValue(selectedTag, forKey: Keys.audioConnection)
         }
         return selectedTag
     }
@@ -1501,11 +1491,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             var optionStr:String? = nil
             if nativeSize.equalTo(NSSize(width: 720, height: 486)) {
                 optionStr = "525 13.5"
-            } else
-            if nativeSize.equalTo(NSSize(width: 720, height: 576)) {
+            } else if nativeSize.equalTo(NSSize(width: 720, height: 576)) {
                 optionStr = "625 13.5"
-            } else
-            if nativeSize.equalTo(NSSize(width: 1440, height: 1080)) {
+            } else if nativeSize.equalTo(NSSize(width: 1440, height: 1080)) {
                 optionStr = "HDCAM"
             }
             
@@ -1552,7 +1540,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let displayMode = DLABDisplayMode.init(rawValue: UInt32(defaults.integer(forKey: Keys.displayMode)))
         let vsString:String? = defaults.string(forKey: Keys.videoStyle)
         let clap = NSPoint(x: defaults.integer(forKey: Keys.clapOffsetH),
-                                   y: defaults.integer(forKey: Keys.clapOffsetV))
+                           y: defaults.integer(forKey: Keys.clapOffsetV))
         let fd = fieldDominanceForTag(defaults.integer(forKey: Keys.videoFieldDetail))
         if let vsString = vsString {
             let videoStyle = VideoStyle.init(rawValue: vsString)
@@ -1584,17 +1572,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     /* ==================================================================================== */
-    //MARK: -
+    //MARK: - Private functions
     /* ==================================================================================== */
-
+    
     private func queryDevice() -> Bool {
         // initialize properties
         deviceInfo = nil
         availableSettingInfo = nil
-        availableVideo = 0
-        availableAudio = 0
-        expectedStyle = nil
-
+        
         if let manager = manager, let device = manager.currentDevice {
             // deviceInfo
             deviceInfo = manager.deviceInfo(device: device)
@@ -1602,7 +1587,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             // availableModes
             var settingInfoList:[String:Any] = [:]
             if let inputList = manager.inputVideoSettingList(device: device) {
-                let expectedDisplayModes = displayModeList()
+                let expectedDisplayModes = manager.displayModeList()
                 for setting in inputList {
                     // Filter out unsupported displayModes
                     if expectedDisplayModes.contains(setting.displayMode) {
@@ -1620,20 +1605,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if settingInfoList.count > 0 {
                 availableSettingInfo = settingInfoList
             }
-            
-            // video connections
-            if let numberValue = try? device.intValue(for: .videoInputConnections) {
-                availableVideo = numberValue.intValue
-            }
-            
-            // audio connections
-            if let numberValue = try? device.intValue(for: .audioInputConnections) {
-                availableAudio = numberValue.intValue
-            }
         }
         
-        if deviceInfo != nil && availableSettingInfo != nil &&
-            (availableVideo > 0 || availableAudio > 0) {
+        if deviceInfo != nil && availableSettingInfo != nil {
             return true
         } else {
             return false
@@ -1655,7 +1629,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         return nil
     }
-
+    
     private func settingInfoFor(_ targetDisplayMode:DLABDisplayMode) -> [String:Any]? {
         if let list:[String:Any] = availableSettingInfo, list.count > 0 {
             for item in list.values {
@@ -1707,8 +1681,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func videoStyleListFor(_ settingInfo:[String:Any]) -> [VideoStyle]? {
-        if let size = pixelSizeFrom(settingInfo) {
-            return videoStyleListOf(size)
+        if let manager = manager, let size = pixelSizeFrom(settingInfo) {
+            return manager.videoStyleListOf(size)
         } else {
             return nil
         }
@@ -1822,20 +1796,4 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /* ==================================================================================== */
     //MARK: -
     /* ==================================================================================== */
-    
-    private func displayModeList() -> [DLABDisplayMode] {
-        var list:[DLABDisplayMode] = []
-        if let manager = manager {
-            list = manager.displayModeList()
-        }
-        return list
-    }
-    
-    private func videoStyleListOf(_ size:NSSize) -> [VideoStyle]? {
-        var list:[VideoStyle] = [];
-        if let manager = manager, let vsList = manager.videoStyleListOf(size) {
-            list = vsList
-        }
-        return list
-    }
 }
