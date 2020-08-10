@@ -33,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var targetPath : String? = nil
     
     private var iconActiveState = false
+    private var iconAnimation = false
     private let iconIdle = NSImage(named:Keys.idle)
     private let iconInactive = NSImage(named:Keys.inactive)
     private let iconActive = NSImage(named:Keys.active)
@@ -1011,13 +1012,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Dock Icon Animation
         if let manager = manager , manager.recording {
+            if !iconAnimation {
+                iconAnimation = true    // Start Icon Animation
+            }
+            
             // Perform AppIcon Animation
             iconActiveState = !iconActiveState
             NSApp.applicationIconImage = iconActiveState ? iconActive : iconInactive
         } else {
             // Stop AppIcon Animation
-            if iconActiveState {
-                iconActiveState = false
+            if iconAnimation {
+                iconAnimation = false   // Stop Icon Animation
                 NSApp.applicationIconImage = iconIdle
             }
         }
