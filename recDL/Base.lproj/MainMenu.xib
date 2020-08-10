@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="System colors introduced in macOS 10.13" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -963,11 +963,11 @@
                         <tabViewItems>
                             <tabViewItem label="Device" identifier="" id="XQt-zs-a2g">
                                 <view key="view" id="Thu-S3-3ze">
-                                    <rect key="frame" x="10" y="29" width="272" height="499"/>
+                                    <rect key="frame" x="10" y="25" width="272" height="503"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box fixedFrame="YES" title="DeckLink Device:" translatesAutoresizingMaskIntoConstraints="NO" id="16a-sP-0kh">
-                                            <rect key="frame" x="6" y="276" width="260" height="217"/>
+                                            <rect key="frame" x="6" y="280" width="260" height="217"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="crz-sY-M5s">
                                                 <rect key="frame" x="3" y="3" width="254" height="199"/>
@@ -978,7 +978,7 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Ajm-o2-WRr" id="77m-wW-PTy">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <menu key="menu" id="b7K-g4-lBe">
                                                                 <items>
                                                                     <menuItem title="Item 1" state="on" id="Ajm-o2-WRr"/>
@@ -997,7 +997,7 @@
                                                         <rect key="frame" x="17" y="166" width="75" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="DisplayMode:" id="gyy-Pp-sBU">
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1007,7 +1007,7 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Unspecified" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="rOO-hI-l7B" id="qLS-Kv-FJT">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <menu key="menu" id="wky-Bj-dvA">
                                                                 <items>
                                                                     <menuItem title="Unspecified" state="on" id="rOO-hI-l7B"/>
@@ -1040,7 +1040,7 @@
                                                         <rect key="frame" x="24" y="142" width="104" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video Connection:" id="WHH-y5-l9f">
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1049,7 +1049,7 @@
                                                         <rect key="frame" x="24" y="118" width="104" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Audio Connection:" id="6Ad-34-IOt">
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1059,7 +1059,7 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Unspecified" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="lE6-OS-JTC" id="C5P-uA-BmW">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <menu key="menu" id="NAD-A0-yZI">
                                                                 <items>
                                                                     <menuItem title="Unspecified" state="on" id="lE6-OS-JTC">
@@ -1093,7 +1093,7 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="8bit YpCbCr" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="846624121" imageScaling="proportionallyDown" inset="2" selectedItem="DAe-nZ-L1M" id="53n-Lx-fR5">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <menu key="menu" id="qXx-tR-jB9">
                                                                 <items>
                                                                     <menuItem title="8bit YpCbCr" state="on" tag="846624121" id="DAe-nZ-L1M"/>
@@ -1110,7 +1110,7 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="push" title="Restart Session" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Dez-cg-ytV">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="restartSession:" target="d3T-ds-NJz" id="f63-So-j04"/>
@@ -1123,27 +1123,27 @@
                                                         <size key="cellSize" width="58" height="16"/>
                                                         <buttonCell key="prototype" type="radio" title="Radio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="7s1-hX-jPo">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                         </buttonCell>
                                                         <cells>
                                                             <column>
                                                                 <buttonCell type="radio" title="Off" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="R9g-hM-f6O">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                 </buttonCell>
                                                                 <buttonCell type="radio" title="Stereo" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" tag="2" inset="2" id="mO9-4z-E8m">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                 </buttonCell>
                                                             </column>
                                                             <column>
                                                                 <buttonCell type="radio" title="8ch" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" tag="8" inset="2" id="rb2-dR-3YZ">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                 </buttonCell>
                                                                 <buttonCell type="radio" title="16ch" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" tag="16" inset="2" id="1UQ-Bb-8zK">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                 </buttonCell>
                                                             </column>
                                                         </cells>
@@ -1155,7 +1155,7 @@
                                                         <rect key="frame" x="24" y="94" width="104" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video bitDepth:" id="hR9-Mj-auM">
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1167,17 +1167,17 @@
                                                         <size key="cellSize" width="91" height="16"/>
                                                         <buttonCell key="prototype" type="radio" title="Radio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="7L5-z3-rRT">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                         </buttonCell>
                                                         <cells>
                                                             <column>
                                                                 <buttonCell type="radio" title="16bit Audio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" tag="16" inset="2" id="A8w-9p-yNr" userLabel="16bit Audio">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                 </buttonCell>
                                                                 <buttonCell type="radio" title="32bit Audio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" tag="32" inset="2" id="DcH-vg-MfC" userLabel="32bit Audio">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
+                                                                    <font key="font" metaFont="menu" size="11"/>
                                                                 </buttonCell>
                                                             </column>
                                                         </cells>
@@ -1216,7 +1216,7 @@
                                             </scroller>
                                         </scrollView>
                                         <box fixedFrame="YES" borderType="line" title="Video Style:" translatesAutoresizingMaskIntoConstraints="NO" id="gaG-4t-l0E">
-                                            <rect key="frame" x="6" y="122" width="260" height="150"/>
+                                            <rect key="frame" x="6" y="126" width="260" height="150"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="oZ0-48-KWi">
                                                 <rect key="frame" x="3" y="3" width="254" height="132"/>
@@ -1267,6 +1267,12 @@
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                     <menuItem title="DCI2k 2048:1080 Full" tag="1001" id="qgd-uu-9Uy">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="UHD4k 3840:2160 Full" tag="1001" id="6pl-rv-zAE">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="DCI4k 4096:2160 Full" tag="1001" id="8NK-eR-cqM">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                     <menuItem isSeparatorItem="YES" id="bpQ-8Z-07T"/>
@@ -1332,6 +1338,13 @@
                                                                     <menuItem title="DCI2k 2048:1080 239" tag="1001" id="bfo-h6-Oky">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="or7-rd-71x"/>
+                                                                    <menuItem title="DCI4k 4096:2160 185" tag="1001" id="CvS-ap-2yi">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="DCI4k 4096:2160 239" tag="1001" id="pU6-Gl-2Kf">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
@@ -1344,7 +1357,7 @@
                                                         <rect key="frame" x="238" y="51" width="12" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="!" drawsBackground="YES" id="dJ0-jD-xWL">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1374,7 +1387,7 @@
                                                         <rect key="frame" x="238" y="101" width="12" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="!" drawsBackground="YES" id="omr-go-Exj">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1402,7 +1415,7 @@
                                                         <rect key="frame" x="238" y="77" width="12" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="!" drawsBackground="YES" id="6GH-DQ-hwz">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1538,11 +1551,30 @@
                                                             <font key="font" metaFont="message" size="11"/>
                                                             <menu key="menu" id="ZxT-8p-3CD">
                                                                 <items>
-                                                                    <menuItem title="Default" state="on" id="uIE-hR-Cqf"/>
-                                                                    <menuItem title="60000" tag="60000" id="ptb-3R-qjt"/>
+                                                                    <menuItem title="Default" state="on" id="uIE-hR-Cqf">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="krV-IM-2QQ"/>
+                                                                    <menuItem title="120000" tag="120000" id="5X9-9z-Tvc">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="100000" tag="100000" id="FIn-Go-0XZ">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="96000" tag="96000" id="hW0-5Y-bUT">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="kEd-Rh-ldr"/>
+                                                                    <menuItem title="60000" tag="60000" id="ptb-3R-qjt">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
                                                                     <menuItem title="50000" tag="50000" id="rqR-YB-OGd">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
+                                                                    <menuItem title="48000" tag="48000" id="stG-cQ-zjp">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="Q0m-i6-w6t"/>
                                                                     <menuItem title="30000" tag="30000" id="XPl-a6-OkR">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
@@ -1609,17 +1641,18 @@
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="woL-Wb-Hcq">
                                                         <rect key="frame" x="118" y="72" width="119" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="ProRes422HQ" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ykh-1z-9fH" id="AMq-Ga-p8B">
+                                                        <popUpButtonCell key="cell" type="push" title="ProRes422" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="YuH-2K-glh" id="AMq-Ga-p8B">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                             <menu key="menu" id="ALr-Ta-uuC">
                                                                 <items>
-                                                                    <menuItem title="ProRes422HQ" state="on" id="ykh-1z-9fH"/>
-                                                                    <menuItem title="ProRes422" tag="1" id="YuH-2K-glh"/>
+                                                                    <menuItem title="ProRes422HQ" id="ykh-1z-9fH"/>
+                                                                    <menuItem title="ProRes422" state="on" tag="1" id="YuH-2K-glh"/>
                                                                     <menuItem title="ProRes422LT" tag="2" id="l5E-e4-Ct7"/>
                                                                     <menuItem title="ProRes422Proxy" tag="3" id="OFy-wB-IYH"/>
-                                                                    <menuItem title="H.264/AVC" tag="10" id="xt1-Bh-zVN"/>
+                                                                    <menuItem isSeparatorItem="YES" id="BNV-8R-s37"/>
                                                                     <menuItem title="H.265/HEVC" tag="11" id="ic9-b8-geo"/>
+                                                                    <menuItem title="H.264/AVC" tag="10" id="xt1-Bh-zVN"/>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
@@ -1849,7 +1882,7 @@
                     </connections>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="-1597" y="-387"/>
+            <point key="canvasLocation" x="-1522" y="-1005"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="aeJ-nD-3pN"/>
     </objects>
