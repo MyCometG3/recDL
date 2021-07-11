@@ -35,8 +35,8 @@ recDL is a simple, AV capture application for Intensity Shuttle from Blackmagic 
 
 #### Development environment
 - macOS 11.4 BigSur
-- Xcode 12.5.0
-- Swift 5.4
+- Xcode 12.5.1
+- Swift 5.4.2
 
 #### License
 - The MIT License
