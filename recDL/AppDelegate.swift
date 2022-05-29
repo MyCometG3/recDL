@@ -190,6 +190,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyValues[Keys.clapOffsetH] = 0         // SD:+8..-8, HD:+16..-16
         keyValues[Keys.clapOffsetV] = 0         // SD:+8..-8, HD:+16..-16
         keyValues[Keys.videoTimeScale] = 30000  // Video media track time resolution
+        keyValues[Keys.timeCodeSource] = 0      // 0:None, 1:SERIAL, 2:VITC, 4:RP188, 8:CoreAudio
         keyValues[Keys.timeCodeFormat] = 0      // 0:None, 32:tmcd, 64:tc64
         
         keyValues[Keys.videoConnection] = DLABVideoConnection.sVideo.rawValue
@@ -541,6 +542,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             manager.audioDepth = audioDepth
             manager.audioChannels = audioChannel
             
+            let timeCodeSource : Int = defaults.integer(forKey: Keys.timeCodeSource)
+            switch timeCodeSource {
+            case 1, 2, 4, 8:
+                manager.timecodeSource = TimecodeType(rawValue: timeCodeSource)
+            default:
+                manager.timecodeSource = nil
+            }
+            
             addPreviewLayer()
             
             manager.captureStart()
@@ -599,6 +608,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             let timeScale = defaults.integer(forKey: Keys.videoTimeScale)
             let timeCodeFormat = defaults.integer(forKey: Keys.timeCodeFormat)
+            let timeCodeSource = defaults.integer(forKey: Keys.timeCodeSource)
             
             let def_videoEncode = defaults.bool(forKey: Keys.videoEncode)
             let def_videoEncoder = defaults.integer(forKey: Keys.videoEncoder)
@@ -633,16 +643,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             switch timeCodeFormat {
             case 32:
                 manager.timecodeFormatType = kCMTimeCodeFormatType_TimeCode32
-                manager.supportTimecodeVANC = true
-                manager.supportTimecodeCoreAudio = false
             case 64:
                 manager.timecodeFormatType = kCMTimeCodeFormatType_TimeCode64
-                manager.supportTimecodeVANC = true
-                manager.supportTimecodeCoreAudio = false
             default:
                 manager.timecodeFormatType = kCMTimeCodeFormatType_TimeCode32
-                manager.supportTimecodeVANC = false
-                manager.supportTimecodeCoreAudio = false
+                manager.timecodeSource = nil
+            }
+            switch timeCodeSource {
+            case 1, 2, 4, 8:
+                manager.timecodeSource = TimecodeType(rawValue: timeCodeSource)
+            default:
+                manager.timecodeSource = nil
             }
             
             if compressVideo {

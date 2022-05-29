@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="System colors introduced in macOS 10.13" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -679,7 +679,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="0.0" y="694" width="607" height="363"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <value key="minSize" type="size" width="320" height="180"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="607" height="363"/>
@@ -716,7 +716,7 @@
             </view>
             <toolbar key="toolbar" implicitIdentifier="E21BB127-3A21-45CB-8880-00321B74FCF8" displayMode="iconAndLabel" sizeMode="regular" id="4Sg-y6-SmG">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="0FAC6647-B191-485E-B4A4-20B271260CEB" label="Preview Scale" paletteLabel="Preview Scale" id="INf-WX-MGi">
+                    <toolbarItem implicitItemIdentifier="0FAC6647-B191-485E-B4A4-20B271260CEB" label="Preview Scale" paletteLabel="Preview Scale" title="now" id="INf-WX-MGi">
                         <nil key="toolTip"/>
                         <size key="minSize" width="100" height="28"/>
                         <size key="maxSize" width="100" height="28"/>
@@ -725,7 +725,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="now" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" selectedItem="E1N-CR-X8N" id="qu7-VX-u03">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="4EQ-Qb-I0G">
                                     <items>
                                         <menuItem title="now" state="on" tag="-1" id="E1N-CR-X8N">
@@ -764,7 +764,7 @@
                             </popUpButtonCell>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="4F47AC2D-1CCA-4CD9-867C-5445E9A8448A" label="Preview Volume" paletteLabel="Preview Volume" id="Ato-KL-Pbx">
+                    <toolbarItem implicitItemIdentifier="4F47AC2D-1CCA-4CD9-867C-5445E9A8448A" label="Preview Volume" paletteLabel="Preview Volume" title="now" id="Ato-KL-Pbx">
                         <nil key="toolTip"/>
                         <size key="minSize" width="100" height="28"/>
                         <size key="maxSize" width="100" height="28"/>
@@ -773,7 +773,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="now" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" selectedItem="PDt-XX-bf0" id="Cmd-ur-5tB">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="ClM-qW-Z4r">
                                     <items>
                                         <menuItem title="now" state="on" tag="-1" id="PDt-XX-bf0">
@@ -812,7 +812,7 @@
                             </popUpButtonCell>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="BC083FC8-4646-4682-8513-8A5E6AEF1F78" label="Pixel Aspect Ratio" paletteLabel="Pixel Aspect Ratio" id="sLQ-6Y-tXS">
+                    <toolbarItem implicitItemIdentifier="BC083FC8-4646-4682-8513-8A5E6AEF1F78" label="Pixel Aspect Ratio" paletteLabel="Pixel Aspect Ratio" title="1:1 - Square Pixel" id="sLQ-6Y-tXS">
                         <nil key="toolTip"/>
                         <size key="minSize" width="100" height="28"/>
                         <size key="maxSize" width="100" height="28"/>
@@ -821,7 +821,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="1:1 - Square Pixel" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1001" imageScaling="proportionallyDown" inset="2" selectedItem="DEs-Pv-hMl" id="mm4-ad-wSy">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="VF4-tT-z9b">
                                     <items>
                                         <menuItem title="1:1 - Square Pixel" state="on" tag="1001" id="DEs-Pv-hMl">
@@ -878,7 +878,7 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="8I3-1z-jjz"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="qIb-Ug-CP1"/>
-                    <toolbarItem implicitItemIdentifier="17B77A3D-DF0C-4BA6-8311-F9612E8090E8" label="ToggleVideo" paletteLabel="ToggleVideo" id="8HZ-Cw-cAA" userLabel="ToggleVideo">
+                    <toolbarItem implicitItemIdentifier="17B77A3D-DF0C-4BA6-8311-F9612E8090E8" label="ToggleVideo" paletteLabel="ToggleVideo" title="@Video" id="8HZ-Cw-cAA" userLabel="ToggleVideo">
                         <nil key="toolTip"/>
                         <size key="minSize" width="80" height="25"/>
                         <size key="maxSize" width="80" height="25"/>
@@ -899,7 +899,7 @@
                             </connections>
                         </button>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="ABAEA7F7-FB5D-4C26-ACC8-815640DA37EC" label="ToggleAudio" paletteLabel="ToggleAudio" id="7h3-yw-pVS" userLabel="ToggleAudio">
+                    <toolbarItem implicitItemIdentifier="ABAEA7F7-FB5D-4C26-ACC8-815640DA37EC" label="ToggleAudio" paletteLabel="ToggleAudio" title="@Audio" id="7h3-yw-pVS" userLabel="ToggleAudio">
                         <nil key="toolTip"/>
                         <size key="minSize" width="80" height="25"/>
                         <size key="maxSize" width="80" height="25"/>
@@ -920,7 +920,7 @@
                             </connections>
                         </button>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="D6DE9B98-77EE-463B-8DE3-E177CF9A6930" label="ToggleRecord" paletteLabel="ToggleRecord" id="bYh-Uv-6vi" userLabel="ToggleRecord">
+                    <toolbarItem implicitItemIdentifier="D6DE9B98-77EE-463B-8DE3-E177CF9A6930" label="ToggleRecord" paletteLabel="ToggleRecord" title="@Recording" id="bYh-Uv-6vi" userLabel="ToggleRecord">
                         <nil key="toolTip"/>
                         <size key="minSize" width="99" height="25"/>
                         <size key="maxSize" width="101" height="25"/>
@@ -952,7 +952,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" nonactivatingPanel="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="112" width="276" height="538"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <view key="contentView" id="gBu-Kk-mxK">
                 <rect key="frame" x="0.0" y="0.0" width="276" height="538"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -963,11 +963,11 @@
                         <tabViewItems>
                             <tabViewItem label="Device" identifier="" id="XQt-zs-a2g">
                                 <view key="view" id="Thu-S3-3ze">
-                                    <rect key="frame" x="10" y="29" width="272" height="499"/>
+                                    <rect key="frame" x="10" y="25" width="272" height="503"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box fixedFrame="YES" title="DeckLink Device:" translatesAutoresizingMaskIntoConstraints="NO" id="16a-sP-0kh">
-                                            <rect key="frame" x="6" y="276" width="260" height="217"/>
+                                            <rect key="frame" x="6" y="280" width="260" height="217"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="crz-sY-M5s">
                                                 <rect key="frame" x="3" y="3" width="254" height="199"/>
@@ -1216,7 +1216,7 @@
                                             </scroller>
                                         </scrollView>
                                         <box fixedFrame="YES" borderType="line" title="Video Style:" translatesAutoresizingMaskIntoConstraints="NO" id="gaG-4t-l0E">
-                                            <rect key="frame" x="6" y="122" width="260" height="150"/>
+                                            <rect key="frame" x="6" y="126" width="260" height="150"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="oZ0-48-KWi">
                                                 <rect key="frame" x="3" y="3" width="254" height="132"/>
@@ -1684,22 +1684,26 @@
                                             </view>
                                         </box>
                                         <box fixedFrame="YES" title="Timecode Track:" translatesAutoresizingMaskIntoConstraints="NO" id="BqU-C9-Px1" userLabel="Timecode Track:">
-                                            <rect key="frame" x="6" y="154" width="260" height="79"/>
+                                            <rect key="frame" x="6" y="116" width="260" height="117"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="n50-af-ETS">
-                                                <rect key="frame" x="3" y="3" width="254" height="61"/>
+                                                <rect key="frame" x="3" y="3" width="254" height="99"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ae7-fr-z4C">
-                                                        <rect key="frame" x="118" y="20" width="119" height="22"/>
+                                                        <rect key="frame" x="119" y="58" width="119" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="32bit (tmcd)" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="32" imageScaling="proportionallyDown" inset="2" selectedItem="hQr-jX-0tb" id="HgF-0C-MgH">
+                                                        <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="EZs-UF-jtr" id="HgF-0C-MgH">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                             <menu key="menu" id="81k-iq-hgQ">
                                                                 <items>
-                                                                    <menuItem title="None" id="EZs-UF-jtr"/>
-                                                                    <menuItem title="32bit (tmcd)" state="on" tag="32" id="hQr-jX-0tb"/>
+                                                                    <menuItem title="None" state="on" id="EZs-UF-jtr">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="32bit (tmcd)" tag="32" id="hQr-jX-0tb">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
                                                                     <menuItem title="64bit (tc64)" tag="64" id="JiE-vH-unJ">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
@@ -1711,9 +1715,48 @@
                                                         </connections>
                                                     </popUpButton>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cqJ-Ir-yIA">
-                                                        <rect key="frame" x="18" y="25" width="97" height="14"/>
+                                                        <rect key="frame" x="18" y="63" width="99" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="TimecodeFormat:" id="uTW-1m-JBa">
+                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="TimecodeFormat:" id="uTW-1m-JBa">
+                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gyj-8f-fTO">
+                                                        <rect key="frame" x="119" y="34" width="119" height="22"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="b7w-pX-odm" id="Ztl-MT-UG0">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <menu key="menu" id="qPI-u7-lcw">
+                                                                <items>
+                                                                    <menuItem title="None" state="on" id="b7w-pX-odm">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="SERIAL" tag="1" id="wti-l0-0hc">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="VITC" tag="2" id="VCo-Eg-OEf">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="RP188" tag="4" id="ud7-Zg-zdR">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="CoreAudio" tag="8" id="iPW-dQ-s5T" userLabel="CoreAudio">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                </items>
+                                                            </menu>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.timeCodeSource" id="Kob-Uz-b9V"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FoR-gW-FAU">
+                                                        <rect key="frame" x="18" y="39" width="99" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="TimecodeSource:" id="rhx-AB-Pqh">
                                                             <font key="font" metaFont="message" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

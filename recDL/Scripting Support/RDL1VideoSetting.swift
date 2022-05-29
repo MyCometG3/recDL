@@ -27,6 +27,7 @@ class RDL1VideoSetting: NSObject {
     public var fieldDominance :String? = nil
     public var displayModeFlag :Int = 0
     public var isHD :Bool = false
+    public var useSERIAL :Bool = false
     public var useVITC :Bool = false
     public var useRP188 :Bool = false
     public var pixelFormat :String? = nil
@@ -56,6 +57,7 @@ class RDL1VideoSetting: NSObject {
         fieldDominance = NSFileTypeForHFSTypeCode(videoSetting.fieldDominance.rawValue)
         displayModeFlag = Int(videoSetting.displayModeFlag.rawValue)
         isHD = Bool(videoSetting.isHD)
+        useSERIAL = Bool(videoSetting.useSERIAL)
         useVITC = Bool(videoSetting.useVITC)
         useRP188 = Bool(videoSetting.useRP188)
         

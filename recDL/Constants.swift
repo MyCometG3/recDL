@@ -86,6 +86,7 @@ enum Keys {
     static let clapOffsetV = "clapOffsetV"
     static let videoTimeScale = "videoTimeScale"
     static let timeCodeFormat = "timeCodeFormat"
+    static let timeCodeSource = "timeCodeSource"
     static let videoConnection = "videoConnection"
     static let audioConnection = "audioConnection"
 

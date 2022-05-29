@@ -223,6 +223,9 @@
             <property name="isHD" code="isHD" type="boolean" access="r" description="isHD">
                 <cocoa key="isHD"/>
             </property>
+            <property name="useSERIAL" code="Seri" type="boolean" access="r" description="useSERIAL">
+                <cocoa key="useSERIAL"/>
+            </property>
             <property name="useVITC" code="VitC" type="boolean" access="r" description="useVITC">
                 <cocoa key="useVITC"/>
             </property>
