@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private lazy var defaults = UserDefaults.standard
     private lazy var notificationCenter = NotificationCenter.default
     
-    public private(set) var manager : DLABCaptureManager? = nil
+    public private(set) var manager : CaptureManager? = nil
     private var previewLayerReady : Bool = false
     private var updateTimer : Timer? = nil
     private var stopTimer : Timer? = nil
@@ -507,7 +507,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         if manager == nil {
-            manager = DLABCaptureManager()
+            manager = CaptureManager()
         }
         if let manager = manager {
             // TODO: add input devide selection
