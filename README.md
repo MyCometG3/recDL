@@ -2,7 +2,7 @@
 
 recDL is a simple, AV capture application for Blackmagic DeckLink devices.
 
-- __Requirement__: macOS 12.x, 11.x, 10.15, 10.14.
+- __Requirement__: macOS 13.x, 12.x, 11.x, 10.15, 10.14.
 - __Capture Device__: Blackmagic DeckLink devices.
 - __Restriction__: Compressed/Synchronized captures are not supported.
 - __Framework__: DLABridging + DLABCaptureManager (Embedded)
@@ -31,12 +31,13 @@ recDL is a simple, AV capture application for Blackmagic DeckLink devices.
 - ColorPrimaries/TransferFunctions/YCbCrMatrices ready
 - LPCM Audio format recording support
 - Multichannel audio (2 for Stereo, 8 or 16 for discrete)
+- HDMI surround audio (up to 8 channels)
 - SMPTE timecode ready (* Depends on video source - VANC)
 
 #### Development environment
-- macOS 12.6 Monterey
-- Xcode 14.0
-- Swift 5.7.0
+- macOS 12.6.1 Monterey
+- Xcode 14.1
+- Swift 5.7.1
 
 #### License
 - The MIT License
