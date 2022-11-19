@@ -208,6 +208,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         keyValues[Keys.audioEncoder] = 1        // 1:AACLC, 2:HE-AAC(~80Kbps), 3:HE-AACv2(~40Kbps)
         keyValues[Keys.audioBitRate] = 256      // audioBitRate (Kbps)
         keyValues[Keys.audioChannel] = 2        // 0:off, 2:stereo, 3-16:discrete multi channel
+        keyValues[Keys.audioLayout] = 6         // 0:discrete, 2:LR, 3:LRC, 6:5.1ch, 8:7.1ch
+        keyValues[Keys.audioReverse34] = false  // false:(3,4)=(C,LFE), true:(3,4)=(LFE,C)
         
         //
         keyValues[Keys.showAlternate] = false   // Disable video preview
@@ -532,6 +534,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let audioDepthRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.audioDepth))
             guard let audioDepth = DLABAudioSampleType(rawValue: audioDepthRaw) else { return }
             let audioChannel : UInt32  = UInt32(defaults.integer(forKey: Keys.audioChannel))
+            let audioLayout : UInt32 = UInt32(defaults.integer(forKey: Keys.audioLayout))
+            let audioReverse34 : Bool = defaults.bool(forKey: Keys.audioReverse34)
             
             manager.displayMode = displayMode
             manager.videoConnection = videoConnection
@@ -541,6 +545,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             manager.audioDepth = audioDepth
             manager.audioChannels = audioChannel
+            if verifyHDMIAudioChannelLayoutReady() {
+                manager.hdmiAudioChannels = audioLayout
+                manager.reverseCh3Ch4 = audioReverse34
+            }
             
             let timeCodeSource : Int = defaults.integer(forKey: Keys.timeCodeSource)
             switch timeCodeSource {
@@ -1566,6 +1574,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         return (false, false, false)
+    }
+    
+    public func verifyHDMIAudioChannelLayoutReady() -> Bool {
+        let videoConnectionRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.videoConnection))
+        let videoConnection = DLABVideoConnection(rawValue: videoConnectionRaw)
+        
+        let audioConnectionRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.audioConnection))
+        let audioConnection = DLABAudioConnection(rawValue: audioConnectionRaw)
+        
+        let audioChannel : UInt32  = UInt32(defaults.integer(forKey: Keys.audioChannel))
+        
+        if videoConnection == .HDMI && audioConnection == .embedded {
+            if audioChannel == 8 {
+                return true
+            }
+        }
+        return false
     }
     
     public func resetStyleCurrent() -> Bool {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="System colors introduced in macOS 10.13" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,6 +34,7 @@
                 <outlet property="btnAudioConnection" destination="AfU-p5-UXh" id="Aq7-uw-Bk7"/>
                 <outlet property="btnDisplayMode" destination="5Uz-vZ-I0V" id="3nr-BA-YTa"/>
                 <outlet property="btnRestartSession" destination="Q92-gt-71i" id="mHe-hU-8Ld"/>
+                <outlet property="btnReverse34" destination="Zfl-rF-ROD" id="WsV-j3-n01"/>
                 <outlet property="btnVideoConnection" destination="CnT-3R-ghG" id="8LZ-P6-gwt"/>
                 <outlet property="buttonAudioEncode" destination="awg-fZ-TOx" id="mkT-DY-Ay6"/>
                 <outlet property="clapErrorLabel" destination="VFF-yX-rVv" id="JfI-f2-2t6"/>
@@ -45,6 +46,7 @@
                 <outlet property="menuVideoConnection" destination="wky-Bj-dvA" id="XDB-Fw-bBk"/>
                 <outlet property="menuVideoStyle" destination="rxF-IT-qPl" id="K7u-q8-bbp"/>
                 <outlet property="prefWindow" destination="ydn-FR-COG" id="pYe-C6-8Yo"/>
+                <outlet property="segAudioChannelLayout" destination="swG-pf-7ZP" id="KyL-Zg-bRA"/>
                 <outlet property="textAudioBitRate" destination="r0Z-TI-Tyl" id="o7S-Dx-PiV"/>
                 <outlet property="vsErrorLabel" destination="IGH-pT-L3K" id="YKi-cB-REZ"/>
             </connections>
@@ -963,18 +965,18 @@
                         <tabViewItems>
                             <tabViewItem label="Device" identifier="" id="XQt-zs-a2g">
                                 <view key="view" id="Thu-S3-3ze">
-                                    <rect key="frame" x="10" y="25" width="272" height="503"/>
+                                    <rect key="frame" x="10" y="29" width="272" height="499"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box fixedFrame="YES" title="DeckLink Device:" translatesAutoresizingMaskIntoConstraints="NO" id="16a-sP-0kh">
-                                            <rect key="frame" x="6" y="280" width="260" height="217"/>
+                                            <rect key="frame" x="6" y="276" width="260" height="217"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="crz-sY-M5s">
                                                 <rect key="frame" x="3" y="3" width="254" height="199"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Uz-vZ-I0V">
-                                                        <rect key="frame" x="98" y="161" width="139" height="22"/>
+                                                        <rect key="frame" x="99" y="161" width="139" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Ajm-o2-WRr" id="77m-wW-PTy">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -994,16 +996,16 @@
                                                         </connections>
                                                     </popUpButton>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JWv-8g-Pt5">
-                                                        <rect key="frame" x="17" y="166" width="75" height="14"/>
+                                                        <rect key="frame" x="18" y="166" width="79" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="DisplayMode:" id="gyy-Pp-sBU">
+                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="DisplayMode:" id="gyy-Pp-sBU">
                                                             <font key="font" metaFont="message" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CnT-3R-ghG">
-                                                        <rect key="frame" x="129" y="137" width="108" height="22"/>
+                                                        <rect key="frame" x="130" y="140" width="108" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Unspecified" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="rOO-hI-l7B" id="qLS-Kv-FJT">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1037,16 +1039,16 @@
                                                         </connections>
                                                     </popUpButton>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-f3-6FZ">
-                                                        <rect key="frame" x="24" y="142" width="104" height="14"/>
+                                                        <rect key="frame" x="18" y="147" width="110" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video Connection:" id="WHH-y5-l9f">
                                                             <font key="font" metaFont="message" size="11"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ri3-0X-Dhn">
-                                                        <rect key="frame" x="24" y="118" width="104" height="14"/>
+                                                        <rect key="frame" x="18" y="93" width="110" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Audio Connection:" id="6Ad-34-IOt">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -1055,7 +1057,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AfU-p5-UXh">
-                                                        <rect key="frame" x="129" y="113" width="108" height="22"/>
+                                                        <rect key="frame" x="130" y="88" width="108" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Unspecified" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="lE6-OS-JTC" id="C5P-uA-BmW">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1088,25 +1090,8 @@
                                                             <binding destination="aeJ-nD-3pN" name="enabled" keyPath="values.enableAudioConnection" id="MBy-5P-a8U"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="StE-kg-BHI">
-                                                        <rect key="frame" x="129" y="89" width="108" height="22"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="8bit YpCbCr" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="846624121" imageScaling="proportionallyDown" inset="2" selectedItem="DAe-nZ-L1M" id="53n-Lx-fR5">
-                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
-                                                            <menu key="menu" id="qXx-tR-jB9">
-                                                                <items>
-                                                                    <menuItem title="8bit YpCbCr" state="on" tag="846624121" id="DAe-nZ-L1M"/>
-                                                                    <menuItem title="10bit YpCbCr" tag="1983000880" id="ZLi-sT-eau"/>
-                                                                </items>
-                                                            </menu>
-                                                        </popUpButtonCell>
-                                                        <connections>
-                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.pixelFormat" id="xPJ-mS-10F"/>
-                                                        </connections>
-                                                    </popUpButton>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q92-gt-71i">
-                                                        <rect key="frame" x="114" y="11" width="125" height="27"/>
+                                                        <rect key="frame" x="115" y="13" width="125" height="27"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="push" title="Restart Session" bezelStyle="rounded" alignment="center" controlSize="small" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Dez-cg-ytV">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1116,75 +1101,79 @@
                                                             <action selector="restartSession:" target="d3T-ds-NJz" id="f63-So-j04"/>
                                                         </connections>
                                                     </button>
-                                                    <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7z-af-tkF">
-                                                        <rect key="frame" x="118" y="52" width="116" height="32"/>
+                                                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXS-bu-8qk">
+                                                        <rect key="frame" x="92" y="67" width="144" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="cellSize" width="58" height="16"/>
-                                                        <buttonCell key="prototype" type="radio" title="Radio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="7s1-hX-jPo">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
-                                                        </buttonCell>
-                                                        <cells>
-                                                            <column>
-                                                                <buttonCell type="radio" title="Off" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="R9g-hM-f6O">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
-                                                                </buttonCell>
-                                                                <buttonCell type="radio" title="Stereo" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" tag="2" inset="2" id="mO9-4z-E8m">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
-                                                                </buttonCell>
-                                                            </column>
-                                                            <column>
-                                                                <buttonCell type="radio" title="8ch" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" tag="8" inset="2" id="rb2-dR-3YZ">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
-                                                                </buttonCell>
-                                                                <buttonCell type="radio" title="16ch" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" tag="16" inset="2" id="1UQ-Bb-8zK">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
-                                                                </buttonCell>
-                                                            </column>
-                                                        </cells>
+                                                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Zt5-N2-8jG">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <segments>
+                                                                <segment label="Off"/>
+                                                                <segment label="Stereo" selected="YES" tag="2"/>
+                                                                <segment label="8ch" tag="8"/>
+                                                                <segment label="16ch" tag="16"/>
+                                                            </segments>
+                                                        </segmentedCell>
                                                         <connections>
-                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.audioChannel" id="JLE-9n-1Kn"/>
+                                                            <action selector="updateAudioChannel:" target="d3T-ds-NJz" id="gvn-5X-Mc5"/>
+                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.audioChannel" id="rlP-Oi-XGh"/>
                                                         </connections>
-                                                    </matrix>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iKh-mI-PXj">
-                                                        <rect key="frame" x="24" y="94" width="104" height="14"/>
+                                                    </segmentedControl>
+                                                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N68-3E-UDe">
+                                                        <rect key="frame" x="18" y="67" width="73" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video bitDepth:" id="hR9-Mj-auM">
-                                                            <font key="font" metaFont="message" size="11"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dGh-vf-2tV">
-                                                        <rect key="frame" x="19" y="52" width="91" height="32"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="cellSize" width="91" height="16"/>
-                                                        <buttonCell key="prototype" type="radio" title="Radio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="7L5-z3-rRT">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
-                                                        </buttonCell>
-                                                        <cells>
-                                                            <column>
-                                                                <buttonCell type="radio" title="16bit Audio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" tag="16" inset="2" id="A8w-9p-yNr" userLabel="16bit Audio">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
-                                                                </buttonCell>
-                                                                <buttonCell type="radio" title="32bit Audio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" tag="32" inset="2" id="DcH-vg-MfC" userLabel="32bit Audio">
-                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="message" size="11"/>
-                                                                </buttonCell>
-                                                            </column>
-                                                        </cells>
+                                                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="qA5-BN-lFO">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <segments>
+                                                                <segment label="16bit" selected="YES" tag="16"/>
+                                                                <segment label="32bit" width="30" tag="32"/>
+                                                            </segments>
+                                                        </segmentedCell>
                                                         <connections>
-                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.audioDepth" id="pPI-9X-OdF"/>
+                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.audioDepth" id="Rvs-Sv-n9V"/>
                                                         </connections>
-                                                    </matrix>
+                                                    </segmentedControl>
+                                                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="swG-pf-7ZP">
+                                                        <rect key="frame" x="34" y="44" width="202" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fillProportionally" style="rounded" trackingMode="selectOne" id="xA1-mn-uFb">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <segments>
+                                                                <segment label="Discrete"/>
+                                                                <segment label="L R" tag="2"/>
+                                                                <segment label="L R C" tag="3"/>
+                                                                <segment label="5.1ch" selected="YES" tag="6"/>
+                                                                <segment label="7.1ch" tag="8"/>
+                                                            </segments>
+                                                        </segmentedCell>
+                                                        <connections>
+                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.audioLayout" id="w7r-ka-OaL"/>
+                                                        </connections>
+                                                    </segmentedControl>
+                                                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lRY-c1-avT">
+                                                        <rect key="frame" x="80" y="119" width="156" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fillProportionally" style="rounded" trackingMode="selectOne" id="L8Z-Gx-bpr">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <segments>
+                                                                <segment label="8bit YpCbCr" selected="YES" tag="846624121"/>
+                                                                <segment label="10bit YpCbCr" width="74" tag="1983000880"/>
+                                                            </segments>
+                                                        </segmentedCell>
+                                                        <connections>
+                                                            <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.pixelFormat" id="zgb-RN-s8c"/>
+                                                        </connections>
+                                                    </segmentedControl>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zfl-rF-ROD">
+                                                        <rect key="frame" x="19" y="15" width="94" height="27"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="check" title="Reverse 3/4ch" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="XVR-zx-0QG">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="aeJ-nD-3pN" name="value" keyPath="values.audioReverse34" id="uXn-Bf-X0e"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -1216,7 +1205,7 @@
                                             </scroller>
                                         </scrollView>
                                         <box fixedFrame="YES" borderType="line" title="Video Style:" translatesAutoresizingMaskIntoConstraints="NO" id="gaG-4t-l0E">
-                                            <rect key="frame" x="6" y="126" width="260" height="150"/>
+                                            <rect key="frame" x="6" y="122" width="260" height="150"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="oZ0-48-KWi">
                                                 <rect key="frame" x="3" y="3" width="254" height="132"/>

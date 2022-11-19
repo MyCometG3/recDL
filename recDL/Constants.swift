@@ -100,6 +100,8 @@ enum Keys {
     static let audioEncoder = "audioEncoder"
     static let audioBitRate = "audioBitRate"
     static let audioChannel = "audioChannel"
+    static let audioLayout = "audioLayout"
+    static let audioReverse34 = "audioReverse34"
     
     /* ==================================================== */
     

@@ -30,6 +30,8 @@ class PrefController: NSViewController {
     @IBOutlet weak var btnRestartSession: NSButton!
     @IBOutlet weak var menuVideoStyle: NSMenu!
     @IBOutlet weak var menuFieldDominance: NSMenu!
+    @IBOutlet weak var segAudioChannelLayout: NSSegmentedControl!
+    @IBOutlet weak var btnReverse34: NSButton!
     
     @IBOutlet var descriptionText: NSTextView!
     @IBOutlet weak var vsErrorLabel: NSTextField!
@@ -53,6 +55,10 @@ class PrefController: NSViewController {
     }
     
     @IBAction func updateDisplayMode(_ sender: Any) {
+        refreshUI()
+    }
+    
+    @IBAction func updateAudioChannel(_ sender: Any) {
         refreshUI()
     }
     
@@ -115,6 +121,7 @@ class PrefController: NSViewController {
         updateFieldDominance()
         updateDescription()
         updateErrorLabel()
+        updateAudioLayout()
     }
     
     private func updateVideoStyle() {
@@ -135,6 +142,12 @@ class PrefController: NSViewController {
         vsErrorLabel.isHidden = videoStyleOK
         clapErrorLabel.isHidden = clapOK
         fdErrorLabel.isHidden = fdOK
+    }
+    
+    private func updateAudioLayout() {
+        let audioChannelLayoutOK = appDelegate.verifyHDMIAudioChannelLayoutReady()
+        segAudioChannelLayout.isEnabled = audioChannelLayoutOK
+        btnReverse34.isEnabled = audioChannelLayoutOK
     }
     
     private func adjustAudioEncoder() {
