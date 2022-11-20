@@ -58,6 +58,14 @@ class PrefController: NSViewController {
         refreshUI()
     }
     
+    @IBAction func updateVideoConnection(_ sender: Any) {
+        refreshUI()
+    }
+    
+    @IBAction func updateAudioConnection(_ sender: Any) {
+        refreshUI()
+    }
+    
     @IBAction func updateAudioChannel(_ sender: Any) {
         refreshUI()
     }
