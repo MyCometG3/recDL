@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
         <capability name="System colors introduced in macOS 10.13" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -689,7 +689,7 @@
                     <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5uk-6E-etN" userLabel="Parent View" customClass="CaptureVideoPreview" customModule="DLABCaptureManager">
                         <rect key="frame" x="0.0" y="0.0" width="607" height="363"/>
                     </customView>
-                    <textField hidden="YES" wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dOE-10-RDT">
+                    <textField hidden="YES" wantsLayer="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dOE-10-RDT">
                         <rect key="frame" x="10" y="10" width="41" height="20"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="border" title="Label" drawsBackground="YES" id="8L0-AZ-vMF">
                             <font key="font" metaFont="system"/>
@@ -717,10 +717,8 @@
             </view>
             <toolbar key="toolbar" implicitIdentifier="E21BB127-3A21-45CB-8880-00321B74FCF8" displayMode="iconAndLabel" sizeMode="regular" id="4Sg-y6-SmG">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="0FAC6647-B191-485E-B4A4-20B271260CEB" label="Preview Scale" paletteLabel="Preview Scale" title="now" id="INf-WX-MGi">
+                    <toolbarItem implicitItemIdentifier="0FAC6647-B191-485E-B4A4-20B271260CEB" label="Preview Scale" paletteLabel="Preview Scale" title="now" sizingBehavior="auto" id="INf-WX-MGi">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="100" height="28"/>
-                        <size key="maxSize" width="100" height="28"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="J9w-XM-PNP">
                             <rect key="frame" x="0.0" y="14" width="100" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -765,10 +763,8 @@
                             </popUpButtonCell>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="4F47AC2D-1CCA-4CD9-867C-5445E9A8448A" label="Preview Volume" paletteLabel="Preview Volume" title="now" id="Ato-KL-Pbx">
+                    <toolbarItem implicitItemIdentifier="4F47AC2D-1CCA-4CD9-867C-5445E9A8448A" label="Preview Volume" paletteLabel="Preview Volume" title="now" sizingBehavior="auto" id="Ato-KL-Pbx">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="100" height="28"/>
-                        <size key="maxSize" width="100" height="28"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="pMm-3y-Ccw">
                             <rect key="frame" x="0.0" y="14" width="100" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -813,10 +809,8 @@
                             </popUpButtonCell>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="BC083FC8-4646-4682-8513-8A5E6AEF1F78" label="Pixel Aspect Ratio" paletteLabel="Pixel Aspect Ratio" title="1:1 - Square Pixel" id="sLQ-6Y-tXS">
+                    <toolbarItem implicitItemIdentifier="BC083FC8-4646-4682-8513-8A5E6AEF1F78" label="Pixel Aspect Ratio" paletteLabel="Pixel Aspect Ratio" title="1:1 - Square Pixel" sizingBehavior="auto" id="sLQ-6Y-tXS">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="100" height="28"/>
-                        <size key="maxSize" width="100" height="28"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="77r-HM-oof">
                             <rect key="frame" x="1" y="14" width="100" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -879,10 +873,8 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="8I3-1z-jjz"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="qIb-Ug-CP1"/>
-                    <toolbarItem implicitItemIdentifier="17B77A3D-DF0C-4BA6-8311-F9612E8090E8" label="ToggleVideo" paletteLabel="ToggleVideo" title="@Video" id="8HZ-Cw-cAA" userLabel="ToggleVideo">
+                    <toolbarItem implicitItemIdentifier="17B77A3D-DF0C-4BA6-8311-F9612E8090E8" label="ToggleVideo" paletteLabel="ToggleVideo" title="@Video" sizingBehavior="auto" id="8HZ-Cw-cAA" userLabel="ToggleVideo">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="80" height="25"/>
-                        <size key="maxSize" width="80" height="25"/>
                         <button key="view" verticalHuggingPriority="750" id="xxu-rJ-BwE">
                             <rect key="frame" x="0.0" y="14" width="80" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -900,10 +892,8 @@
                             </connections>
                         </button>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="ABAEA7F7-FB5D-4C26-ACC8-815640DA37EC" label="ToggleAudio" paletteLabel="ToggleAudio" title="@Audio" id="7h3-yw-pVS" userLabel="ToggleAudio">
+                    <toolbarItem implicitItemIdentifier="ABAEA7F7-FB5D-4C26-ACC8-815640DA37EC" label="ToggleAudio" paletteLabel="ToggleAudio" title="@Audio" sizingBehavior="auto" id="7h3-yw-pVS" userLabel="ToggleAudio">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="80" height="25"/>
-                        <size key="maxSize" width="80" height="25"/>
                         <button key="view" verticalHuggingPriority="750" id="pSj-1r-guK">
                             <rect key="frame" x="0.0" y="14" width="80" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -921,10 +911,8 @@
                             </connections>
                         </button>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="D6DE9B98-77EE-463B-8DE3-E177CF9A6930" label="ToggleRecord" paletteLabel="ToggleRecord" title="@Recording" id="bYh-Uv-6vi" userLabel="ToggleRecord">
+                    <toolbarItem implicitItemIdentifier="D6DE9B98-77EE-463B-8DE3-E177CF9A6930" label="ToggleRecord" paletteLabel="ToggleRecord" title="@Recording" sizingBehavior="auto" id="bYh-Uv-6vi" userLabel="ToggleRecord">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="99" height="25"/>
-                        <size key="maxSize" width="101" height="25"/>
                         <button key="view" verticalHuggingPriority="750" id="9tB-sY-C8a">
                             <rect key="frame" x="0.0" y="14" width="100" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -994,7 +982,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="enabled" keyPath="values.enableDisplayMode" id="GLc-LC-IXx"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JWv-8g-Pt5">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JWv-8g-Pt5">
                                                         <rect key="frame" x="18" y="164" width="79" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="DisplayMode:" id="gyy-Pp-sBU">
@@ -1038,7 +1026,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.videoConnection" id="d0H-sS-jlL"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-f3-6FZ">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-f3-6FZ">
                                                         <rect key="frame" x="18" y="145" width="110" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video Connection:" id="WHH-y5-l9f">
@@ -1047,7 +1035,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ri3-0X-Dhn">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ri3-0X-Dhn">
                                                         <rect key="frame" x="18" y="91" width="110" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Audio Connection:" id="6Ad-34-IOt">
@@ -1213,7 +1201,7 @@
                                                 <rect key="frame" x="4" y="5" width="252" height="130"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MQl-4u-5qe">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MQl-4u-5qe">
                                                         <rect key="frame" x="39" y="48" width="121" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Clean Aperture (H, V):" id="M3n-Dh-GRg">
@@ -1222,7 +1210,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kDJ-Rw-WTB">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kDJ-Rw-WTB">
                                                         <rect key="frame" x="25" y="97" width="67" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video Style:" id="Jzb-Aj-m6Y">
@@ -1344,7 +1332,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="selectedValue" keyPath="values.videoStyle" id="C3t-fq-R2j"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VFF-yX-rVv">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VFF-yX-rVv">
                                                         <rect key="frame" x="238" y="49" width="12" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="!" drawsBackground="YES" id="dJ0-jD-xWL">
@@ -1353,7 +1341,7 @@
                                                             <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cPP-7O-3Ki" userLabel="clapOffsetH">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cPP-7O-3Ki" userLabel="clapOffsetH">
                                                         <rect key="frame" x="166" y="46" width="30" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="FQF-o2-Ctm">
@@ -1374,7 +1362,7 @@
                                                             </binding>
                                                         </connections>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IGH-pT-L3K">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IGH-pT-L3K">
                                                         <rect key="frame" x="238" y="99" width="12" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="!" drawsBackground="YES" id="omr-go-Exj">
@@ -1402,7 +1390,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.videoFieldDetail" id="6Mp-75-BLZ"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MGL-L4-MXi">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MGL-L4-MXi">
                                                         <rect key="frame" x="238" y="75" width="12" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="!" drawsBackground="YES" id="6GH-DQ-hwz">
@@ -1422,7 +1410,7 @@
                                                             <action selector="resetStyle:" target="d3T-ds-NJz" id="tQT-Po-OmQ"/>
                                                         </connections>
                                                     </button>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MEJ-aE-X8v" userLabel="clapOffsetV">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MEJ-aE-X8v" userLabel="clapOffsetV">
                                                         <rect key="frame" x="204" y="46" width="30" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="0" drawsBackground="YES" id="Cjg-ba-x2J">
@@ -1443,7 +1431,7 @@
                                                             </binding>
                                                         </connections>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T3P-fL-7kb">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T3P-fL-7kb">
                                                         <rect key="frame" x="18" y="73" width="95" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Field Dominance:" id="hpm-MD-o0W">
@@ -1470,7 +1458,7 @@
                                                 <rect key="frame" x="4" y="5" width="252" height="83"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qgf-yc-eXy">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qgf-yc-eXy">
                                                         <rect key="frame" x="30" y="24" width="85" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="AAC Data Rate:" id="48Z-lu-he6">
@@ -1479,7 +1467,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="992-fB-pVP">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="992-fB-pVP">
                                                         <rect key="frame" x="166" y="24" width="31" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Kbps" id="7JX-96-P1K">
@@ -1488,7 +1476,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r0Z-TI-Tyl" userLabel="AudioBitRate">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r0Z-TI-Tyl" userLabel="AudioBitRate">
                                                         <rect key="frame" x="121" y="22" width="39" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="256" drawsBackground="YES" id="2Wp-vA-U14">
@@ -1579,7 +1567,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.videoTimeScale" id="ehb-Kj-jQQ"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cyH-1s-cew">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cyH-1s-cew">
                                                         <rect key="frame" x="53" y="49" width="62" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Timescale:" id="P8o-X9-CSb">
@@ -1588,7 +1576,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJo-Gj-alH">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJo-Gj-alH">
                                                         <rect key="frame" x="21" y="23" width="94" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="H.26x Data Rate:" id="Yti-P6-EAV">
@@ -1597,7 +1585,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0se-ev-qAG">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0se-ev-qAG">
                                                         <rect key="frame" x="166" y="23" width="31" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Kbps" id="Sni-xd-zkm">
@@ -1606,7 +1594,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d74-tk-xVL" userLabel="VideoBitRate">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d74-tk-xVL" userLabel="VideoBitRate">
                                                         <rect key="frame" x="121" y="20" width="39" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="2048" drawsBackground="YES" id="mzp-8W-maK">
@@ -1662,7 +1650,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="value" keyPath="values.videoEncode" id="wur-Og-pbZ"/>
                                                         </connections>
                                                     </button>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KHI-sr-6wr">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KHI-sr-6wr">
                                                         <rect key="frame" x="31" y="75" width="84" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Video Encoder:" id="RjP-9e-eoT">
@@ -1705,7 +1693,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.timeCodeFormat" id="Qrf-c4-zUe"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cqJ-Ir-yIA">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cqJ-Ir-yIA">
                                                         <rect key="frame" x="18" y="61" width="99" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="TimecodeFormat:" id="uTW-1m-JBa">
@@ -1744,7 +1732,7 @@
                                                             <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.timeCodeSource" id="Kob-Uz-b9V"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FoR-gW-FAU">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FoR-gW-FAU">
                                                         <rect key="frame" x="18" y="37" width="99" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="TimecodeSource:" id="rhx-AB-Pqh">
@@ -1771,7 +1759,7 @@
                                                 <rect key="frame" x="4" y="5" width="252" height="84"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9o7-tZ-5XI">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9o7-tZ-5XI">
                                                         <rect key="frame" x="18" y="50" width="90" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Recording Limit:" id="tZD-fj-cqz">
@@ -1780,7 +1768,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ly7-gb-WKA">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ly7-gb-WKA">
                                                         <rect key="frame" x="172" y="50" width="46" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="minutes" id="4xD-kH-nAC">
@@ -1789,7 +1777,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zkl-Au-MEr" userLabel="maxDuration">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zkl-Au-MEr" userLabel="maxDuration">
                                                         <rect key="frame" x="114" y="47" width="52" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="6rz-5e-Hxh">
@@ -1812,7 +1800,7 @@
                                                             </binding>
                                                         </connections>
                                                     </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j0p-WP-5RC">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j0p-WP-5RC">
                                                         <rect key="frame" x="18" y="23" width="91" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File name prefix:" id="7ug-aq-crM">
@@ -1821,7 +1809,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FI9-dC-m2X" userLabel="prefix">
+                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FI9-dC-m2X" userLabel="prefix">
                                                         <rect key="frame" x="114" y="20" width="52" height="19"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9bX-dz-ACF">
@@ -1874,7 +1862,7 @@
             <rect key="frame" x="0.0" y="0.0" width="456" height="62"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vJA-xX-Ddc">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vJA-xX-Ddc">
                     <rect key="frame" x="18" y="23" width="69" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Stop after:" id="tMy-aZ-pFZ">
@@ -1883,7 +1871,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SsP-MO-qkf">
+                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SsP-MO-qkf">
                     <rect key="frame" x="93" y="20" width="64" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="gGa-93-WOD">
@@ -1892,7 +1880,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFC-9k-wbk">
+                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFC-9k-wbk">
                     <rect key="frame" x="163" y="23" width="53" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="minutes" id="WKp-EJ-77U">
