@@ -230,6 +230,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.titleVisibility = .hidden
         _ = window.setFrameAutosaveName(Keys.previewWindow)
         window.makeKeyAndOrderFront(self)
+        window.isMovableByWindowBackground = true
         
         // Ensure CALayer for the ParentView
         if parentView.wantsLayer == false {
