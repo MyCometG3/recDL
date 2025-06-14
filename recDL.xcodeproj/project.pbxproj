@@ -16,6 +16,7 @@
 		164F6A5C1FDD0B1A00152716 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F6A5B1FDD0B1A00152716 /* CoreVideo.framework */; };
 		164F6A5E1FDD0B2700152716 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F6A5D1FDD0B2700152716 /* CoreMedia.framework */; };
 		1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B1C31FDBF3B600EBA4DD /* PrefController.swift */; };
+		169327BC2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */; };
 		16A4C6B31F89AF000027F5EA /* recDL.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 16A4C6B21F89AF000027F5EA /* recDL.sdef */; };
 		16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */; };
 		16A4C6B71F89B1390027F5EA /* RDL1Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */; };
@@ -57,6 +58,7 @@
 		164F6A5D1FDD0B2700152716 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		1658B1C31FDBF3B600EBA4DD /* PrefController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefController.swift; sourceTree = "<group>"; };
 		1658B1C51FDD0A2400EBA4DD /* DeckLinkAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeckLinkAPI.framework; path = ../../../../../../Library/Frameworks/DeckLinkAPI.framework; sourceTree = "<group>"; };
+		169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1ScriptableObject.swift; sourceTree = "<group>"; };
 		16A4C6B21F89AF000027F5EA /* recDL.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = recDL.sdef; sourceTree = "<group>"; };
 		16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Session.swift; sourceTree = "<group>"; };
 		16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Recording.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				16A4C6B21F89AF000027F5EA /* recDL.sdef */,
+				169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */,
 				16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */,
 				16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */,
 				16A4C6B81F89B14C0027F5EA /* RDL1DeviceInfo.swift */,
@@ -232,6 +235,7 @@
 				1647766E1F889C7D0024D780 /* AppDelegate.swift in Sources */,
 				1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */,
 				16A4C6BB1F89BAF10027F5EA /* RDL1VideoSetting.swift in Sources */,
+				169327BC2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift in Sources */,
 				1647767F1F88D6700024D780 /* Constants.swift in Sources */,
 				16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */,
 			);
@@ -393,7 +397,7 @@
 				MARKETING_VERSION = 0.9.8.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -422,7 +426,7 @@
 				MARKETING_VERSION = 0.9.8.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};

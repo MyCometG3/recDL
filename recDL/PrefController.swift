@@ -11,6 +11,7 @@
 import Cocoa
 
 @objcMembers
+@MainActor
 class PrefController: NSViewController {
     private lazy var defaults = UserDefaults.standard
     

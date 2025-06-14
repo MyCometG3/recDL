@@ -9,24 +9,20 @@
 /* This software is released under the MIT License, see LICENSE.txt. */
 
 import Cocoa
-import DLABridging
-
-private var nameCounter = 1
+@preconcurrency import DLABridging
 
 @objcMembers
-class RDL1AudioSetting: NSObject {
-    public var name :String = "as\(nameCounter)"
+@MainActor
+class RDL1AudioSetting: RDL1ScriptableObject {
+    /* ============================================================================== */
+    
+    public var name :String // "as\(nameCounter)"
     public var uniqueID :String = UUID().uuidString
     
     public var sampleSize :Int = 0
     public var channelCount :Int = 0
     public var sampleType :Int = 0
     public var sampleRate :Int = 0
-    
-    //
-    
-    private weak var container :NSObject! = NSApp
-    private var containerProperty :String = Keys.audioSetting
     
     /* ============================================================================== */
     
@@ -45,21 +41,17 @@ class RDL1AudioSetting: NSObject {
     /* ============================================================================== */
     
     override init() {
+        self.name = RDL1AudioSetting.initialName("as")
+        
+        // Initialize super class and properties
         super.init()
-        nameCounter += 1
+        self.container = NSApp
+        self.containerProperty = Keys.audioSetting
     }
     
-    override var objectSpecifier: NSScriptObjectSpecifier? {
-        let desc = container.classDescription as! NSScriptClassDescription
-        let spec = (container == NSApp) ? nil : container.objectSpecifier
-        let prop = containerProperty
-        let specifier = NSPropertySpecifier(containerClassDescription: desc,
-                                            containerSpecifier: spec,
-                                            key: prop)
-        //let specifier = NSNameSpecifier(containerClassDescription: desc,
-        //                                containerSpecifier: spec,
-        //                                key: prop,
-        //                                name: name)
-        return specifier
+    static var nameCounter = 0
+    static func initialName(_ prefix: String) -> String {
+        self.nameCounter += 1
+        return "\(prefix)\(nameCounter)"
     }
 }

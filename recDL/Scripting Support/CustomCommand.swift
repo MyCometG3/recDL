@@ -11,6 +11,7 @@
 import Cocoa
 
 @objcMembers
+@MainActor
 class CustomCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
         // print("\(#file) \(#line) \(#function)")

@@ -9,10 +9,13 @@
 /* This software is released under the MIT License, see LICENSE.txt. */
 
 import Cocoa
-import DLABridging
+@preconcurrency import DLABridging
 
 @objcMembers
-class RDL1Session: NSObject {
+@MainActor
+class RDL1Session: RDL1ScriptableObject {
+    /* ============================================================================== */
+    
     public var name: String = "current session"
     public var uniqueID: String = UUID().uuidString
     
@@ -38,10 +41,7 @@ class RDL1Session: NSObject {
         return _device
     }
     
-    //
-    
-    private weak var container :NSObject! = NSApp
-    private var containerProperty :String = Keys.sessionItem
+    /* ============================================================================== */
     
     private lazy var defaults = UserDefaults.standard
     private lazy var notificationCenter = NotificationCenter.default
@@ -52,12 +52,6 @@ class RDL1Session: NSObject {
     
     /* ============================================================================== */
     
-    private func postNotificationOfChanges() {
-        let notification = Notification(name: .sessionStateChangedKey,
-                                        object: [Keys.newSessionData: self])
-        notificationCenter.post(notification)
-    }
-    
     public func handleRestartSession(_ notification :Notification) {
         // print("\(#file) \(#line) \(#function)")
         
@@ -66,27 +60,24 @@ class RDL1Session: NSObject {
     
     /* ============================================================================== */
     
+    private func postNotificationOfChanges() {
+        let notification = Notification(name: .sessionStateChangedKey,
+                                        object: [Keys.newSessionData: self])
+        notificationCenter.post(notification)
+    }
+    
+    /* ============================================================================== */
+    
     override init() {
+        // Initialize super class and properties
         super.init()
+        self.container = NSApp
+        self.containerProperty = Keys.sessionItem
         
         // Register notification observer for Scripting support
         notificationCenter.addObserver(self,
                                        selector: #selector(handleRestartSession(_:)),
                                        name: .restartSessionNotificationKey,
                                        object: nil)
-    }
-    
-    override var objectSpecifier: NSScriptObjectSpecifier? {
-        let desc = container.classDescription as! NSScriptClassDescription
-        let spec = (container == NSApp) ? nil : container.objectSpecifier
-        let prop = containerProperty
-        let specifier = NSPropertySpecifier(containerClassDescription: desc,
-                                            containerSpecifier: spec,
-                                            key: prop)
-        //let specifier = NSNameSpecifier(containerClassDescription: desc,
-        //                                containerSpecifier: spec,
-        //                                key: prop,
-        //                                name: name)
-        return specifier
     }
 }

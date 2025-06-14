@@ -9,10 +9,13 @@
 /* This software is released under the MIT License, see LICENSE.txt. */
 
 import Cocoa
-import DLABridging
+@preconcurrency import DLABridging
 
 @objcMembers
-class RDL1Recording: NSObject {
+@MainActor
+class RDL1Recording: RDL1ScriptableObject {
+    /* ============================================================================== */
+    
     public var name: String = "current recording"
     public var uniqueID: String = UUID().uuidString
     
@@ -36,22 +39,13 @@ class RDL1Recording: NSObject {
         return nil
     }
     
-    //
-    
-    private weak var container :NSObject! = NSApp
-    private var containerProperty :String = Keys.recordingItem
+    /* ============================================================================== */
     
     private lazy var defaults = UserDefaults.standard
     private lazy var notificationCenter = NotificationCenter.default
     private lazy var appDelegate :AppDelegate? = NSApp.delegate as? AppDelegate
     
     /* ============================================================================== */
-    
-    private func postNotificationOfChanges() {
-        let notification = Notification(name: .recordingStateChangedKey,
-                                        object: [Keys.newRecordingData: self])
-        notificationCenter.post(notification)
-    }
     
     public func handleStartRecording(_ notification :Notification) {
         // print("\(#file) \(#line) \(#function)")
@@ -81,8 +75,19 @@ class RDL1Recording: NSObject {
     
     /* ============================================================================== */
     
+    private func postNotificationOfChanges() {
+        let notification = Notification(name: .recordingStateChangedKey,
+                                        object: [Keys.newRecordingData: self])
+        notificationCenter.post(notification)
+    }
+    
+    /* ============================================================================== */
+    
     override init() {
+        // Initialize super class and properties
         super.init()
+        self.container = NSApp
+        self.containerProperty = Keys.recordingItem
         
         // Register notification observer for Scripting support
         notificationCenter.addObserver(self,
@@ -93,19 +98,5 @@ class RDL1Recording: NSObject {
                                        selector: #selector(handleStopRecording(_:)),
                                        name: .recordingStoppedNotificationKey,
                                        object: nil)
-    }
-    
-    override var objectSpecifier: NSScriptObjectSpecifier? {
-        let desc = container.classDescription as! NSScriptClassDescription
-        let spec = (container == NSApp) ? nil : container.objectSpecifier
-        let prop = containerProperty
-        let specifier = NSPropertySpecifier(containerClassDescription: desc,
-                                            containerSpecifier: spec,
-                                            key: prop)
-        //let specifier = NSNameSpecifier(containerClassDescription: desc,
-        //                                containerSpecifier: spec,
-        //                                key: prop,
-        //                                name: name)
-        return specifier
     }
 }

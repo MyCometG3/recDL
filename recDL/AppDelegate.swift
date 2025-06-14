@@ -13,8 +13,9 @@ import CoreVideo
 import DLABridging
 import DLABCaptureManager
 
-@NSApplicationMain
+@main
 @objcMembers
+@MainActor
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     /* ============================================ */
@@ -258,10 +259,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.applicationIconImage = iconIdle
         
         //
+        let handler: @Sendable (Notification) -> Void = { [weak self] notification in
+            guard let self = self else { preconditionFailure("Self is nil") }
+            let block: () -> Void = {
+                return MainActor.assumeIsolated {
+                    self.updateCurrentScale()
+                }
+            }
+            if Thread.isMainThread {
+                block()
+            } else {
+                DispatchQueue.main.async {
+                    block()
+                }
+            }
+        }
         notificationCenter.addObserver(forName: NSView.frameDidChangeNotification,
                                        object: parentView,
                                        queue: OperationQueue.main,
-                                       using: { (notification) -> Void in self.updateCurrentScale() } )
+                                       using: handler) 
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {

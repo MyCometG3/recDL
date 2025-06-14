@@ -9,13 +9,14 @@
 /* This software is released under the MIT License, see LICENSE.txt. */
 
 import Cocoa
-import DLABridging
-
-private var nameCounter = 1
+@preconcurrency import DLABridging
 
 @objcMembers
-class RDL1DeviceInfo: NSObject {
-    public var name :String = "dev\(nameCounter)"
+@MainActor
+class RDL1DeviceInfo: RDL1ScriptableObject {
+    /* ============================================================================== */
+    
+    public var name :String // "dev\(nameCounter)"
     public var uniqueID :String = UUID().uuidString
     
     public var modelName :String? = nil
@@ -61,10 +62,7 @@ class RDL1DeviceInfo: NSObject {
         return _inputAudioSetting
     }
     
-    //
-    
-    private weak var container :NSObject! = NSApp
-    private var containerProperty :String = Keys.deviceItem
+    /* ============================================================================== */
     
     private var _outputVideoSetting :RDL1VideoSetting? = nil
     private var _outputAudioSetting :RDL1AudioSetting? = nil
@@ -107,21 +105,17 @@ class RDL1DeviceInfo: NSObject {
     /* ============================================================================== */
     
     override init() {
+        self.name = RDL1DeviceInfo.initialName("dev")
+        
+        // Initialize super class and properties
         super.init()
-        nameCounter += 1
+        self.container = NSApp
+        self.containerProperty = Keys.deviceItem
     }
     
-    override var objectSpecifier: NSScriptObjectSpecifier? {
-        let desc = container.classDescription as! NSScriptClassDescription
-        let spec = (container == NSApp) ? nil : container.objectSpecifier
-        let prop = containerProperty
-        let specifier = NSPropertySpecifier(containerClassDescription: desc,
-                                            containerSpecifier: spec,
-                                            key: prop)
-        //let specifier = NSNameSpecifier(containerClassDescription: desc,
-        //                                containerSpecifier: spec,
-        //                                key: prop,
-        //                                name: name)
-        return specifier
+    static var nameCounter = 0
+    static func initialName(_ prefix: String) -> String {
+        self.nameCounter += 1
+        return "\(prefix)\(nameCounter)"
     }
 }
