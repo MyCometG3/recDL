@@ -17,6 +17,9 @@
 		164F6A5E1FDD0B2700152716 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F6A5D1FDD0B2700152716 /* CoreMedia.framework */; };
 		1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B1C31FDBF3B600EBA4DD /* PrefController.swift */; };
 		169327BC2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */; };
+		169327BE2DFDB12200F721E1 /* AppDelegate+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327BD2DFDB12200F721E1 /* AppDelegate+UI.swift */; };
+		169327C02DFDB46500F721E1 /* AppDelegate+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327BF2DFDB46500F721E1 /* AppDelegate+Session.swift */; };
+		169327C22DFDC2C400F721E1 /* AppDelegate+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327C12DFDC2C400F721E1 /* AppDelegate+Preferences.swift */; };
 		16A4C6B31F89AF000027F5EA /* recDL.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 16A4C6B21F89AF000027F5EA /* recDL.sdef */; };
 		16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */; };
 		16A4C6B71F89B1390027F5EA /* RDL1Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */; };
@@ -59,6 +62,9 @@
 		1658B1C31FDBF3B600EBA4DD /* PrefController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefController.swift; sourceTree = "<group>"; };
 		1658B1C51FDD0A2400EBA4DD /* DeckLinkAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeckLinkAPI.framework; path = ../../../../../../Library/Frameworks/DeckLinkAPI.framework; sourceTree = "<group>"; };
 		169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1ScriptableObject.swift; sourceTree = "<group>"; };
+		169327BD2DFDB12200F721E1 /* AppDelegate+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UI.swift"; sourceTree = "<group>"; };
+		169327BF2DFDB46500F721E1 /* AppDelegate+Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Session.swift"; sourceTree = "<group>"; };
+		169327C12DFDC2C400F721E1 /* AppDelegate+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Preferences.swift"; sourceTree = "<group>"; };
 		16A4C6B21F89AF000027F5EA /* recDL.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = recDL.sdef; sourceTree = "<group>"; };
 		16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Session.swift; sourceTree = "<group>"; };
 		16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Recording.swift; sourceTree = "<group>"; };
@@ -109,6 +115,9 @@
 				164776741F889C7D0024D780 /* Info.plist */,
 				164776751F889C7D0024D780 /* recDL.entitlements */,
 				1647766D1F889C7D0024D780 /* AppDelegate.swift */,
+				169327BD2DFDB12200F721E1 /* AppDelegate+UI.swift */,
+				169327C12DFDC2C400F721E1 /* AppDelegate+Preferences.swift */,
+				169327BF2DFDB46500F721E1 /* AppDelegate+Session.swift */,
 				1647767E1F88D6700024D780 /* Constants.swift */,
 				1658B1C31FDBF3B600EBA4DD /* PrefController.swift */,
 				16A4C6C41F8B7BD20027F5EA /* Scripting Support */,
@@ -228,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16CF53841FA4890B003D16F6 /* CustomCommand.swift in Sources */,
+				169327BE2DFDB12200F721E1 /* AppDelegate+UI.swift in Sources */,
 				16A4C6B71F89B1390027F5EA /* RDL1Recording.swift in Sources */,
 				16CF53861FA4A305003D16F6 /* NSApplicationExtension.swift in Sources */,
 				16A4C6BD1F89BB050027F5EA /* RDL1AudioSetting.swift in Sources */,
@@ -235,7 +245,9 @@
 				1647766E1F889C7D0024D780 /* AppDelegate.swift in Sources */,
 				1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */,
 				16A4C6BB1F89BAF10027F5EA /* RDL1VideoSetting.swift in Sources */,
+				169327C22DFDC2C400F721E1 /* AppDelegate+Preferences.swift in Sources */,
 				169327BC2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift in Sources */,
+				169327C02DFDB46500F721E1 /* AppDelegate+Session.swift in Sources */,
 				1647767F1F88D6700024D780 /* Constants.swift in Sources */,
 				16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */,
 			);
@@ -380,7 +392,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2024.09.18;
+				CURRENT_PROJECT_VERSION = 2025.07.26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BV5C4YNA4Z;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -394,7 +406,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 0.9.8.5;
+				MARKETING_VERSION = 0.10.0a5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;
@@ -409,7 +421,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2024.09.18;
+				CURRENT_PROJECT_VERSION = 2025.07.26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BV5C4YNA4Z;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -423,7 +435,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 0.9.8.5;
+				MARKETING_VERSION = 0.10.0a5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;
