@@ -21,15 +21,17 @@ extension AppDelegate {
     public func deviceDescription() -> String {
         var desc:String = "ERROR: DeviceInfo is not available."
         if let deviceInfo = deviceInfo {
-            let modelName = deviceInfo["modelName"] as! String
-            let displayName = deviceInfo["displayName"] as! String
-            let persistentID = deviceInfo["persistentID"] as! Int64
-            let deviceGroupID = deviceInfo["deviceGroupID"] as! Int64
-            let topologicalID = deviceInfo["topologicalID"] as! Int64
-            let numberOfSubDevices = deviceInfo["numberOfSubDevices"] as! Int64
-            let subDeviceIndex = deviceInfo["subDeviceIndex"] as! Int64
-            let profileID = deviceInfo["profileID"] as! Int64
-            let duplex = deviceInfo["duplex"] as! Int64
+            guard let modelName = deviceInfo["modelName"] as? String,
+                  let displayName = deviceInfo["displayName"] as? String,
+                  let persistentID = deviceInfo["persistentID"] as? Int64,
+                  let deviceGroupID = deviceInfo["deviceGroupID"] as? Int64,
+                  let topologicalID = deviceInfo["topologicalID"] as? Int64,
+                  let numberOfSubDevices = deviceInfo["numberOfSubDevices"] as? Int64,
+                  let subDeviceIndex = deviceInfo["subDeviceIndex"] as? Int64,
+                  let profileID = deviceInfo["profileID"] as? Int64,
+                  let duplex = deviceInfo["duplex"] as? Int64 else {
+                return "ERROR: Invalid device info format."
+            }
             let duplexStr:String = NSFileTypeForHFSTypeCode(UInt32(duplex))
             
             desc = "DeviceInfo = \(persistentID):\(topologicalID):\(profileID)"
@@ -49,13 +51,15 @@ extension AppDelegate {
         if let selectedDisplayMode = displayModeCurrent(), let settingInfo = settingInfoCurrent() {
             if let displayMode = displayModeFrom(settingInfo), selectedDisplayMode == displayMode {
                 // create description from settingInfo
-                let name = settingInfo["name"] as! String
-                let typeString = settingInfo["displayMode"] as! String
-                let width = settingInfo["width"] as! Int
-                let height = settingInfo["height"] as! Int
-                let duration = settingInfo["duration"] as! Int64
-                let timeScale = settingInfo["timeScale"] as! Int64
-                let fieldDominance = settingInfo["fieldDominance"] as! String
+                guard let name = settingInfo["name"] as? String,
+                      let typeString = settingInfo["displayMode"] as? String,
+                      let width = settingInfo["width"] as? Int,
+                      let height = settingInfo["height"] as? Int,
+                      let duration = settingInfo["duration"] as? Int64,
+                      let timeScale = settingInfo["timeScale"] as? Int64,
+                      let fieldDominance = settingInfo["fieldDominance"] as? String else {
+                    return "ERROR: Invalid setting info format."
+                }
                 var fdString:String = "Unknown"
                 switch fieldDominance {
                 case NSFileTypeForHFSTypeCode(DLABFieldDominance.lowerFieldFirst.rawValue):
