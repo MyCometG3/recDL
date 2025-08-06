@@ -145,14 +145,13 @@ extension AppDelegate {
             self.stopSession()
             
             //
-            try? await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
+            try? await Task.sleep(nanoseconds: AudioConstants.sessionRestartDelay) // sleep for 0.1 seconds
             
             // Start Session
             self.startSession()
             self.manager?.videoPreview = self.parentView
             self.addPreviewLayer()
             
-            self.defaults.set(false, forKey: Keys.showAlternate)
             self.startUpdateStatus()
             
             // Update Toolbar button title
@@ -192,9 +191,9 @@ extension AppDelegate {
         
         let compressAudio = (def_audioEncode)
         let useAudioBitrate = defaults.integer(forKey: Keys.audioBitRate) * 1000
-        let useAAC = (def_audioEncoder > 0 && useAudioBitrate > 80_000)
-        let useAAC_HE = (def_audioEncoder > 0 && !useAAC && useAudioBitrate > 40_000)
-        let useAAC_HEv2 = (def_audioEncoder > 0 && !useAAC_HE && useAudioBitrate <= 40_000)
+        let useAAC = (def_audioEncoder > 0 && useAudioBitrate > AudioConstants.aacBitrateThreshold)
+        let useAAC_HE = (def_audioEncoder > 0 && !useAAC && useAudioBitrate > AudioConstants.aacHEBitrateThreshold)
+        let useAAC_HEv2 = (def_audioEncoder > 0 && !useAAC_HE && useAudioBitrate <= AudioConstants.aacHEBitrateThreshold)
         
         let useInterlacedEncoding = (def_videoFieldDetail > 0)
         let useBFF = (def_videoFieldDetail == 1)
@@ -274,11 +273,11 @@ extension AppDelegate {
             }
             if useAAC_HE {
                 manager.encodeAudioFormatID = kAudioFormatMPEG4AAC_HE
-                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 80_000) // clipping at 80Kbps
+                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), AudioConstants.aacBitrateThreshold) // clipping at 80Kbps
             }
             if useAAC_HEv2 {
                 manager.encodeAudioFormatID = kAudioFormatMPEG4AAC_HE_V2
-                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 40_000) // clipping at 40Kbps
+                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), AudioConstants.aacHEBitrateThreshold) // clipping at 40Kbps
             }
         } else {
             manager.encodeAudio = false
@@ -290,8 +289,8 @@ extension AppDelegate {
     private func queryBitrateRange<T: BinaryInteger>(channelCount: T) -> (min: T, max: T) {
         precondition(channelCount > 0, "Channel count must be positive")
         let channelCountWithoutLFE: T = (channelCount > 5) ? (channelCount - 1) : channelCount
-        let minRate = 40_000 * channelCountWithoutLFE
-        let maxRate = 160_000 * channelCountWithoutLFE
+        let minRate = T(AudioConstants.minAACBitratePerChannel) * channelCountWithoutLFE
+        let maxRate = T(AudioConstants.maxAACBitratePerChannel) * channelCountWithoutLFE
         return (min: minRate, max: maxRate)
     }
     

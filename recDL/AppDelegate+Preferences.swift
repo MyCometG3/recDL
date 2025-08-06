@@ -112,7 +112,7 @@ extension AppDelegate {
             let sortedKeys = list.keys.sorted()
             menu.removeAllItems()
             for key:String in sortedKeys {
-                let settingInfo:[String:Any] = list[key] as! [String:Any]
+                guard let settingInfo = list[key] as? [String:Any] else { continue }
                 if let displayMode:DLABDisplayMode = displayModeFrom(settingInfo) {
                     let menuTitle = NSFileTypeForHFSTypeCode(displayMode.rawValue) + ": " + key
                     let menuItem = NSMenuItem(title: menuTitle, action: nil, keyEquivalent: "")
@@ -386,7 +386,7 @@ extension AppDelegate {
     private func settingInfoFor(_ targetDisplayMode:DLABDisplayMode) -> [String:Any]? {
         if let list:[String:Any] = availableSettingInfo, list.count > 0 {
             for item in list.values {
-                let settingInfo = item as! [String:Any]
+                guard let settingInfo = item as? [String:Any] else { continue }
                 let displayMode = displayModeFrom(settingInfo)
                 if let displayMode = displayMode, displayMode == targetDisplayMode {
                     return settingInfo

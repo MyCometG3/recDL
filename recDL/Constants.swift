@@ -126,3 +126,15 @@ enum Keys {
     static let enableVideoConnection = "enableVideoConnection"
     static let enableAudioConnection = "enableAudioConnection"
 }
+
+/* ======================================================================================== */
+// MARK: - Audio Encoding Constants
+/* ======================================================================================== */
+
+enum AudioConstants {
+    static let aacBitrateThreshold: UInt = 80_000      // Threshold for AAC LC vs HE-AAC
+    static let aacHEBitrateThreshold: UInt = 40_000    // Threshold for HE-AAC vs HE-AACv2
+    static let sessionRestartDelay: UInt64 = 100_000_000  // 0.1 seconds in nanoseconds
+    static let minAACBitratePerChannel: UInt = 40_000  // Minimum bitrate per channel for AAC
+    static let maxAACBitratePerChannel: UInt = 160_000 // Maximum bitrate per channel for AAC
+}

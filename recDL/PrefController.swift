@@ -161,10 +161,11 @@ class PrefController: NSViewController {
     
     private func adjustAudioEncoder() {
         let useAudioBitRate :Int = textAudioBitRate.integerValue
+        let useAudioBitRateKbps = useAudioBitRate * 1000
         
-        if useAudioBitRate > 80 {
+        if useAudioBitRateKbps > AudioConstants.aacBitrateThreshold {
             defaults.set(1, forKey: Keys.audioEncoder)
-        } else if useAudioBitRate > 40 {
+        } else if useAudioBitRateKbps > AudioConstants.aacHEBitrateThreshold {
             defaults.set(2, forKey: Keys.audioEncoder)
         } else {
             defaults.set(3, forKey: Keys.audioEncoder)
