@@ -188,9 +188,9 @@ extension AppDelegate {
         
         let compressAudio = (def_audioEncode)
         let useAudioBitrate = defaults.integer(forKey: Keys.audioBitRate) * 1000
-        let useAAC = (def_audioEncoder > 0 && useAudioBitrate > 80*1000)
-        let useAAC_HE = (def_audioEncoder > 0 && !useAAC && useAudioBitrate > 40*1000)
-        let useAAC_HEv2 = (def_audioEncoder > 0 && !useAAC_HE && useAudioBitrate <= 40*1000)
+        let useAAC = (def_audioEncoder > 0 && useAudioBitrate > 80_000)
+        let useAAC_HE = (def_audioEncoder > 0 && !useAAC && useAudioBitrate > 40_000)
+        let useAAC_HEv2 = (def_audioEncoder > 0 && !useAAC_HE && useAudioBitrate <= 40_000)
         
         let useInterlacedEncoding = (def_videoFieldDetail > 0)
         let useBFF = (def_videoFieldDetail == 1)
@@ -270,11 +270,11 @@ extension AppDelegate {
             }
             if useAAC_HE {
                 manager.encodeAudioFormatID = kAudioFormatMPEG4AAC_HE
-                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 80*1000) // clipping at 80Kbps
+                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 80_000) // clipping at 80Kbps
             }
             if useAAC_HEv2 {
                 manager.encodeAudioFormatID = kAudioFormatMPEG4AAC_HE_V2
-                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 40*1000) // clipping at 40Kbps
+                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 40_000) // clipping at 40Kbps
             }
         } else {
             manager.encodeAudio = false

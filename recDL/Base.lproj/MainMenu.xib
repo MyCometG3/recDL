@@ -992,7 +992,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CnT-3R-ghG">
-                                                        <rect key="frame" x="130" y="138" width="108" height="22"/>
+                                                        <rect key="frame" x="130" y="136" width="108" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Unspecified" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="rOO-hI-l7B" id="qLS-Kv-FJT">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1026,17 +1026,8 @@
                                                             <binding destination="aeJ-nD-3pN" name="selectedTag" keyPath="values.videoConnection" id="d0H-sS-jlL"/>
                                                         </connections>
                                                     </popUpButton>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-f3-6FZ">
-                                                        <rect key="frame" x="18" y="145" width="110" height="14"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video Connection:" id="WHH-y5-l9f">
-                                                            <font key="font" metaFont="message" size="11"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ri3-0X-Dhn">
-                                                        <rect key="frame" x="18" y="91" width="110" height="14"/>
+                                                        <rect key="frame" x="18" y="95" width="110" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Audio Connection:" id="6Ad-34-IOt">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -1045,7 +1036,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AfU-p5-UXh">
-                                                        <rect key="frame" x="130" y="91" width="108" height="22"/>
+                                                        <rect key="frame" x="130" y="90" width="108" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Unspecified" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="lE6-OS-JTC" id="C5P-uA-BmW">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1091,7 +1082,7 @@
                                                         </connections>
                                                     </button>
                                                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXS-bu-8qk">
-                                                        <rect key="frame" x="92" y="65" width="144" height="21"/>
+                                                        <rect key="frame" x="92" y="67" width="144" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Zt5-N2-8jG">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1108,7 +1099,7 @@
                                                         </connections>
                                                     </segmentedControl>
                                                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N68-3E-UDe">
-                                                        <rect key="frame" x="18" y="65" width="73" height="21"/>
+                                                        <rect key="frame" x="18" y="67" width="73" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="qA5-BN-lFO">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1122,7 +1113,7 @@
                                                         </connections>
                                                     </segmentedControl>
                                                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="swG-pf-7ZP">
-                                                        <rect key="frame" x="34" y="42" width="202" height="21"/>
+                                                        <rect key="frame" x="34" y="41" width="202" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fillProportionally" style="rounded" trackingMode="selectOne" id="xA1-mn-uFb">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1140,7 +1131,7 @@
                                                         </connections>
                                                     </segmentedControl>
                                                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lRY-c1-avT">
-                                                        <rect key="frame" x="80" y="117" width="156" height="21"/>
+                                                        <rect key="frame" x="80" y="114" width="156" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fillProportionally" style="rounded" trackingMode="selectOne" id="L8Z-Gx-bpr">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1154,7 +1145,7 @@
                                                         </connections>
                                                     </segmentedControl>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zfl-rF-ROD">
-                                                        <rect key="frame" x="19" y="13" width="94" height="27"/>
+                                                        <rect key="frame" x="19" y="12" width="94" height="27"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Reverse 3/4ch" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="XVR-zx-0QG">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1164,6 +1155,15 @@
                                                             <binding destination="aeJ-nD-3pN" name="value" keyPath="values.audioReverse34" id="uXn-Bf-X0e"/>
                                                         </connections>
                                                     </button>
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-f3-6FZ">
+                                                        <rect key="frame" x="18" y="141" width="110" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Video Connection:" id="WHH-y5-l9f">
+                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -1481,7 +1481,7 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="256" drawsBackground="YES" id="2Wp-vA-U14">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="RTW-tU-lMq">
-                                                                <real key="minimum" value="40"/>
+                                                                <real key="minimum" value="32"/>
                                                                 <real key="maximum" value="960"/>
                                                             </numberFormatter>
                                                             <font key="font" metaFont="message" size="11"/>
