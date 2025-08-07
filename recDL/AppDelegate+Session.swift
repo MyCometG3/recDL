@@ -145,7 +145,7 @@ extension AppDelegate {
             self.stopSession()
             
             //
-            try? await Task.sleep(nanoseconds: AudioConstants.sessionRestartDelay) // sleep for 0.1 seconds
+            try? await Task.sleep(nanoseconds: AppConstants.sessionRestartDelay) // sleep for 0.1 seconds
             
             // Start Session
             self.startSession()
