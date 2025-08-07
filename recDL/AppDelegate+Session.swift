@@ -87,15 +87,13 @@ extension AppDelegate {
             addPreviewLayer()
             
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
-            Task {
-                let result = await manager.captureStartAsync()
-                await MainActor.run {
-                    if result {
-                        printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
-                    } else {
-                        printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
-                    }
-                }
+            let result = performAsync {
+                await manager.captureStartAsync()
+            }
+            if result {
+                printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
+            } else {
+                printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
             }
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
@@ -107,15 +105,13 @@ extension AppDelegate {
         
         if let manager = manager {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
-            Task {
-                let result = await manager.captureStopAsync()
-                await MainActor.run {
-                    if result {
-                        printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
-                    } else {
-                        printVerbose("ERROR:\(self.className): \(#function) - Stopping capture session failed.")
-                    }
-                }
+            let result = performAsync {
+                await manager.captureStopAsync()
+            }
+            if result {
+                printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
+            } else {
+                printVerbose("ERROR:\(self.className): \(#function) - Stopping capture session failed.")
             }
             self.manager = nil
         } else {
@@ -145,13 +141,14 @@ extension AppDelegate {
             self.stopSession()
             
             //
-            try? await Task.sleep(nanoseconds: AppConstants.sessionRestartDelay) // sleep for 0.1 seconds
+            try? await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
             
             // Start Session
             self.startSession()
             self.manager?.videoPreview = self.parentView
             self.addPreviewLayer()
             
+            self.defaults.set(false, forKey: Keys.showAlternate)
             self.startUpdateStatus()
             
             // Update Toolbar button title
@@ -191,9 +188,9 @@ extension AppDelegate {
         
         let compressAudio = (def_audioEncode)
         let useAudioBitrate = defaults.integer(forKey: Keys.audioBitRate) * 1000
-        let useAAC = (def_audioEncoder > 0 && useAudioBitrate > AudioConstants.aacBitrateThreshold)
-        let useAAC_HE = (def_audioEncoder > 0 && !useAAC && useAudioBitrate > AudioConstants.aacHEBitrateThreshold)
-        let useAAC_HEv2 = (def_audioEncoder > 0 && !useAAC_HE && useAudioBitrate <= AudioConstants.aacHEBitrateThreshold)
+        let useAAC = (def_audioEncoder > 0 && useAudioBitrate > 80_000)
+        let useAAC_HE = (def_audioEncoder > 0 && !useAAC && useAudioBitrate > 40_000)
+        let useAAC_HEv2 = (def_audioEncoder > 0 && !useAAC_HE && useAudioBitrate <= 40_000)
         
         let useInterlacedEncoding = (def_videoFieldDetail > 0)
         let useBFF = (def_videoFieldDetail == 1)
@@ -273,11 +270,11 @@ extension AppDelegate {
             }
             if useAAC_HE {
                 manager.encodeAudioFormatID = kAudioFormatMPEG4AAC_HE
-                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), AudioConstants.aacBitrateThreshold) // clipping at 80Kbps
+                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 80_000) // clipping at 80Kbps
             }
             if useAAC_HEv2 {
                 manager.encodeAudioFormatID = kAudioFormatMPEG4AAC_HE_V2
-                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), AudioConstants.aacHEBitrateThreshold) // clipping at 40Kbps
+                manager.encodeAudioBitrate = min(UInt(useAudioBitrate), 40_000) // clipping at 40Kbps
             }
         } else {
             manager.encodeAudio = false
@@ -289,8 +286,8 @@ extension AppDelegate {
     private func queryBitrateRange<T: BinaryInteger>(channelCount: T) -> (min: T, max: T) {
         precondition(channelCount > 0, "Channel count must be positive")
         let channelCountWithoutLFE: T = (channelCount > 5) ? (channelCount - 1) : channelCount
-        let minRate = T(AudioConstants.minAACBitratePerChannel) * channelCountWithoutLFE
-        let maxRate = T(AudioConstants.maxAACBitratePerChannel) * channelCountWithoutLFE
+        let minRate = 40_000 * channelCountWithoutLFE
+        let maxRate = 160_000 * channelCountWithoutLFE
         return (min: minRate, max: maxRate)
     }
     
@@ -303,39 +300,38 @@ extension AppDelegate {
             
             // Start recording to specified URL
             manager.movieURL = movieURL
-            Task {
+            performAsync {
                 await manager.recordToggleAsync()
-                await MainActor.run {
-                    if manager.recording {
-                        // Schedule StopTimer if required
-                        scheduleStopTimer(sec)
-                        
-                        // Update recording button as pressed state
-                        recordingButton.state = NSControl.StateValue.on
-                        
-                        // Update dock icon and badge
-                        Task(priority: .background) {
-                            // Update AppIcon badge to active state
-                            NSApp.dockTile.badgeLabel = "REC"
-                            
-                            // Update AppIcon animation to active state
-                            NSApp.applicationIconImage = iconActive
-                        }
-                        
-                        // Post notification with userInfo
-                        let userInfo : [String:Any] = [Keys.fileURL : movieURL]
-                        let notification = Notification(name: .recordingStartedNotificationKey,
-                                                        object: self,
-                                                        userInfo: userInfo)
-                        notificationCenter.post(notification)
-                    } else {
-                        printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
-                    }
-                }
             }
-        } else {
-            printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
+            
+            if manager.recording {
+                // Schedule StopTimer if required
+                scheduleStopTimer(sec)
+                
+                // Update recording button as pressed state
+                recordingButton.state = NSControl.StateValue.on
+                
+                // Update dock icon and badge
+                Task(priority: .background) {
+                    // Update AppIcon badge to active state
+                    NSApp.dockTile.badgeLabel = "REC"
+                    
+                    // Update AppIcon animation to active state
+                    NSApp.applicationIconImage = iconActive
+                }
+                
+                // Post notification with userInfo
+                let userInfo : [String:Any] = [Keys.fileURL : movieURL]
+                let notification = Notification(name: .recordingStartedNotificationKey,
+                                                object: self,
+                                                userInfo: userInfo)
+                notificationCenter.post(notification)
+                
+                return
+            }
         }
+        
+        printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
     }
     
     public func stopRecording() {
@@ -344,57 +340,56 @@ extension AppDelegate {
         // Stop recording
         if let manager = manager, manager.recording {
             // Stop recording to specified URL
-            Task {
+            performAsync {
                 await manager.recordToggleAsync()
-                await MainActor.run {
-                    if manager.recording == false {
-                        // Release StopTimer
-                        invalidateStopTimer()
-                        
-                        // Update recording button as released state
-                        recordingButton.state = NSControl.StateValue.off
-                        
-                        // Reset dock icon and badge
-                        Task(priority: .background) {
-                            // Reset AppIcon badge to inactive state
-                            NSApp.dockTile.badgeLabel = nil
-                            
-                            // Reset AppIcon animation to inactive state
-                            NSApp.applicationIconImage = iconIdle
-                        }
-                        
-                        // Post notification without userInfo
-                        let notification = Notification(name: .recordingStoppedNotificationKey,
-                                                        object: self,
-                                                        userInfo: nil)
-                        notificationCenter.post(notification)
-                        
-                        // Evaluate AutoQuit after finished
-                        if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
-                            printVerbose("NOTICE:\(self.className): \(#function) - AutoQuite triggered")
-                            
-                            /*
-                             * Calling NSApp.terminate() asynchronously could cause a deadlock with
-                             * NSApplication.TerminateReply.terminateLater.
-                             *
-                             * Task { @MainActor [weak self] in
-                             *     guard let self = self else { preconditionFailure("self is nil") }
-                             *     NSApp.terminate(self)
-                             * }
-                             *
-                             * To avoid potential deadlocks, terminate the application synchronously.
-                             */
-                            
-                            NSApp.terminate(self)
-                        }
-                    } else {
-                        printVerbose("ERROR:\(self.className): \(#function) - Failed to stop recording")
-                    }
-                }
             }
-        } else {
-            printVerbose("ERROR:\(self.className): \(#function) - Failed to stop recording")
+            
+            if manager.recording == false {
+                // Release StopTimer
+                invalidateStopTimer()
+                
+                // Update recording button as released state
+                recordingButton.state = NSControl.StateValue.off
+                
+                // Reset dock icon and badge
+                Task(priority: .background) {
+                    // Reset AppIcon badge to inactive state
+                    NSApp.dockTile.badgeLabel = nil
+                    
+                    // Reset AppIcon animation to inactive state
+                    NSApp.applicationIconImage = iconIdle
+                }
+                
+                // Post notification without userInfo
+                let notification = Notification(name: .recordingStoppedNotificationKey,
+                                                object: self,
+                                                userInfo: nil)
+                notificationCenter.post(notification)
+                
+                // Evaluate AutoQuit after finished
+                if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
+                    printVerbose("NOTICE:\(self.className): \(#function) - AutoQuite triggered")
+                    
+                    /*
+                     * Calling NSApp.terminate() asynchronously could cause a deadlock with
+                     * NSApplication.TerminateReply.terminateLater.
+                     *
+                     * Task { @MainActor [weak self] in
+                     *     guard let self = self else { preconditionFailure("self is nil") }
+                     *     NSApp.terminate(self)
+                     * }
+                     *
+                     * To avoid potential deadlocks, terminate the application synchronously.
+                     */
+                    
+                    NSApp.terminate(self)
+                }
+                
+                return
+            }
         }
+        
+        printVerbose("ERROR:\(self.className): \(#function) - Failed to stop recording")
     }
     
     private func scheduleStopTimer(_ sec: Int) {
@@ -460,4 +455,51 @@ extension AppDelegate {
     /* ==================================================================================== */
     //MARK: -
     /* ==================================================================================== */
+}
+
+extension AppDelegate {
+    /// Executes an asynchronous, throwing operation synchronously using a detached task.
+    /// - Parameter block: A closure that performs asynchronous work and may throw.
+    /// - Returns: The result produced by the closure.
+    /// - Note: This method blocks the calling thread until the asynchronous work completes.
+    ///         It can be used from the main thread only if the operation does not rely on main-thread execution.
+    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async throws -> T) throws -> T {
+        let semaphore = DispatchSemaphore(value: 0)
+        let lock = DispatchQueue(label: "ResultLock")
+        var result: Result<T, Error>?
+        Task.detached(priority: .high) {
+            let taskResult: Result<T, Error>
+            do {
+                taskResult = .success(try await block())
+            } catch {
+                taskResult = .failure(error)
+            }
+            lock.sync {
+                result = taskResult
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return try lock.sync { try result!.get() }
+    }
+    
+    /// Executes an asynchronous, non-throwing operation synchronously using a detached task.
+    /// - Parameter block: A closure that performs asynchronous work.
+    /// - Returns: The result produced by the closure.
+    /// - Note: This method blocks the calling thread until the asynchronous work completes.
+    ///         It can be used from the main thread only if the operation does not rely on main-thread execution.
+    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
+        let semaphore = DispatchSemaphore(value: 0)
+        let lock = DispatchQueue(label: "ResultLock")
+        var result: T?
+        Task.detached(priority: .high) {
+            let taskResult = await block()
+            lock.sync {
+                result = taskResult
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return lock.sync { result! }
+    }
 }
