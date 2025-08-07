@@ -140,7 +140,8 @@ extension AppDelegate {
                 
                 // Perform AppIcon Animation
                 if useIconAnimation {
-                    NSApp.applicationIconImage = iconActiveState ? iconActive : iconInactive
+                    let targetIcon = iconActiveState ? iconActive : iconInactive
+                    NSApp.applicationIconImage = targetIcon
                 }
             }
         } else {

@@ -271,14 +271,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Task(priority: .background) {
             // Resize AppIcon for animation (to avoid performance impact)
             let iconSize = NSSize(width: 64, height: 64)
-            iconInactive!.size = iconSize
-            iconActive!.size = iconSize
-            iconIdle!.size = iconSize
+            iconInactive?.size = iconSize
+            iconActive?.size = iconSize
+            iconIdle?.size = iconSize
             
             // PreCache icon images
-            NSApp.applicationIconImage = iconActive
-            NSApp.applicationIconImage = iconInactive
-            NSApp.applicationIconImage = iconIdle
+            if let iconActive = iconActive {
+                NSApp.applicationIconImage = iconActive
+            }
+            if let iconInactive = iconInactive {
+                NSApp.applicationIconImage = iconInactive
+            }
+            if let iconIdle = iconIdle {
+                NSApp.applicationIconImage = iconIdle
+            }
         }
         
         //
@@ -387,12 +393,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func updateVolume(_ sender: AnyObject) {
         // print("\(#file) \(#line) \(#function)")
         
-        if sender is NSMenuItem {
-            let volTag = (sender as! NSMenuItem).tag
+        if let menuItem = sender as? NSMenuItem {
+            let volTag = menuItem.tag
             setVolume(volTag)
-        }
-        if sender is NSPopUpButton {
-            let volTag = (sender as! NSPopUpButton).selectedTag()
+        } else if let popUpButton = sender as? NSPopUpButton {
+            let volTag = popUpButton.selectedTag()
             setVolume(volTag)
         }
     }
@@ -418,12 +423,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func updateScale(_ sender: AnyObject) {
         // print("\(#file) \(#line) \(#function)")
         
-        if sender is NSMenuItem {
-            let scaleTag = (sender as! NSMenuItem).tag
+        if let menuItem = sender as? NSMenuItem {
+            let scaleTag = menuItem.tag
             setScale(scaleTag)
-        }
-        if sender is NSPopUpButton {
-            let scaleTag = (sender as! NSPopUpButton).selectedTag()
+        } else if let popUpButton = sender as? NSPopUpButton {
+            let scaleTag = popUpButton.selectedTag()
             setScale(scaleTag)
         }
     }
@@ -431,12 +435,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func updateAspectRatio(_ sender: AnyObject) {
         // print("\(#file) \(#line) \(#function)")
         
-        if sender is NSMenuItem {
-            let ratioTag = (sender as! NSMenuItem).tag
+        if let menuItem = sender as? NSMenuItem {
+            let ratioTag = menuItem.tag
             setAspectRatio(ratioTag)
-        }
-        if sender is NSPopUpButton {
-            let ratioTag = (sender as! NSPopUpButton).selectedTag()
+        } else if let popUpButton = sender as? NSPopUpButton {
+            let ratioTag = popUpButton.selectedTag()
             setAspectRatio(ratioTag)
         }
     }
@@ -639,7 +642,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Generate Movie file name
-        let prefix = defaults.value(forKey: Keys.prefix) as! String
+        let prefix = defaults.string(forKey: Keys.prefix) ?? "recdl-"
         let formatter = DateFormatter()
         formatter.dateFormat = "yyMMdd-HHmmss"
         let movieName = prefix + formatter.string(from: Date()) + ".mov"
