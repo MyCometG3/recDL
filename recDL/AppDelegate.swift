@@ -658,11 +658,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    private func logOperation(_ operation: String, status: String, file: String = #file, function: String = #function) {
-        let className = String(describing: type(of: self))
-        printVerbose("\(status):\(className): \(function) - \(operation)")
-    }
-    
     /* ==================================================================================== */
     //MARK: -
     /* ==================================================================================== */
