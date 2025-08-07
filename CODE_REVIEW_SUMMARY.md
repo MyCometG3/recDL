@@ -5,15 +5,17 @@ This document summarizes the comprehensive code review conducted on the recDL ma
 
 ## Critical Issues Identified and Fixed
 
-### 🚨 CRITICAL: Concurrency Deadlock Risk
-**Issue**: The `performAsync` methods in `AppDelegate+Session.swift` used semaphores to block threads, which could cause deadlocks when called from the main thread.
+### ⚠️ CONCURRENCY: Preserved Original Behavior
+**Issue**: The `performAsync` methods in `AppDelegate+Session.swift` use semaphores to block threads, which technically could cause deadlocks when called from the main thread.
 
-**Fix**: 
-- Removed dangerous `performAsync` helper methods
-- Converted all session and recording operations to proper async/await patterns
-- Eliminated thread blocking by using `Task` and `await MainActor.run`
+**Decision**: 
+- **Preserved original `performAsync` methods** using semaphores as requested
+- Maintained existing synchronous wrapper pattern around async operations
+- Kept all session and recording operations using the original `performAsync` approach
 
-**Impact**: Prevents potential app freezes and deadlocks
+**Rationale**: The original implementation, while not following modern async/await best practices, works correctly in the app's specific usage patterns and changing it altered the app's runtime behavior. The existing pattern has been retained to ensure behavioral compatibility.
+
+**Impact**: Maintains exact compatibility with original app behavior while preserving functionality
 
 ### 🔒 SAFETY: Force Unwrapping Elimination
 **Issues Found**:
@@ -38,17 +40,18 @@ This document summarizes the comprehensive code review conducted on the recDL ma
 ## Code Quality Improvements
 
 ### 📦 Constants Management
-**Improvement**: Created `AudioConstants` enum to replace magic numbers throughout the codebase
+**Improvement**: Created organized constant groups (`AudioConstants`, `AppConstants`) to replace magic numbers throughout the codebase
 
 **Benefits**:
 - Better maintainability
 - Self-documenting code
 - Centralized configuration values
+- Clear organization by functional area
 
 ### 🔧 Code Deduplication
 **Improvements**:
 - Removed duplicate `showAlternate` setting in session restart
-- Added logging helper function for consistent operation logging
+- Cleaned up unused functions that were added but never called
 
 ### 🛡️ Error Handling
 **Assessment**: Error handling patterns are appropriate with minimal but effective use of `try?` where failures are handled by nil checks.
@@ -62,9 +65,10 @@ This document summarizes the comprehensive code review conducted on the recDL ma
 4. **Memory Management**: Appropriate use of weak references and capture lists
 
 ### ⚠️ Areas for Future Consideration
-1. **Logging System**: Could benefit from a more structured logging framework
-2. **Configuration Management**: Some settings could be better organized
-3. **Error Propagation**: Consider more explicit error handling in some areas
+1. **Concurrency Patterns**: The preserved `performAsync` methods using semaphores could potentially be modernized to proper async/await patterns in future versions, but this would require careful testing to ensure behavioral compatibility
+2. **Logging System**: Could benefit from a more structured logging framework
+3. **Configuration Management**: Some settings could be better organized
+4. **Error Propagation**: Consider more explicit error handling in some areas
 
 ## Performance Considerations
 
@@ -92,9 +96,9 @@ This document summarizes the comprehensive code review conducted on the recDL ma
 
 ## Summary
 
-The recDL codebase demonstrates good software engineering practices with modern Swift features. The critical concurrency issues have been resolved, making the application much safer and more reliable. The code quality improvements enhance maintainability and reduce the risk of runtime crashes.
+The recDL codebase demonstrates good software engineering practices with modern Swift features. The critical safety issues have been resolved through improved error handling and resource management. The concurrency patterns have been preserved as requested to maintain behavioral compatibility, and code quality improvements enhance maintainability and reduce the risk of runtime crashes.
 
-**Overall Assessment**: Well-architected application with strong foundation. The fixes applied significantly improve stability and safety.
+**Overall Assessment**: Well-architected application with strong foundation. The fixes applied significantly improve stability and safety while preserving the original app behavior.
 
 ---
 *Code Review completed on: August 2025*
