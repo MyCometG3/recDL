@@ -13,7 +13,7 @@ import Foundation
 /// Generic async wrappers for completion-handler based APIs
 extension NSObject {
     /// Helper for creating async wrappers around completion handlers
-    func withAsyncContinuation<T>(_ operation: @escaping (@escaping (T) -> Void) -> Void) async -> T {
+    func withAsyncContinuation<T: Sendable>(_ operation: @escaping (@escaping (T) -> Void) -> Void) async -> T {
         return await withCheckedContinuation { continuation in
             operation { result in
                 continuation.resume(returning: result)
@@ -22,7 +22,7 @@ extension NSObject {
     }
     
     /// Helper for creating throwing async wrappers around completion handlers  
-    func withAsyncThrowingContinuation<T>(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) async throws -> T {
+    func withAsyncThrowingContinuation<T: Sendable>(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) async throws -> T {
         return try await withCheckedThrowingContinuation { continuation in
             operation { result in
                 continuation.resume(with: result)
