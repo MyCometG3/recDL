@@ -13,6 +13,9 @@ import CoreVideo
 @preconcurrency import DLABridging
 import DLABCaptureManager
 
+// Extend CaptureManager to conform to the protocol for actor isolation
+extension CaptureManager: CaptureManagerProtocol {}
+
 extension Comparable {
     internal func clipped(to range: ClosedRange<Self>) -> Self {
         min(max(self, range.lowerBound), range.upperBound)
@@ -72,6 +75,12 @@ extension AppDelegate {
     public func startSession() {
         // print("\(#file) \(#line) \(#function)")
         
+        Task { @MainActor in
+            await startSessionAsync()
+        }
+    }
+    
+    private func startSessionAsync() async {
         if manager == nil {
             manager = CaptureManager()
         }
@@ -87,9 +96,11 @@ extension AppDelegate {
             addPreviewLayer()
             
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
-            let result = performAsync {
-                await manager.captureStartAsync()
-            }
+            
+            // Configure and start session through actor
+            await CaptureSession.shared.configure(manager: manager)
+            let result = await CaptureSession.shared.start()
+            
             if result {
                 printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
             } else {
@@ -103,16 +114,24 @@ extension AppDelegate {
     public func stopSession() {
         // print("\(#file) \(#line) \(#function)")
         
+        Task { @MainActor in
+            await stopSessionAsync()
+        }
+    }
+    
+    private func stopSessionAsync() async {
         if let manager = manager {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
-            let result = performAsync {
-                await manager.captureStopAsync()
-            }
+            
+            let result = await CaptureSession.shared.stop()
+            
             if result {
                 printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
             } else {
                 printVerbose("ERROR:\(self.className): \(#function) - Stopping capture session failed.")
             }
+            
+            await CaptureSession.shared.reset()
             self.manager = nil
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
@@ -122,6 +141,15 @@ extension AppDelegate {
     public func restartSession(_ notification: Notification) {
         // print("\(#file) \(#line) \(#function)")
         
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            await self.restartSessionAsync(notification)
+        }
+    }
+    
+    public func restartSessionAsync(_ notification: Notification) async {
+        // print("\(#file) \(#line) \(#function)")
+        
         // Check user choosen input port (audio/video)
         // modify if required
         if manager == nil {
@@ -129,32 +157,28 @@ extension AppDelegate {
             return
         }
         
-        Task { @MainActor [weak self] in
-            guard let self = self else { preconditionFailure("self is nil") }
-            
-            // Stop Session
-            self.stopUpdateStatus()
-            self.defaults.set(false, forKey: Keys.showAlternate)
-            
-            self.removePreviewLayer()
-            self.manager?.videoPreview = nil
-            self.stopSession()
-            
-            //
-            try? await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
-            
-            // Start Session
-            self.startSession()
-            self.manager?.videoPreview = self.parentView
-            self.addPreviewLayer()
-            
-            self.defaults.set(false, forKey: Keys.showAlternate)
-            self.startUpdateStatus()
-            
-            // Update Toolbar button title
-            self.setScale(-1)               // Update Popup Menu Selection
-            self.setVolume(-1)              // Update Popup Menu Selection
-        }
+        // Stop Session
+        self.stopUpdateStatus()
+        self.defaults.set(false, forKey: Keys.showAlternate)
+        
+        self.removePreviewLayer()
+        self.manager?.videoPreview = nil
+        await self.stopSessionAsync()
+        
+        //
+        try? await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
+        
+        // Start Session
+        await self.startSessionAsync()
+        self.manager?.videoPreview = self.parentView
+        self.addPreviewLayer()
+        
+        self.defaults.set(false, forKey: Keys.showAlternate)
+        self.startUpdateStatus()
+        
+        // Update Toolbar button title
+        self.setScale(-1)               // Update Popup Menu Selection
+        self.setVolume(-1)              // Update Popup Menu Selection
     }
     
     /* ======================================================================================== */
@@ -294,15 +318,20 @@ extension AppDelegate {
     public func startRecording(for sec: Int) {
         // print("\(#file) \(#line) \(#function)")
         
+        Task { @MainActor in
+            await startRecordingAsync(for: sec)
+        }
+    }
+    
+    private func startRecordingAsync(for sec: Int) async {
         if let manager = manager, manager.recording == false, let movieURL = createMovieURL() {
             // Configure recording parameters
             applyRecordingParameters(manager)
             
             // Start recording to specified URL
             manager.movieURL = movieURL
-            performAsync {
-                await manager.recordToggleAsync()
-            }
+            
+            _ = await CaptureSession.shared.toggleRecording()
             
             if manager.recording {
                 // Schedule StopTimer if required
@@ -337,12 +366,16 @@ extension AppDelegate {
     public func stopRecording() {
         // print("\(#file) \(#line) \(#function)")
         
+        Task { @MainActor in
+            await stopRecordingAsync()
+        }
+    }
+    
+    private func stopRecordingAsync() async {
         // Stop recording
         if let manager = manager, manager.recording {
             // Stop recording to specified URL
-            performAsync {
-                await manager.recordToggleAsync()
-            }
+            _ = await CaptureSession.shared.toggleRecording()
             
             if manager.recording == false {
                 // Release StopTimer
@@ -455,51 +488,4 @@ extension AppDelegate {
     /* ==================================================================================== */
     //MARK: -
     /* ==================================================================================== */
-}
-
-extension AppDelegate {
-    /// Executes an asynchronous, throwing operation synchronously using a detached task.
-    /// - Parameter block: A closure that performs asynchronous work and may throw.
-    /// - Returns: The result produced by the closure.
-    /// - Note: This method blocks the calling thread until the asynchronous work completes.
-    ///         It can be used from the main thread only if the operation does not rely on main-thread execution.
-    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async throws -> T) throws -> T {
-        let semaphore = DispatchSemaphore(value: 0)
-        let lock = DispatchQueue(label: "ResultLock")
-        var result: Result<T, Error>?
-        Task.detached(priority: .high) {
-            let taskResult: Result<T, Error>
-            do {
-                taskResult = .success(try await block())
-            } catch {
-                taskResult = .failure(error)
-            }
-            lock.sync {
-                result = taskResult
-            }
-            semaphore.signal()
-        }
-        semaphore.wait()
-        return try lock.sync { try result!.get() }
-    }
-    
-    /// Executes an asynchronous, non-throwing operation synchronously using a detached task.
-    /// - Parameter block: A closure that performs asynchronous work.
-    /// - Returns: The result produced by the closure.
-    /// - Note: This method blocks the calling thread until the asynchronous work completes.
-    ///         It can be used from the main thread only if the operation does not rely on main-thread execution.
-    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
-        let semaphore = DispatchSemaphore(value: 0)
-        let lock = DispatchQueue(label: "ResultLock")
-        var result: T?
-        Task.detached(priority: .high) {
-            let taskResult = await block()
-            lock.sync {
-                result = taskResult
-            }
-            semaphore.signal()
-        }
-        semaphore.wait()
-        return lock.sync { result! }
-    }
 }
