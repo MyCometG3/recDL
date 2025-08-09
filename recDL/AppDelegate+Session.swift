@@ -127,7 +127,7 @@ extension AppDelegate {
     }
     
     internal func stopSessionAsync() async {
-        if let manager = manager {
+        if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
             
             let result = await CaptureSession.shared.stop()
