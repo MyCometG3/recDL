@@ -13,7 +13,7 @@ import Foundation
 /// Generic async wrappers for completion-handler based APIs
 extension NSObject {
     /// Helper for creating async wrappers around completion handlers
-    func withCheckedContinuation<T>(_ operation: @escaping (@escaping (T) -> Void) -> Void) async -> T {
+    func withAsyncContinuation<T>(_ operation: @escaping (@escaping (T) -> Void) -> Void) async -> T {
         return await withCheckedContinuation { continuation in
             operation { result in
                 continuation.resume(returning: result)
@@ -22,7 +22,7 @@ extension NSObject {
     }
     
     /// Helper for creating throwing async wrappers around completion handlers  
-    func withCheckedThrowingContinuation<T>(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) async throws -> T {
+    func withAsyncThrowingContinuation<T>(_ operation: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) async throws -> T {
         return try await withCheckedThrowingContinuation { continuation in
             operation { result in
                 continuation.resume(with: result)
@@ -34,10 +34,10 @@ extension NSObject {
 /// AsyncStream helpers for high-frequency callback bridging
 actor StreamBridge<Element: Sendable> {
     private var continuation: AsyncStream<Element>.Continuation?
-    private let bufferPolicy: AsyncStream<Element>.Continuation.BufferPolicy
+    private let bufferPolicy: AsyncStream<Element>.Continuation.BufferingPolicy
     private var isFinished = false
     
-    init(bufferPolicy: AsyncStream<Element>.Continuation.BufferPolicy = .bufferingNewest(100)) {
+    init(bufferPolicy: AsyncStream<Element>.Continuation.BufferingPolicy = .bufferingNewest(100)) {
         self.bufferPolicy = bufferPolicy
     }
     
@@ -49,7 +49,7 @@ actor StreamBridge<Element: Sendable> {
         }
     }
     
-    private func setContinuation(_ continuation: AsyncStream<Element>.Continuation) {
+    private func setContinuation(_ continuation: AsyncStream<Element>.Continuation) async {
         self.continuation = continuation
         
         // Set up cancellation handler
