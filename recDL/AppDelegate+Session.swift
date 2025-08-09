@@ -92,7 +92,7 @@ extension AppDelegate {
             
             // TODO: add input devide selection
             
-            guard let _ = manager.findFirstDevice() else { return }
+            guard manager.findFirstDevice() != nil else { return }
             
             applySessionParameters(manager)
             
@@ -101,7 +101,11 @@ extension AppDelegate {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
             
             // Configure and start session through actor
-            await CaptureSession.shared.configure(manager: manager)
+            let configureResult = await CaptureSession.shared.configure(manager: manager)
+            guard configureResult else {
+                printVerbose("ERROR:\(self.className): \(#function) - Failed to configure capture session.")
+                return
+            }
             let result = await CaptureSession.shared.start()
             
             if result {
