@@ -35,6 +35,7 @@ extension NSObject {
 actor StreamBridge<Element> {
     private var continuation: AsyncStream<Element>.Continuation?
     private let bufferPolicy: AsyncStream<Element>.Continuation.BufferPolicy
+    private var isFinished = false
     
     init(bufferPolicy: AsyncStream<Element>.Continuation.BufferPolicy = .bufferingNewest(100)) {
         self.bufferPolicy = bufferPolicy
@@ -42,15 +43,36 @@ actor StreamBridge<Element> {
     
     func createStream() -> AsyncStream<Element> {
         return AsyncStream(bufferingPolicy: bufferPolicy) { continuation in
-            self.continuation = continuation
+            Task {
+                await self.setContinuation(continuation)
+            }
         }
     }
     
+    private func setContinuation(_ continuation: AsyncStream<Element>.Continuation) {
+        self.continuation = continuation
+        
+        // Set up cancellation handler
+        continuation.onTermination = { [weak self] _ in
+            Task {
+                await self?.handleTermination()
+            }
+        }
+    }
+    
+    private func handleTermination() {
+        isFinished = true
+        continuation = nil
+    }
+    
     func yield(_ element: Element) {
+        guard !isFinished else { return }
         continuation?.yield(element)
     }
     
     func finish() {
+        guard !isFinished else { return }
+        isFinished = true
         continuation?.finish()
         continuation = nil
     }

@@ -34,6 +34,9 @@ actor CaptureSession {
     func configure<T: CaptureManagerProtocol>(manager: T) async -> Bool {
         guard !isConfigured else { return true }
         
+        // Check for cancellation before proceeding
+        if Task.isCancelled { return false }
+        
         self.manager = manager
         isConfigured = true
         return true
@@ -42,6 +45,9 @@ actor CaptureSession {
     /// Start the capture session
     func start() async -> Bool {
         guard let manager = manager, isConfigured, !isStarted else { return false }
+        
+        // Check for cancellation before proceeding
+        if Task.isCancelled { return false }
         
         let result = await manager.captureStartAsync()
         if result {
@@ -65,6 +71,9 @@ actor CaptureSession {
     /// Toggle recording state
     func toggleRecording() async -> Bool {
         guard let manager = manager, isStarted else { return false }
+        
+        // Check for cancellation before proceeding
+        if Task.isCancelled { return false }
         
         await manager.recordToggleAsync()
         isRecording = manager.recording
