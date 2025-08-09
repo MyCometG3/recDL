@@ -32,7 +32,7 @@ extension NSObject {
 }
 
 /// AsyncStream helpers for high-frequency callback bridging
-actor StreamBridge<Element> {
+actor StreamBridge<Element: Sendable> {
     private var continuation: AsyncStream<Element>.Continuation?
     private let bufferPolicy: AsyncStream<Element>.Continuation.BufferPolicy
     private var isFinished = false

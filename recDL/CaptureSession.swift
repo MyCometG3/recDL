@@ -11,7 +11,7 @@
 import Foundation
 
 /// Protocol for capture manager to avoid direct dependency
-protocol CaptureManagerProtocol {
+protocol CaptureManagerProtocol: Sendable {
     func captureStartAsync() async -> Bool
     func captureStopAsync() async -> Bool  
     func recordToggleAsync() async
@@ -19,7 +19,6 @@ protocol CaptureManagerProtocol {
 }
 
 /// Actor that centralizes capture session state management and enforces sequential operations
-@globalActor
 actor CaptureSession {
     static let shared = CaptureSession()
     

@@ -16,6 +16,9 @@ import DLABCaptureManager
 // Extend CaptureManager to conform to the protocol for actor isolation
 extension CaptureManager: CaptureManagerProtocol {}
 
+// Mark CaptureManager as Sendable for actor isolation (external library)
+extension CaptureManager: @unchecked Sendable {}
+
 extension Comparable {
     internal func clipped(to range: ClosedRange<Self>) -> Self {
         min(max(self, range.lowerBound), range.upperBound)
