@@ -122,7 +122,7 @@ extension AppDelegate {
         }
     }
     
-    private func stopSessionAsync() async {
+    internal func stopSessionAsync() async {
         if let manager = manager {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
             
@@ -326,7 +326,7 @@ extension AppDelegate {
         }
     }
     
-    private func startRecordingAsync(for sec: Int) async {
+    internal func startRecordingAsync(for sec: Int) async {
         if let manager = manager, manager.recording == false, let movieURL = createMovieURL() {
             // Configure recording parameters
             applyRecordingParameters(manager)
@@ -374,7 +374,7 @@ extension AppDelegate {
         }
     }
     
-    private func stopRecordingAsync() async {
+    internal func stopRecordingAsync() async {
         // Stop recording
         if let manager = manager, manager.recording {
             // Stop recording to specified URL
