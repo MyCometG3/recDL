@@ -66,8 +66,12 @@ actor CaptureSession {
         guard let manager = manager else { return }
         
         manager.displayMode = displayMode
-        manager.videoConnection = videoConnection
-        manager.audioConnection = audioConnection
+        if let videoConnection = videoConnection {
+            manager.videoConnection = videoConnection
+        }
+        if let audioConnection = audioConnection {
+            manager.audioConnection = audioConnection
+        }
         manager.pixelFormat = pixelFormat
         manager.videoStyle = videoStyle
         
@@ -133,19 +137,19 @@ actor CaptureSession {
         guard let manager = manager, !manager.recording else { return false }
         
         manager.movieURL = movieURL
-        let toggleResult = await manager.recordToggleAsync()
+        await manager.recordToggleAsync()
         
         // Return true if recording actually started
-        return toggleResult && manager.recording
+        return manager.recording
     }
     
     func stopRecording() async -> Bool {
         guard let manager = manager, manager.recording else { return false }
         
-        let toggleResult = await manager.recordToggleAsync()
+        await manager.recordToggleAsync()
         
         // Return true if recording actually stopped
-        return toggleResult && !manager.recording
+        return !manager.recording
     }
     
     // MARK: - State Access

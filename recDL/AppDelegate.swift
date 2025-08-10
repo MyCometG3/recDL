@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public internal(set) var manager : CaptureManager? = nil
     internal let captureSession = CaptureSession()
-    internal private(set) var cachedRecordingState = false
+    internal var cachedRecordingState = false
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil

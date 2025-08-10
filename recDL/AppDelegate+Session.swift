@@ -47,20 +47,21 @@ extension AppDelegate {
         let audioLayout : UInt32 = UInt32(defaults.integer(forKey: Keys.audioLayout))
         let audioReverse34 : Bool = defaults.bool(forKey: Keys.audioReverse34)
         
+        // Prepare parameters for actor (accessing main actor context)
+        let hdmiAudioChannels = self.verifyHDMIAudioChannelLayoutReady() ? audioLayout : nil
+        let reverseCh3Ch4 = self.verifyHDMIAudioChannelLayoutReady() ? audioReverse34 : nil
+        
+        let timeCodeSource : Int = self.defaults.integer(forKey: Keys.timeCodeSource)
+        let timecodeSource: TimecodeType?
+        switch timeCodeSource {
+        case 1, 2, 4, 8:
+            timecodeSource = TimecodeType(rawValue: timeCodeSource)
+        default:
+            timecodeSource = nil
+        }
+        
         // Apply parameters through actor
         performAsync {
-            let hdmiAudioChannels = self.verifyHDMIAudioChannelLayoutReady() ? audioLayout : nil
-            let reverseCh3Ch4 = self.verifyHDMIAudioChannelLayoutReady() ? audioReverse34 : nil
-            
-            let timeCodeSource : Int = self.defaults.integer(forKey: Keys.timeCodeSource)
-            let timecodeSource: TimecodeType?
-            switch timeCodeSource {
-            case 1, 2, 4, 8:
-                timecodeSource = TimecodeType(rawValue: timeCodeSource)
-            default:
-                timecodeSource = nil
-            }
-            
             await self.captureSession.applySessionParameters(
                 displayMode: displayMode,
                 videoConnection: videoConnection,
