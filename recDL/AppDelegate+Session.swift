@@ -125,7 +125,7 @@ extension AppDelegate {
                 await self.captureSession.destroyManager()
             }
             self.manager = nil
-            cachedRecordingState = false
+            updateCachedState()
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
         }
