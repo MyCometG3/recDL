@@ -120,7 +120,7 @@ extension AppDelegate {
     public func stopSession() {
         // print("\(#file) \(#line) \(#function)")
         
-        if let manager = manager {
+        if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
             let result = performAsync {
                 await self.captureSession.stopCaptureSession()
@@ -374,7 +374,7 @@ extension AppDelegate {
         }
         
         // Stop recording
-        if let manager = manager, isRecording {
+        if manager != nil && isRecording {
             // Stop recording to specified URL
             let recordingStopped = performAsync {
                 await self.captureSession.stopRecording()

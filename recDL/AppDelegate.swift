@@ -481,7 +481,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         if modifier(.option) {
-            if let manager = manager, cachedRecordingState {
+            if manager != nil && cachedRecordingState {
                 // Reject multiple request
                 recordingButton.state = NSControl.StateValue.on   // Reset button state
                 NSSound.beep()
@@ -512,7 +512,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Reject multiple request
-        if let manager = manager, (cachedRecordingState || window.attachedSheet != nil) {
+        if manager != nil && (cachedRecordingState || window.attachedSheet != nil) {
             NSSound.beep()
             return
         }
@@ -539,7 +539,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Reject multiple request
-        if let manager = manager, (cachedRecordingState || window.attachedSheet != nil) {
+        if manager != nil && (cachedRecordingState || window.attachedSheet != nil) {
             NSSound.beep()
             return
         }
