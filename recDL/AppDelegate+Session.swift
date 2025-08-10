@@ -51,7 +51,7 @@ extension AppDelegate {
         let hdmiAudioChannels = self.verifyHDMIAudioChannelLayoutReady() ? audioLayout : nil
         let reverseCh3Ch4 = self.verifyHDMIAudioChannelLayoutReady() ? audioReverse34 : nil
         
-        var timecodeSource: TimecodeType?
+        let timecodeSource: TimecodeType?
         let timeCodeSourceRaw = self.defaults.integer(forKey: Keys.timeCodeSource)
         switch timeCodeSourceRaw {
         case 1, 2, 4, 8:
@@ -80,20 +80,15 @@ extension AppDelegate {
     public func startSession() {
         // print("\(#file) \(#line) \(#function)")
         
-        // Create manager through actor
-        let managerCreated = performAsync {
+        // Create manager through actor and set as local reference
+        manager = performAsync {
             await self.captureSession.setVerbose(self.verbose)
             return await self.captureSession.createManager()
         }
         
-        guard managerCreated else {
+        guard manager != nil else {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to create CaptureManager.")
             return
-        }
-        
-        // Get manager reference for UI operations
-        manager = performAsync {
-            return await self.captureSession.getManager()
         }
         
         applySessionParameters()
@@ -106,7 +101,7 @@ extension AppDelegate {
         }
         if result {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
-            updateCachedRecordingState()
+            updateCachedState()
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
         }
@@ -173,7 +168,7 @@ extension AppDelegate {
             self.setVolume(-1)              // Update Popup Menu Selection
             
             // Update cached recording state after restart
-            self.updateCachedRecordingState()
+            self.updateCachedState()
         }
     }
     
@@ -330,7 +325,7 @@ extension AppDelegate {
             }
             
             // Update cached state after operation
-            updateCachedRecordingState()
+            updateCachedState()
             
             if recordingStarted {
                 
@@ -378,7 +373,7 @@ extension AppDelegate {
             }
             
             // Update cached state after operation
-            updateCachedRecordingState()
+            updateCachedState()
             
             if recordingStopped {
                 

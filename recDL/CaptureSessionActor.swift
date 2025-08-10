@@ -73,21 +73,21 @@ actor CaptureSession {
     /// This method creates a new CaptureManager if one doesn't exist, configures it with
     /// the current verbose setting, and attempts to find the first available capture device.
     ///
-    /// - Returns: `true` if the manager was successfully created and a device was found, `false` otherwise.
+    /// - Returns: The CaptureManager instance if successfully created and a device was found, `nil` otherwise.
     /// - Note: This method must be called before any capture operations can be performed.
-    func createManager() -> Bool {
+    func createManager() -> CaptureManager? {
         if manager == nil {
             manager = CaptureManager()
         }
         
-        guard let manager = manager else { return false }
+        guard let manager = manager else { return nil }
         
         manager.verbose = self.verbose
         
         // TODO: add input device selection
-        guard let _ = manager.findFirstDevice() else { return false }
+        guard let _ = manager.findFirstDevice() else { return nil }
         
-        return true
+        return manager
     }
     
     /// Applies session-level configuration parameters to the capture manager.

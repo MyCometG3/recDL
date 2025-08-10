@@ -20,8 +20,8 @@ class RDL1Session: RDL1ScriptableObject {
     public var uniqueID: String = UUID().uuidString
     
     public var running :Bool {
-        if let appDelegate = appDelegate, let manager = appDelegate.manager {
-            return manager.running
+        if let appDelegate = appDelegate {
+            return appDelegate.cachedRunningState
         }
         return false
     }

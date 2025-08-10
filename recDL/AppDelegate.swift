@@ -31,6 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     public internal(set) var manager : CaptureManager? = nil
     internal let captureSession = CaptureSession()
     internal var cachedRecordingState = false
+    internal var cachedRunningState = false
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil
@@ -67,9 +68,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Cached State Management
     /* ============================================ */
     
-    internal func updateCachedRecordingState() {
+    internal func updateCachedState() {
         cachedRecordingState = performAsync {
             await self.captureSession.isRecording()
+        }
+        cachedRunningState = performAsync {
+            await self.captureSession.isRunning()
         }
     }
     
@@ -313,7 +317,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                        using: handler)
         
         // Initialize cached recording state
-        updateCachedRecordingState()
+        updateCachedState()
         
         prepared = true
     }
