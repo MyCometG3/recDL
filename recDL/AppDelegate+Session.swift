@@ -315,7 +315,7 @@ extension AppDelegate {
             await self.captureSession.isRecording()
         }
         
-        if let manager = manager, !isRecording, let movieURL = createMovieURL() {
+        if manager != nil && !isRecording, let movieURL = createMovieURL() {
             // Configure recording parameters
             applyRecordingParameters()
             
