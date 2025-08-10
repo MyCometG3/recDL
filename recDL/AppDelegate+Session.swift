@@ -24,7 +24,7 @@ extension AppDelegate {
     // MARK: - Capture Session support
     /* ======================================================================================== */
     
-    private func applySessionParameters(_ manager: CaptureManager) {
+    private func applySessionParameters() {
         // Read parameters for session
         let displayModeRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.displayMode))
         guard let displayMode = DLABDisplayMode(rawValue: displayModeRaw) else { return }
@@ -51,11 +51,11 @@ extension AppDelegate {
         let hdmiAudioChannels = self.verifyHDMIAudioChannelLayoutReady() ? audioLayout : nil
         let reverseCh3Ch4 = self.verifyHDMIAudioChannelLayoutReady() ? audioReverse34 : nil
         
-        let timeCodeSource : Int = self.defaults.integer(forKey: Keys.timeCodeSource)
-        let timecodeSource: TimecodeType?
-        switch timeCodeSource {
+        var timecodeSource: TimecodeType?
+        let timeCodeSourceRaw = self.defaults.integer(forKey: Keys.timeCodeSource)
+        switch timeCodeSourceRaw {
         case 1, 2, 4, 8:
-            timecodeSource = TimecodeType(rawValue: timeCodeSource)
+            timecodeSource = TimecodeType(rawValue: timeCodeSourceRaw)
         default:
             timecodeSource = nil
         }
@@ -96,12 +96,7 @@ extension AppDelegate {
             return await self.captureSession.getManager()
         }
         
-        guard let manager = manager else {
-            printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
-            return
-        }
-        
-        applySessionParameters(manager)
+        applySessionParameters()
         
         addPreviewLayer()
         
@@ -186,7 +181,9 @@ extension AppDelegate {
     // MARK: - Recording support
     /* ======================================================================================== */
     
-    private func applyRecordingParameters(_ manager: CaptureManager) {
+    private func applyRecordingParameters() {
+        guard let manager = self.manager else { return }
+        
         // Read parameters for recording
         let clapOffsetH = defaults.integer(forKey: Keys.clapOffsetH)
         let clapOffsetV = defaults.integer(forKey: Keys.clapOffsetV)
@@ -325,7 +322,7 @@ extension AppDelegate {
         
         if let manager = manager, !isRecording, let movieURL = createMovieURL() {
             // Configure recording parameters
-            applyRecordingParameters(manager)
+            applyRecordingParameters()
             
             // Start recording to specified URL
             let recordingStarted = performAsync {
