@@ -406,7 +406,7 @@ extension AppDelegate {
                     let selector = #selector(NSApplication.terminate(_:))
                     NSApp.perform(selector,
                                   with: nil,
-                                  afterDelay: 0.1 ,
+                                  afterDelay: 0.1,
                                   inModes: [.common])
                     /*
                      * Calling NSApp.terminate() directly causes a deadlock with
