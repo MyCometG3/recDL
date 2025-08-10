@@ -320,7 +320,7 @@ extension AppDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         let isRecording = performAsync {
-            await self.captureSession.getManagerRecordingState()
+            await self.captureSession.isRecording()
         }
         
         if let manager = manager, !isRecording, let movieURL = createMovieURL() {
@@ -370,7 +370,7 @@ extension AppDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         let isRecording = performAsync {
-            await self.captureSession.getManagerRecordingState()
+            await self.captureSession.isRecording()
         }
         
         // Stop recording

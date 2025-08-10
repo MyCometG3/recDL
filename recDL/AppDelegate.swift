@@ -69,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     internal func updateCachedRecordingState() {
         cachedRecordingState = performAsync {
-            await self.captureSession.getManagerRecordingState()
+            await self.captureSession.isRecording()
         }
     }
     

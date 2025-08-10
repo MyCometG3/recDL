@@ -262,6 +262,14 @@ actor CaptureSession {
     
     // MARK: - State Access
     
+    /// Returns the current capture session running state.
+    ///
+    /// - Returns: `true` if the capture session is currently running, `false` otherwise.
+    /// - Note: Returns `false` if no manager instance exists.
+    func isRunning() -> Bool {
+        return manager?.running ?? false
+    }
+    
     /// Returns the current recording state.
     ///
     /// - Returns: `true` if recording is currently active, `false` otherwise.
@@ -290,15 +298,4 @@ actor CaptureSession {
     }
     
     // MARK: - Manager Property Access
-    
-    /// Returns the recording state from the underlying manager.
-    ///
-    /// This method provides direct access to the manager's recording state and is primarily
-    /// used for UI updates and state synchronization.
-    ///
-    /// - Returns: `true` if the manager reports active recording, `false` otherwise or if no manager exists.
-    /// - Note: This is functionally equivalent to `isRecording()` but provided for API consistency.
-    func getManagerRecordingState() -> Bool {
-        return manager?.recording ?? false
-    }
 }
