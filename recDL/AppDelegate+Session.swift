@@ -49,10 +49,10 @@ extension AppDelegate {
         
         // Apply parameters through actor
         performAsync {
-            let hdmiAudioChannels = verifyHDMIAudioChannelLayoutReady() ? audioLayout : nil
-            let reverseCh3Ch4 = verifyHDMIAudioChannelLayoutReady() ? audioReverse34 : nil
+            let hdmiAudioChannels = self.verifyHDMIAudioChannelLayoutReady() ? audioLayout : nil
+            let reverseCh3Ch4 = self.verifyHDMIAudioChannelLayoutReady() ? audioReverse34 : nil
             
-            let timeCodeSource : Int = defaults.integer(forKey: Keys.timeCodeSource)
+            let timeCodeSource : Int = self.defaults.integer(forKey: Keys.timeCodeSource)
             let timecodeSource: TimecodeType?
             switch timeCodeSource {
             case 1, 2, 4, 8:
@@ -61,7 +61,7 @@ extension AppDelegate {
                 timecodeSource = nil
             }
             
-            await captureSession.applySessionParameters(
+            await self.captureSession.applySessionParameters(
                 displayMode: displayMode,
                 videoConnection: videoConnection,
                 audioConnection: audioConnection,
@@ -81,8 +81,8 @@ extension AppDelegate {
         
         // Create manager through actor
         let managerCreated = performAsync {
-            await captureSession.setVerbose(self.verbose)
-            return await captureSession.createManager()
+            await self.captureSession.setVerbose(self.verbose)
+            return await self.captureSession.createManager()
         }
         
         guard managerCreated else {
@@ -92,7 +92,7 @@ extension AppDelegate {
         
         // Get manager reference for UI operations
         manager = performAsync {
-            return await captureSession.getManager()
+            return await self.captureSession.getManager()
         }
         
         guard let manager = manager else {
@@ -106,7 +106,7 @@ extension AppDelegate {
         
         printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
         let result = performAsync {
-            await captureSession.startCaptureSession()
+            await self.captureSession.startCaptureSession()
         }
         if result {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
@@ -122,7 +122,7 @@ extension AppDelegate {
         if let manager = manager {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
             let result = performAsync {
-                await captureSession.stopCaptureSession()
+                await self.captureSession.stopCaptureSession()
             }
             if result {
                 printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
@@ -131,7 +131,7 @@ extension AppDelegate {
             }
             
             performAsync {
-                await captureSession.destroyManager()
+                await self.captureSession.destroyManager()
             }
             self.manager = nil
             cachedRecordingState = false
@@ -319,7 +319,7 @@ extension AppDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         let isRecording = performAsync {
-            await captureSession.getManagerRecordingState()
+            await self.captureSession.getManagerRecordingState()
         }
         
         if let manager = manager, !isRecording, let movieURL = createMovieURL() {
@@ -328,7 +328,7 @@ extension AppDelegate {
             
             // Start recording to specified URL
             let recordingStarted = performAsync {
-                await captureSession.startRecording(to: movieURL)
+                await self.captureSession.startRecording(to: movieURL)
             }
             
             // Update cached state after operation
@@ -369,14 +369,14 @@ extension AppDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         let isRecording = performAsync {
-            await captureSession.getManagerRecordingState()
+            await self.captureSession.getManagerRecordingState()
         }
         
         // Stop recording
         if let manager = manager, isRecording {
             // Stop recording to specified URL
             let recordingStopped = performAsync {
-                await captureSession.stopRecording()
+                await self.captureSession.stopRecording()
             }
             
             // Update cached state after operation
