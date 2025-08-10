@@ -401,7 +401,7 @@ extension AppDelegate {
                 
                 // Evaluate AutoQuit after finished
                 if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
-                    printVerbose("NOTICE:\(self.className): \(#function) - AutoQuite triggered")
+                    printVerbose("NOTICE:\(self.className): \(#function) - AutoQuit triggered")
                     
                     let selector = #selector(NSApplication.terminate(_:))
                     NSApp.perform(selector,
