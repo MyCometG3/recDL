@@ -403,19 +403,17 @@ extension AppDelegate {
                 if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
                     printVerbose("NOTICE:\(self.className): \(#function) - AutoQuite triggered")
                     
+                    let selector = #selector(NSApplication.terminate(_:))
+                    NSApp.perform(selector,
+                                  with: nil,
+                                  afterDelay: 0.1 ,
+                                  inModes: [.common])
                     /*
-                     * Calling NSApp.terminate() asynchronously could cause a deadlock with
+                     * Calling NSApp.terminate() directly causes a deadlock with
                      * NSApplication.TerminateReply.terminateLater.
-                     *
-                     * Task { @MainActor [weak self] in
-                     *     guard let self = self else { preconditionFailure("self is nil") }
-                     *     NSApp.terminate(self)
-                     * }
-                     *
-                     * To avoid potential deadlocks, terminate the application synchronously.
+                     * Instead, trigger termination using performSelector method.
+                     * NSApp.terminate(self)
                      */
-                    
-                    NSApp.terminate(self)
                 }
                 
                 return
