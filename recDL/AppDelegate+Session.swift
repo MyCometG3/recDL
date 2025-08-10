@@ -24,7 +24,7 @@ extension AppDelegate {
     // MARK: - Capture Session support
     /* ======================================================================================== */
     
-    private func applySessionParameters(_ manager: CaptureManager) {
+    private func applySessionParameters() {
         // Read parameters for session
         let displayModeRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.displayMode))
         guard let displayMode = DLABDisplayMode(rawValue: displayModeRaw) else { return }
@@ -47,73 +47,86 @@ extension AppDelegate {
         let audioLayout : UInt32 = UInt32(defaults.integer(forKey: Keys.audioLayout))
         let audioReverse34 : Bool = defaults.bool(forKey: Keys.audioReverse34)
         
-        manager.displayMode = displayMode
-        manager.videoConnection = videoConnection
-        manager.audioConnection = audioConnection
-        manager.pixelFormat = pixelFormat
-        manager.videoStyle = videoStyle
+        // Prepare parameters for actor (accessing main actor context)
+        let hdmiAudioChannels = self.verifyHDMIAudioChannelLayoutReady() ? audioLayout : nil
+        let reverseCh3Ch4 = self.verifyHDMIAudioChannelLayoutReady() ? audioReverse34 : nil
         
-        manager.audioDepth = audioDepth
-        manager.audioChannels = audioChannel
-        if verifyHDMIAudioChannelLayoutReady() {
-            manager.hdmiAudioChannels = audioLayout
-            manager.reverseCh3Ch4 = audioReverse34
+        let timecodeSource: TimecodeType?
+        let timeCodeSourceRaw = self.defaults.integer(forKey: Keys.timeCodeSource)
+        switch timeCodeSourceRaw {
+        case 1, 2, 4, 8:
+            timecodeSource = TimecodeType(rawValue: timeCodeSourceRaw)
+        default:
+            timecodeSource = nil
         }
         
-        let timeCodeSource : Int = defaults.integer(forKey: Keys.timeCodeSource)
-        switch timeCodeSource {
-        case 1, 2, 4, 8:
-            manager.timecodeSource = TimecodeType(rawValue: timeCodeSource)
-        default:
-            manager.timecodeSource = nil
+        // Apply parameters through actor
+        performAsync {
+            await self.captureSession.applySessionParameters(
+                displayMode: displayMode,
+                videoConnection: videoConnection,
+                audioConnection: audioConnection,
+                pixelFormat: pixelFormat,
+                videoStyle: videoStyle,
+                audioDepth: audioDepth,
+                audioChannels: audioChannel,
+                hdmiAudioChannels: hdmiAudioChannels,
+                reverseCh3Ch4: reverseCh3Ch4,
+                timecodeSource: timecodeSource
+            )
         }
     }
     
     public func startSession() {
         // print("\(#file) \(#line) \(#function)")
         
-        if manager == nil {
-            manager = CaptureManager()
+        // Create manager through actor and set as local reference
+        let verbose = self.verbose
+        manager = performAsync {
+            await self.captureSession.setVerbose(verbose)
+            return await self.captureSession.createManager()
         }
-        if let manager = manager {
-            manager.verbose = self.verbose
-            
-            // TODO: add input devide selection
-            
-            guard let _ = manager.findFirstDevice() else { return }
-            
-            applySessionParameters(manager)
-            
-            addPreviewLayer()
-            
-            printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
-            let result = performAsync {
-                await manager.captureStartAsync()
-            }
-            if result {
-                printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
-            } else {
-                printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
-            }
+        
+        guard manager != nil else {
+            printVerbose("ERROR:\(self.className): \(#function) - Failed to create CaptureManager.")
+            return
+        }
+        
+        applySessionParameters()
+        
+        addPreviewLayer()
+        
+        printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
+        let result = performAsync {
+            await self.captureSession.startCaptureSession()
+        }
+        if result {
+            printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
+            updateCachedState()
         } else {
-            printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
+            printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
         }
     }
     
     public func stopSession() {
         // print("\(#file) \(#line) \(#function)")
         
-        if let manager = manager {
+        if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
             let result = performAsync {
-                await manager.captureStopAsync()
+                await self.captureSession.stopCaptureSession()
             }
             if result {
                 printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
             } else {
                 printVerbose("ERROR:\(self.className): \(#function) - Stopping capture session failed.")
             }
+            
+            performAsync {
+                await self.captureSession.destroyManager()
+            }
             self.manager = nil
+            updateCachedState()
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
         }
@@ -154,6 +167,9 @@ extension AppDelegate {
             // Update Toolbar button title
             self.setScale(-1)               // Update Popup Menu Selection
             self.setVolume(-1)              // Update Popup Menu Selection
+            
+            // Update cached recording state after restart
+            self.updateCachedState()
         }
     }
     
@@ -161,7 +177,9 @@ extension AppDelegate {
     // MARK: - Recording support
     /* ======================================================================================== */
     
-    private func applyRecordingParameters(_ manager: CaptureManager) {
+    private func applyRecordingParameters() {
+        guard let manager = self.manager else { return }
+        
         // Read parameters for recording
         let clapOffsetH = defaults.integer(forKey: Keys.clapOffsetH)
         let clapOffsetV = defaults.integer(forKey: Keys.clapOffsetV)
@@ -294,17 +312,24 @@ extension AppDelegate {
     public func startRecording(for sec: Int) {
         // print("\(#file) \(#line) \(#function)")
         
-        if let manager = manager, manager.recording == false, let movieURL = createMovieURL() {
+        let isRecording = performAsync {
+            await self.captureSession.isRecording()
+        }
+        
+        if manager != nil && !isRecording, let movieURL = createMovieURL() {
             // Configure recording parameters
-            applyRecordingParameters(manager)
+            applyRecordingParameters()
             
             // Start recording to specified URL
-            manager.movieURL = movieURL
-            performAsync {
-                await manager.recordToggleAsync()
+            let recordingStarted = performAsync {
+                await self.captureSession.startRecording(to: movieURL)
             }
             
-            if manager.recording {
+            // Update cached state after operation
+            updateCachedState()
+            
+            if recordingStarted {
+                
                 // Schedule StopTimer if required
                 scheduleStopTimer(sec)
                 
@@ -337,14 +362,22 @@ extension AppDelegate {
     public func stopRecording() {
         // print("\(#file) \(#line) \(#function)")
         
+        let isRecording = performAsync {
+            await self.captureSession.isRecording()
+        }
+        
         // Stop recording
-        if let manager = manager, manager.recording {
+        if manager != nil && isRecording {
             // Stop recording to specified URL
-            performAsync {
-                await manager.recordToggleAsync()
+            let recordingStopped = performAsync {
+                await self.captureSession.stopRecording()
             }
             
-            if manager.recording == false {
+            // Update cached state after operation
+            updateCachedState()
+            
+            if recordingStopped {
+                
                 // Release StopTimer
                 invalidateStopTimer()
                 

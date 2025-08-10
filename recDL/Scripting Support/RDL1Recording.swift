@@ -24,8 +24,8 @@ class RDL1Recording: RDL1ScriptableObject {
     public var endDate: Date? = nil
     
     public var running :Bool {
-        if let appDelegate = appDelegate, let manager = appDelegate.manager {
-            return manager.recording
+        if let appDelegate = appDelegate {
+            return appDelegate.cachedRecordingState
         }
         return false
     }

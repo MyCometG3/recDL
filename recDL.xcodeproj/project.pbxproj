@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		160554022E4823B1008D05B5 /* CaptureSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160554012E4823B1008D05B5 /* CaptureSessionActor.swift */; };
 		1647766E1F889C7D0024D780 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1647766D1F889C7D0024D780 /* AppDelegate.swift */; };
 		164776701F889C7D0024D780 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1647766F1F889C7D0024D780 /* Assets.xcassets */; };
 		164776731F889C7D0024D780 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 164776711F889C7D0024D780 /* MainMenu.xib */; };
@@ -48,6 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		160554012E4823B1008D05B5 /* CaptureSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureSessionActor.swift; sourceTree = "<group>"; };
 		161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DLABCaptureManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1647766A1F889C7D0024D780 /* recDL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = recDL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1647766D1F889C7D0024D780 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				169327BD2DFDB12200F721E1 /* AppDelegate+UI.swift */,
 				169327C12DFDC2C400F721E1 /* AppDelegate+Preferences.swift */,
 				169327BF2DFDB46500F721E1 /* AppDelegate+Session.swift */,
+				160554012E4823B1008D05B5 /* CaptureSessionActor.swift */,
 				1647767E1F88D6700024D780 /* Constants.swift */,
 				1658B1C31FDBF3B600EBA4DD /* PrefController.swift */,
 				16A4C6C41F8B7BD20027F5EA /* Scripting Support */,
@@ -248,6 +251,7 @@
 				169327C22DFDC2C400F721E1 /* AppDelegate+Preferences.swift in Sources */,
 				169327BC2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift in Sources */,
 				169327C02DFDB46500F721E1 /* AppDelegate+Session.swift in Sources */,
+				160554022E4823B1008D05B5 /* CaptureSessionActor.swift in Sources */,
 				1647767F1F88D6700024D780 /* Constants.swift in Sources */,
 				16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */,
 			);
@@ -392,7 +396,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2025.08.05;
+				CURRENT_PROJECT_VERSION = 2025.08.10;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BV5C4YNA4Z;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -406,7 +410,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 0.10.0a6;
+				MARKETING_VERSION = 0.10.0a7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;
@@ -421,7 +425,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2025.08.05;
+				CURRENT_PROJECT_VERSION = 2025.08.10;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = BV5C4YNA4Z;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -435,7 +439,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 0.10.0a6;
+				MARKETING_VERSION = 0.10.0a7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mycometg3.recDL;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;
