@@ -30,6 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public internal(set) var manager : CaptureManager? = nil
     internal let captureSession = CaptureSession()
+    internal private(set) var cachedRecordingState = false
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil
@@ -61,6 +62,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     internal var deviceInfo : [String:Any]? = nil
     internal var availableSettingInfo : [String:Any]? = nil
+    
+    /* ============================================ */
+    // MARK: - Cached State Management
+    /* ============================================ */
+    
+    internal func updateCachedRecordingState() {
+        cachedRecordingState = performAsync {
+            await captureSession.getManagerRecordingState()
+        }
+    }
     
     /* ============================================ */
     // MARK: - Scripting support
@@ -301,6 +312,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                        queue: nil,
                                        using: handler)
         
+        // Initialize cached recording state
+        updateCachedRecordingState()
+        
         prepared = true
     }
     
@@ -467,7 +481,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         if modifier(.option) {
-            if let manager = manager, manager.recording {
+            if let manager = manager, cachedRecordingState {
                 // Reject multiple request
                 recordingButton.state = NSControl.StateValue.on   // Reset button state
                 NSSound.beep()
@@ -498,7 +512,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Reject multiple request
-        if let manager = manager, (manager.recording || window.attachedSheet != nil) {
+        if let manager = manager, (cachedRecordingState || window.attachedSheet != nil) {
             NSSound.beep()
             return
         }
@@ -525,7 +539,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Reject multiple request
-        if let manager = manager, (manager.recording || window.attachedSheet != nil) {
+        if let manager = manager, (cachedRecordingState || window.attachedSheet != nil) {
             NSSound.beep()
             return
         }

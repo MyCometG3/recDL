@@ -133,13 +133,19 @@ actor CaptureSession {
         guard let manager = manager, !manager.recording else { return false }
         
         manager.movieURL = movieURL
-        return await manager.recordToggleAsync()
+        let toggleResult = await manager.recordToggleAsync()
+        
+        // Return true if recording actually started
+        return toggleResult && manager.recording
     }
     
     func stopRecording() async -> Bool {
         guard let manager = manager, manager.recording else { return false }
         
-        return await manager.recordToggleAsync()
+        let toggleResult = await manager.recordToggleAsync()
+        
+        // Return true if recording actually stopped
+        return toggleResult && !manager.recording
     }
     
     // MARK: - State Access

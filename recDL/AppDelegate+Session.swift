@@ -110,6 +110,7 @@ extension AppDelegate {
         }
         if result {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
+            updateCachedRecordingState()
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
         }
@@ -133,6 +134,7 @@ extension AppDelegate {
                 await captureSession.destroyManager()
             }
             self.manager = nil
+            cachedRecordingState = false
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
         }
@@ -173,6 +175,9 @@ extension AppDelegate {
             // Update Toolbar button title
             self.setScale(-1)               // Update Popup Menu Selection
             self.setVolume(-1)              // Update Popup Menu Selection
+            
+            // Update cached recording state after restart
+            self.updateCachedRecordingState()
         }
     }
     
@@ -326,7 +331,11 @@ extension AppDelegate {
                 await captureSession.startRecording(to: movieURL)
             }
             
+            // Update cached state after operation
+            updateCachedRecordingState()
+            
             if recordingStarted {
+                
                 // Schedule StopTimer if required
                 scheduleStopTimer(sec)
                 
@@ -370,7 +379,11 @@ extension AppDelegate {
                 await captureSession.stopRecording()
             }
             
+            // Update cached state after operation
+            updateCachedRecordingState()
+            
             if recordingStopped {
+                
                 // Release StopTimer
                 invalidateStopTimer()
                 

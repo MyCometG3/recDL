@@ -83,7 +83,7 @@ extension AppDelegate {
             let showAlternate = defaults.bool(forKey: Keys.showAlternate)
             let forceMute = defaults.bool(forKey: Keys.forceMute)
             
-            if let manager = manager , manager.recording {
+            if let manager = manager , cachedRecordingState {
                 // Recording now
                 visible = true
                 status = "Recording..."
@@ -126,7 +126,7 @@ extension AppDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Dock Icon Animation
-        if let manager = manager , manager.recording {
+        if let manager = manager , cachedRecordingState {
             if !iconAnimation {
                 iconAnimation = true    // Start Icon Animation
             }
