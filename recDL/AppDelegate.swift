@@ -29,6 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     internal lazy var notificationCenter = NotificationCenter.default
     
     public internal(set) var manager : CaptureManager? = nil
+    internal let captureSession = CaptureSession()
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil
