@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -36,15 +36,13 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		16ADBB931FE63CA000FB7747 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolder = Frameworks;
 			files = (
 				16ADBB921FE63CA000FB7747 /* DLABCaptureManager.framework in Embed Frameworks */,
 				16ADBB901FE63CA000FB7747 /* DLABridging.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -80,14 +78,12 @@
 /* Begin PBXFrameworksBuildPhase section */
 		164776671F889C7D0024D780 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				164F6A5E1FDD0B2700152716 /* CoreMedia.framework in Frameworks */,
 				164F6A5C1FDD0B1A00152716 /* CoreVideo.framework in Frameworks */,
 				164F6A591FDD0A7700152716 /* DLABCaptureManager.framework in Frameworks */,
 				164F6A5A1FDD0A7700152716 /* DLABridging.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -170,8 +166,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = recDL;
 			productName = recDL;
 			productReference = 1647766A1F889C7D0024D780 /* recDL.app */;
@@ -204,7 +198,6 @@
 				};
 			};
 			buildConfigurationList = 164776651F889C7D0024D780 /* Build configuration list for PBXProject "recDL" */;
-			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -212,6 +205,7 @@
 				Base,
 			);
 			mainGroup = 164776611F889C7D0024D780;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = 1647766B1F889C7D0024D780 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -224,20 +218,17 @@
 /* Begin PBXResourcesBuildPhase section */
 		164776681F889C7D0024D780 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				16A4C6B31F89AF000027F5EA /* recDL.sdef in Resources */,
 				164776701F889C7D0024D780 /* Assets.xcassets in Resources */,
 				164776731F889C7D0024D780 /* MainMenu.xib in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		164776661F889C7D0024D780 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				16CF53841FA4890B003D16F6 /* CustomCommand.swift in Sources */,
 				169327BE2DFDB12200F721E1 /* AppDelegate+UI.swift in Sources */,
@@ -255,7 +246,6 @@
 				1647767F1F88D6700024D780 /* Constants.swift in Sources */,
 				16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -271,7 +261,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		164776761F889C7D0024D780 /* Debug */ = {
+		164776761F889C7D0024D780 /* Debug configuration for PBXProject "recDL" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -333,7 +323,7 @@
 			};
 			name = Debug;
 		};
-		164776771F889C7D0024D780 /* Release */ = {
+		164776771F889C7D0024D780 /* Release configuration for PBXProject "recDL" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -388,7 +378,7 @@
 			};
 			name = Release;
 		};
-		164776791F889C7D0024D780 /* Debug */ = {
+		164776791F889C7D0024D780 /* Debug configuration for PBXNativeTarget "recDL" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -418,7 +408,7 @@
 			};
 			name = Debug;
 		};
-		1647767A1F889C7D0024D780 /* Release */ = {
+		1647767A1F889C7D0024D780 /* Release configuration for PBXNativeTarget "recDL" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -454,19 +444,17 @@
 		164776651F889C7D0024D780 /* Build configuration list for PBXProject "recDL" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				164776761F889C7D0024D780 /* Debug */,
-				164776771F889C7D0024D780 /* Release */,
+				164776761F889C7D0024D780 /* Debug configuration for PBXProject "recDL" */,
+				164776771F889C7D0024D780 /* Release configuration for PBXProject "recDL" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		164776781F889C7D0024D780 /* Build configuration list for PBXNativeTarget "recDL" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				164776791F889C7D0024D780 /* Debug */,
-				1647767A1F889C7D0024D780 /* Release */,
+				164776791F889C7D0024D780 /* Debug configuration for PBXNativeTarget "recDL" */,
+				1647767A1F889C7D0024D780 /* Release configuration for PBXNativeTarget "recDL" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
