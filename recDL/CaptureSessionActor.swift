@@ -3,7 +3,7 @@
 //  recDL
 //
 //  Created by Takashi Mochizuki on 2025/08/10.
-//  Copyright © 2025 MyCometG3. All rights reserved.
+//  Copyright © 2026 MyCometG3. All rights reserved.
 //
 
 /* This software is released under the MIT License, see LICENSE.txt. */
