@@ -46,6 +46,12 @@ actor CaptureSession {
     /// Controls whether verbose logging is enabled for capture operations.
     private var verbose: Bool = true
     
+    /// True while prewarm is actively running.
+    private var prewarmInProgress: Bool = false
+    
+    /// True while start/stop recording transition is actively running.
+    private var recordingTransitionInProgress: Bool = false
+    
     // MARK: - Initialization
     
     /// Creates a new CaptureSession instance.
@@ -178,6 +184,19 @@ actor CaptureSession {
         return await manager.captureStartAsync()
     }
     
+    /// Pre-warms recording internals to reduce first-start latency/stutter.
+    /// - Returns: `true` if prewarm succeeded or was already prepared, `false` otherwise.
+    @discardableResult
+    func prewarmRecordingPath() async -> Bool {
+        guard !recordingTransitionInProgress else { return false }
+        guard !prewarmInProgress else { return false }
+        guard let manager = manager else { return false }
+        
+        prewarmInProgress = true
+        defer { prewarmInProgress = false }
+        return await manager.prewarmRecordingPathAsync()
+    }
+    
     /// Stops the capture session asynchronously.
     ///
     /// This method stops the video capture process. Any active recording will also be stopped.
@@ -250,6 +269,15 @@ actor CaptureSession {
         manager.encodeAudio = encodeAudio
         manager.encodeAudioFormatID = encodeAudioFormatID
         manager.encodeAudioBitrate = encodeAudioBitrate
+        manager.invalidateRecordingPreparation()
+    }
+    
+    /// Marks prewarmed recording state as stale.
+    func invalidateRecordingPreparation() async {
+        while prewarmInProgress || recordingTransitionInProgress {
+            await Task.yield()
+        }
+        manager?.invalidateRecordingPreparation()
     }
     
     /// Starts recording to the specified movie file URL asynchronously.
@@ -263,12 +291,19 @@ actor CaptureSession {
     /// - Note: Recording will fail if the capture session is not active or if a recording is already in progress.
     /// - Important: Ensure the destination directory exists and is writable before calling this method.
     func startRecording(to movieURL: URL) async -> Bool {
+        while prewarmInProgress || recordingTransitionInProgress {
+            await Task.yield()
+        }
+        
         guard let manager = manager, !manager.recording else { return false }
         
         if verbose {
             print("TRACE:CaptureSession.startRecording - begin ")
         }
         let startedAt = CFAbsoluteTimeGetCurrent()
+        
+        recordingTransitionInProgress = true
+        defer { recordingTransitionInProgress = false }
         
         manager.movieURL = movieURL
         await manager.recordToggleAsync()
@@ -291,7 +326,14 @@ actor CaptureSession {
     /// - Note: This method has no effect if no recording is currently active.
     /// - Important: The movie file may not be immediately available after this call returns due to finalization processes.
     func stopRecording() async -> Bool {
+        while prewarmInProgress || recordingTransitionInProgress {
+            await Task.yield()
+        }
+        
         guard let manager = manager, manager.recording else { return false }
+        
+        recordingTransitionInProgress = true
+        defer { recordingTransitionInProgress = false }
         
         await manager.recordToggleAsync()
         

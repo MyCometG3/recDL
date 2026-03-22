@@ -179,6 +179,10 @@ extension AppDelegate {
         if result {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
             updateCachedState()
+            
+            Task(priority: .utility) { [captureSession] in
+                _ = await captureSession.prewarmRecordingPath()
+            }
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
         }
@@ -373,6 +377,10 @@ extension AppDelegate {
         } else {
             manager.encodeAudio = false
             manager.encodeAudioBitrate = 0
+        }
+        
+        performAsync {
+            await self.captureSession.invalidateRecordingPreparation()
         }
     }
     
