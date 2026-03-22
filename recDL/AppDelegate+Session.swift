@@ -20,6 +20,82 @@ extension Comparable {
 }
 
 extension AppDelegate {
+    private final class ThrowingAsyncResultBox<T>: @unchecked Sendable {
+        private let lock = NSLock()
+        private let semaphore = DispatchSemaphore(value: 0)
+        private var result: Result<T, Error>?
+        
+        func store(_ result: Result<T, Error>) {
+            lock.lock()
+            self.result = result
+            lock.unlock()
+            semaphore.signal()
+        }
+        
+        func waitAndGet() throws -> T {
+            semaphore.wait()
+            lock.lock()
+            defer { lock.unlock() }
+            guard let result = result else {
+                fatalError("Async operation failed to complete - this should never happen")
+            }
+            return try result.get()
+        }
+    }
+    
+    private final class AsyncResultBox<T>: @unchecked Sendable {
+        private let lock = NSLock()
+        private let semaphore = DispatchSemaphore(value: 0)
+        private var value: T?
+        
+        func store(_ value: T) {
+            lock.lock()
+            self.value = value
+            lock.unlock()
+            semaphore.signal()
+        }
+        
+        func waitAndGet() -> T {
+            semaphore.wait()
+            lock.lock()
+            defer { lock.unlock() }
+            guard let value = value else {
+                fatalError("Async operation failed to complete - this should never happen for non-throwing operations")
+            }
+            return value
+        }
+    }
+    
+    /// Executes an asynchronous, throwing operation synchronously.
+    /// - Note: Uses an attached task to avoid detached-task sendability diagnostics.
+    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async throws -> T) throws -> T {
+        let box = ThrowingAsyncResultBox<T>()
+        
+        Task(priority: .high) { [box, block] in
+            do {
+                box.store(.success(try await block()))
+            } catch {
+                box.store(.failure(error))
+            }
+        }
+        
+        return try box.waitAndGet()
+    }
+    
+    /// Executes an asynchronous, non-throwing operation synchronously.
+    /// - Note: Uses an attached task to avoid detached-task sendability diagnostics.
+    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
+        let box = AsyncResultBox<T>()
+        
+        Task(priority: .high) { [box, block] in
+            box.store(await block())
+        }
+        
+        return box.waitAndGet()
+    }
+}
+
+extension AppDelegate {
     /* ======================================================================================== */
     // MARK: - Capture Session support
     /* ======================================================================================== */
@@ -551,51 +627,3 @@ extension AppDelegate {
     //MARK: -
     /* ==================================================================================== */
 }
-
-extension AppDelegate {
-    /// Executes an asynchronous, throwing operation synchronously using a detached task.
-    /// - Parameter block: A closure that performs asynchronous work and may throw.
-    /// - Returns: The result produced by the closure.
-    /// - Note: This method blocks the calling thread until the asynchronous work completes.
-    ///         It can be used from the main thread only if the operation does not rely on main-thread execution.
-    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async throws -> T) throws -> T {
-        let semaphore = DispatchSemaphore(value: 0)
-        let lock = DispatchQueue(label: "ResultLock")
-        var result: Result<T, Error>?
-        Task.detached(priority: .high) {
-            let taskResult: Result<T, Error>
-            do {
-                taskResult = .success(try await block())
-            } catch {
-                taskResult = .failure(error)
-            }
-            lock.sync {
-                result = taskResult
-            }
-            semaphore.signal()
-        }
-        semaphore.wait()
-        return try lock.sync { try result!.get() }
-    }
-    
-    /// Executes an asynchronous, non-throwing operation synchronously using a detached task.
-    /// - Parameter block: A closure that performs asynchronous work.
-    /// - Returns: The result produced by the closure.
-    /// - Note: This method blocks the calling thread until the asynchronous work completes.
-    ///         It can be used from the main thread only if the operation does not rely on main-thread execution.
-    nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
-        let semaphore = DispatchSemaphore(value: 0)
-        let lock = DispatchQueue(label: "ResultLock")
-        var result: T?
-        Task.detached(priority: .high) {
-            let taskResult = await block()
-            lock.sync {
-                result = taskResult
-            }
-            semaphore.signal()
-        }
-        semaphore.wait()
-        return lock.sync { result! }
-    }
-}
-
