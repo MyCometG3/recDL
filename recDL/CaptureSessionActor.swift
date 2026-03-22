@@ -22,14 +22,14 @@ import DLABCaptureManager
 /// ## Usage
 /// ```swift
 /// let captureSession = CaptureSession()
-/// 
+///
 /// // Initialize and configure
 /// let created = await captureSession.createManager()
 /// await captureSession.applySessionParameters(...)
-/// 
+///
 /// // Start capture session
 /// let started = await captureSession.startCaptureSession()
-/// 
+///
 /// // Begin recording
 /// let recording = await captureSession.startRecording(to: movieURL)
 /// ```
@@ -265,11 +265,21 @@ actor CaptureSession {
     func startRecording(to movieURL: URL) async -> Bool {
         guard let manager = manager, !manager.recording else { return false }
         
+        if verbose {
+            print("TRACE:CaptureSession.startRecording - begin ")
+        }
+        let startedAt = CFAbsoluteTimeGetCurrent()
+        
         manager.movieURL = movieURL
         await manager.recordToggleAsync()
         
         // Return true if recording actually started
-        return manager.recording
+        let recording = manager.recording
+        if verbose {
+            let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
+            print("TRACE:CaptureSession.startRecording - end \(elapsedMs)ms (recording:\(recording))")
+        }
+        return recording
     }
     
     /// Stops the current recording session asynchronously.

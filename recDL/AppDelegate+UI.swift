@@ -83,7 +83,7 @@ extension AppDelegate {
             let showAlternate = defaults.bool(forKey: Keys.showAlternate)
             let forceMute = defaults.bool(forKey: Keys.forceMute)
             
-            if manager != nil && cachedRecordingState {
+            if manager != nil && (cachedRecordingState || recordingStartInProgress) {
                 // Recording now
                 visible = true
                 status = "Recording..."
@@ -126,7 +126,7 @@ extension AppDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Dock Icon Animation
-        if manager != nil && cachedRecordingState {
+        if manager != nil && (cachedRecordingState || recordingStartInProgress) {
             if !iconAnimation {
                 iconAnimation = true    // Start Icon Animation
             }

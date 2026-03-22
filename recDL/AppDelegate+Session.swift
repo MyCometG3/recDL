@@ -359,6 +359,70 @@ extension AppDelegate {
         printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
     }
     
+    /// Non-blocking start flow for UI-triggered recording.
+    /// This avoids synchronous semaphore waits on the main thread while the writer initializes.
+    public func startRecordingNonBlocking(for sec: Int) async {
+        // print("\(#file) \(#line) \(#function)")
+        
+        guard !recordingStartInProgress else {
+            printVerbose("ERROR:\(self.className): \(#function) - Recording start already in progress")
+            return
+        }
+        
+        let isRecording = await self.captureSession.isRecording()
+        
+        guard manager != nil, !isRecording, let movieURL = createMovieURL() else {
+            printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
+            return
+        }
+        recordingStartInProgress = true
+        defer {
+            recordingStartInProgress = false
+        }
+        
+        let startedAt = CFAbsoluteTimeGetCurrent()
+        printVerbose("TRACE:\(self.className): \(#function) - begin ")
+        
+        applyRecordingParameters()
+        
+        let recordingStarted = await self.captureSession.startRecording(to: movieURL)
+        
+        // Refresh cache asynchronously to keep the hot path non-blocking.
+        updateCachedStateAsync()
+        
+        if recordingStarted {
+            // Schedule StopTimer if required
+            scheduleStopTimer(sec)
+            
+            // Update recording button as pressed state
+            recordingButton.state = NSControl.StateValue.on
+            
+            // Update dock icon and badge
+            Task(priority: .background) {
+                // Update AppIcon badge to active state
+                NSApp.dockTile.badgeLabel = "REC"
+                
+                // Update AppIcon animation to active state
+                NSApp.applicationIconImage = iconActive
+            }
+            
+            // Post notification with userInfo
+            let userInfo : [String:Any] = [Keys.fileURL : movieURL]
+            let notification = Notification(name: .recordingStartedNotificationKey,
+                                            object: self,
+                                            userInfo: userInfo)
+            notificationCenter.post(notification)
+            
+            let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
+            printVerbose("TRACE:\(self.className): \(#function) - success \(elapsedMs)ms ")
+            return
+        }
+        
+        let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
+        printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
+        printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
+    }
+    
     public func stopRecording() {
         // print("\(#file) \(#line) \(#function)")
         
@@ -534,3 +598,4 @@ extension AppDelegate {
         return lock.sync { result! }
     }
 }
+
