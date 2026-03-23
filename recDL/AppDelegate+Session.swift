@@ -10,6 +10,7 @@
 
 import Cocoa
 import CoreVideo
+import os.lock
 @preconcurrency import DLABridging
 import DLABCaptureManager
 
@@ -19,50 +20,57 @@ extension Comparable {
     }
 }
 
+private final class UnfairLockBox: @unchecked Sendable {
+    private var rawLock = os_unfair_lock_s()
+    
+    @inline(__always)
+    func withLock<T>(_ body: () throws -> T) rethrows -> T {
+        os_unfair_lock_lock(&rawLock)
+        defer { os_unfair_lock_unlock(&rawLock) }
+        return try body()
+    }
+}
+
 extension AppDelegate {
     private final class ThrowingAsyncResultBox<T>: @unchecked Sendable {
-        private let lock = NSLock()
+        private let lock = UnfairLockBox()
         private let semaphore = DispatchSemaphore(value: 0)
         private var result: Result<T, Error>?
         
         func store(_ result: Result<T, Error>) {
-            lock.lock()
-            self.result = result
-            lock.unlock()
+            lock.withLock { self.result = result }
             semaphore.signal()
         }
         
         func waitAndGet() throws -> T {
             semaphore.wait()
-            lock.lock()
-            defer { lock.unlock() }
-            guard let result = result else {
-                fatalError("Async operation failed to complete - this should never happen")
+            return try lock.withLock {
+                guard let result = result else {
+                    fatalError("Async operation failed to complete - this should never happen")
+                }
+                return try result.get()
             }
-            return try result.get()
         }
     }
     
     private final class AsyncResultBox<T>: @unchecked Sendable {
-        private let lock = NSLock()
+        private let lock = UnfairLockBox()
         private let semaphore = DispatchSemaphore(value: 0)
         private var value: T?
         
         func store(_ value: T) {
-            lock.lock()
-            self.value = value
-            lock.unlock()
+            lock.withLock { self.value = value }
             semaphore.signal()
         }
         
         func waitAndGet() -> T {
             semaphore.wait()
-            lock.lock()
-            defer { lock.unlock() }
-            guard let value = value else {
-                fatalError("Async operation failed to complete - this should never happen for non-throwing operations")
+            return lock.withLock {
+                guard let value = value else {
+                    fatalError("Async operation failed to complete - this should never happen for non-throwing operations")
+                }
+                return value
             }
-            return value
         }
     }
     
