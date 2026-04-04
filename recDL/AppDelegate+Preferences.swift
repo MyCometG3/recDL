@@ -215,7 +215,10 @@ extension AppDelegate {
         guard checkReadiness() else { return }
         
         let uint32Value = UInt32(defaults.integer(forKey: Keys.displayMode))
-        let displayMode = DLABDisplayMode(rawValue: uint32Value)!
+        guard let displayMode = DLABDisplayMode(rawValue: uint32Value) else {
+            printVerbose("WARNING:\(self.className): \(#function) - invalid displayMode: \(uint32Value)")
+            return
+        }
         
         if let settingInfo:[String:Any] = settingInfoFor(displayMode),
            let nativeSize = pixelSizeFrom(settingInfo)
@@ -256,7 +259,10 @@ extension AppDelegate {
         guard checkReadiness() else { return }
         
         let uint32Value = UInt32(defaults.integer(forKey: Keys.displayMode))
-        let displayMode = DLABDisplayMode(rawValue: uint32Value)!
+        guard let displayMode = DLABDisplayMode(rawValue: uint32Value) else {
+            printVerbose("WARNING:\(self.className): \(#function) - invalid displayMode: \(uint32Value)")
+            return
+        }
         
         if let settingInfo:[String:Any] = settingInfoFor(displayMode),
            let nativeFD = fieldDominanceFrom(settingInfo)
