@@ -231,7 +231,10 @@ extension AppDelegate {
         }
         
         Task { @MainActor [weak self] in
-            guard let self = self else { preconditionFailure("self is nil") }
+            guard let self = self else {
+                AppDelegate.printNilSelfWarning(#function)
+                return
+            }
             
             // Stop Session
             self.stopUpdateStatus()
