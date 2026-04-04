@@ -2,10 +2,10 @@
 
 recDL is a simple, AV capture application for Blackmagic DeckLink devices.
 
-- __Requirement__: macOS 15.x, 14.x, 13.x, 12.x, 11.x, 10.15, 10.14.
+- __Requirement__: macOS 26.x, 15.x, 14.x, 13.x, 12.x, 11.x.
 - __Capture Device__: Blackmagic DeckLink devices/UltraStudio devices.
-- __Restriction__: Compressed/Synchronized captures are not supported.
-- __Dependency__: Blackmagic_Desktop_Video_Macintosh (11.4-11.7, 12.0-12.9, 14.0-14.2).
+- __Restriction__: Compressed/Synchronized/IP captures are not supported.
+- __Dependency__: Blackmagic_Desktop_Video_Macintosh (11.4-11.7, 12.0-12.9, 14.0-14.2, **15.0-15.3.1**).
 - __Framework__: DLABridging + DLABCaptureManager (Embedded)
 - __Architecture__: Universal binary (x86_64 + arm64)
 
@@ -35,11 +35,11 @@ recDL is a simple, AV capture application for Blackmagic DeckLink devices.
 - SMPTE timecode ready (* Depends on video source - VANC)
 
 #### Development environment
-- macOS 15.0 Sequoia
-- Xcode 16.0
-- Swift 6.0
+- macOS 26.4 Tahoe
+- Xcode 26.4
+- Swift 6.3
 
 #### License
 - The MIT License
 
-Copyright © 2016-2024年 MyCometG3. All rights reserved.
+Copyright © 2016-2026年 MyCometG3. All rights reserved.
