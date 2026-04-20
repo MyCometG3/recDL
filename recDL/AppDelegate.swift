@@ -33,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     internal var cachedRecordingState = false
     internal var cachedRunningState = false
     internal var recordingStartInProgress = false
+    internal var terminationInProgress = false
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil
@@ -85,6 +86,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let running = await self.captureSession.isRunning()
             self.cachedRecordingState = recording
             self.cachedRunningState = running
+        }
+    }
+
+    private var requiresTerminationCleanup: Bool {
+        manager != nil || cachedRecordingState || cachedRunningState || recordingStartInProgress
+    }
+
+    private func prepareForTermination() async {
+        while recordingStartInProgress {
+            await Task.yield()
         }
     }
     
@@ -338,28 +349,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         // print("\(#file) \(#line) \(#function)")
-        
-        // Graceful close handler (NSApplicationDelegate method)
-        if prepared {
-            Task { @MainActor [weak self] in
-                guard let self = self else {
-                    AppDelegate.printNilSelfWarning(#function)
-                    NSApp.reply(toApplicationShouldTerminate: true)
-                    return
-                }
-                
-                printVerbose("NOTICE:\(self.className): \(#function) - cleanup started")
-                cleanup()
-                printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
-                
-                NSApp.reply(toApplicationShouldTerminate: true)
-            }
-            printVerbose("NOTICE:\(self.className): \(#function) - later")
+
+        guard terminationInProgress == false else {
+            printVerbose("NOTICE:\(self.className): \(#function) - cleanup already in progress")
             return .terminateLater
-        } else {
+        }
+
+        guard prepared else {
             printVerbose("NOTICE:\(self.className): \(#function) - ready")
             return .terminateNow
         }
+
+        guard requiresTerminationCleanup else {
+            printVerbose("NOTICE:\(self.className): \(#function) - no session cleanup required")
+            return .terminateNow
+        }
+
+        terminationInProgress = true
+        Task { @MainActor [weak self] in
+            guard let self = self else {
+                AppDelegate.printNilSelfWarning(#function)
+                NSApp.reply(toApplicationShouldTerminate: true)
+                return
+            }
+
+            printVerbose("NOTICE:\(self.className): \(#function) - cleanup started")
+            await prepareForTermination()
+            cleanup()
+            printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
+
+            NSApp.reply(toApplicationShouldTerminate: true)
+            self.terminationInProgress = false
+        }
+        printVerbose("NOTICE:\(self.className): \(#function) - later")
+        return .terminateLater
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {
