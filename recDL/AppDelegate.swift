@@ -103,8 +103,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     internal func scheduleRecordingStart(for sec: Int) {
-        guard recordingStartTask == nil else {
-            printVerbose("ERROR:\(self.className): \(#function) - Recording start task already in progress")
+        guard !recordingStartPending else {
+            printVerbose("ERROR:\(self.className): \(#function) - Recording start already in progress")
             return
         }
 
