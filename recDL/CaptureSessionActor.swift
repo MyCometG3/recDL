@@ -306,6 +306,7 @@ actor CaptureSession {
         defer { recordingTransitionInProgress = false }
         
         manager.movieURL = movieURL
+        manager.trimsRecordedMovieTimeRangeAfterRecording = true
         await manager.recordToggleAsync()
         
         // Return true if recording actually started
