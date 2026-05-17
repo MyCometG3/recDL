@@ -105,11 +105,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private var requiresTerminationCleanup: Bool {
-        manager != nil || cachedRecordingState || cachedRunningState || recordingStartPending
+        manager != nil || cachedRecordingState || cachedRunningState || recordingStartPending || restartSessionTask != nil
     }
     
     private func prepareForTermination() async {
         await recordingStartTask?.value
+        await restartSessionTask?.value
     }
     
     internal func scheduleRecordingStart(for sec: Int) {
@@ -432,6 +433,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private func cleanup() async {
         // print("\(#file) \(#line) \(#function)")
+        
+        // Wait for any in-flight session transitions before cleanup
+        await prepareForTermination()
         
         // Ensure that we are prepared
         if prepared == false { return }
