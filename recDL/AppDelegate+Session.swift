@@ -108,7 +108,7 @@ extension AppDelegate {
     // MARK: - Capture Session support
     /* ======================================================================================== */
     
-    private func applySessionParameters() {
+    private func applySessionParametersAsync() async {
         // Read parameters for session
         let displayModeRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.displayMode))
         guard let displayMode = DLABDisplayMode(rawValue: displayModeRaw) else { return }
@@ -145,45 +145,39 @@ extension AppDelegate {
         }
         
         // Apply parameters through actor
-        performAsync {
-            await self.captureSession.applySessionParameters(
-                displayMode: displayMode,
-                videoConnection: videoConnection,
-                audioConnection: audioConnection,
-                pixelFormat: pixelFormat,
-                videoStyle: videoStyle,
-                audioDepth: audioDepth,
-                audioChannels: audioChannel,
-                hdmiAudioChannels: hdmiAudioChannels,
-                reverseCh3Ch4: reverseCh3Ch4,
-                timecodeSource: timecodeSource
-            )
-        }
+        await self.captureSession.applySessionParameters(
+            displayMode: displayMode,
+            videoConnection: videoConnection,
+            audioConnection: audioConnection,
+            pixelFormat: pixelFormat,
+            videoStyle: videoStyle,
+            audioDepth: audioDepth,
+            audioChannels: audioChannel,
+            hdmiAudioChannels: hdmiAudioChannels,
+            reverseCh3Ch4: reverseCh3Ch4,
+            timecodeSource: timecodeSource
+        )
     }
     
-    public func startSession() {
+    public func startSession() async {
         // print("\(#file) \(#line) \(#function)")
         
         // Create manager through actor and set as local reference
         let verbose = self.verbose
-        manager = performAsync {
-            await self.captureSession.setVerbose(verbose)
-            return await self.captureSession.createManager()
-        }
+        await self.captureSession.setVerbose(verbose)
+        manager = await self.captureSession.createManager()
         
         guard manager != nil else {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to create CaptureManager.")
             return
         }
         
-        applySessionParameters()
+        await applySessionParametersAsync()
         
         addPreviewLayer()
         
         printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
-        let result = performAsync {
-            await self.captureSession.startCaptureSession()
-        }
+        let result = await self.captureSession.startCaptureSession()
         if result {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
             updateCachedState()
@@ -196,23 +190,19 @@ extension AppDelegate {
         }
     }
     
-    public func stopSession() {
+    public func stopSession() async {
         // print("\(#file) \(#line) \(#function)")
         
         if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
-            let result = performAsync {
-                await self.captureSession.stopCaptureSession()
-            }
+            let result = await self.captureSession.stopCaptureSession()
             if result {
                 printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
             } else {
                 printVerbose("ERROR:\(self.className): \(#function) - Stopping capture session failed.")
             }
             
-            performAsync {
-                await self.captureSession.destroyManager()
-            }
+            await self.captureSession.destroyManager()
             self.manager = nil
             updateCachedState()
         } else {
@@ -242,13 +232,13 @@ extension AppDelegate {
             
             self.removePreviewLayer()
             self.manager?.videoPreview = nil
-            self.stopSession()
+            await self.stopSession()
             
             //
             try? await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
             
             // Start Session
-            self.startSession()
+            await self.startSession()
             self.manager?.videoPreview = self.parentView
             self.addPreviewLayer()
             

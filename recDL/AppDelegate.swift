@@ -285,10 +285,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Register defaults
         defaults.register(defaults: keyValues)
         
-        Task { setup() }
+        Task { await setup() }
     }
     
-    private func setup() {
+    private func setup() async {
         // print("\(#file) \(#line) \(#function)")
         
         // Register notification observer for Cocoa scripting support
@@ -319,7 +319,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         //
         parentView.verbose = false
-        startSession()
+        await startSession()
         
         // Update Toolbar button title
         setVolume(-1)                       // Update Popup Menu Selection
@@ -372,22 +372,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         // print("\(#file) \(#line) \(#function)")
-
+        
         guard terminationInProgress == false else {
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup already in progress")
             return .terminateLater
         }
-
+        
         guard prepared else {
             printVerbose("NOTICE:\(self.className): \(#function) - ready")
             return .terminateNow
         }
-
+        
         guard requiresTerminationCleanup else {
             printVerbose("NOTICE:\(self.className): \(#function) - no session cleanup required")
             return .terminateNow
         }
-
+        
         terminationInProgress = true
         Task { @MainActor [weak self] in
             guard let self = self else {
@@ -395,12 +395,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 NSApp.reply(toApplicationShouldTerminate: true)
                 return
             }
-
+            
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup started")
             await prepareForTermination()
-            cleanup()
+            await cleanup()
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
-
+            
             NSApp.reply(toApplicationShouldTerminate: true)
             self.terminationInProgress = false
         }
@@ -414,12 +414,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Force termination handler (NSApplicationDelegate method)
         if prepared {
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup started")
-            cleanup()
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                await cleanup()
+            }
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
         }
     }
     
-    private func cleanup() {
+    private func cleanup() async {
         // print("\(#file) \(#line) \(#function)")
         
         // Ensure that we are prepared
@@ -436,7 +439,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Stop Session
         removePreviewLayer()
-        stopSession()
+        await stopSession()
         
         // Resign notification observer
         notificationCenter.removeObserver(self)
