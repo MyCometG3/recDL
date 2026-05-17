@@ -34,6 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     internal var cachedRunningState = false
     internal var recordingStartInProgress = false
     internal var recordingStartTask: Task<Void, Never>? = nil
+    internal var restartSessionTask: Task<Void, Never>? = nil
     internal var terminationInProgress = false
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
@@ -91,25 +92,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.cachedRunningState = running
         }
     }
-
+    
+    internal func refreshCachedState() async {
+        let recording = await captureSession.isRecording()
+        let running = await captureSession.isRunning()
+        cachedRecordingState = recording
+        cachedRunningState = running
+    }
+    
     internal var recordingStartPending: Bool {
         recordingStartTask != nil || recordingStartInProgress
     }
-
+    
     private var requiresTerminationCleanup: Bool {
         manager != nil || cachedRecordingState || cachedRunningState || recordingStartPending
     }
-
+    
     private func prepareForTermination() async {
         await recordingStartTask?.value
     }
-
+    
     internal func scheduleRecordingStart(for sec: Int) {
         guard !recordingStartPending else {
             printVerbose("ERROR:\(self.className): \(#function) - Recording start already in progress")
             return
         }
-
+        
         recordingStartTask = Task { @MainActor [weak self] in
             guard let self = self else {
                 AppDelegate.printNilSelfWarning(#function)
@@ -365,7 +373,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                                             using: handler)
         
         // Initialize cached recording state
-        updateCachedState()
+        await refreshCachedState()
         
         prepared = true
     }

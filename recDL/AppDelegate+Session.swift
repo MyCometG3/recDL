@@ -180,7 +180,7 @@ extension AppDelegate {
         let result = await self.captureSession.startCaptureSession()
         if result {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
-            updateCachedState()
+            await refreshCachedState()
             
             Task(priority: .utility) { [captureSession] in
                 _ = await captureSession.prewarmRecordingPath()
@@ -204,7 +204,7 @@ extension AppDelegate {
             
             await self.captureSession.destroyManager()
             self.manager = nil
-            updateCachedState()
+            await refreshCachedState()
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
         }
@@ -213,6 +213,11 @@ extension AppDelegate {
     public func restartSession(_ notification: Notification) {
         // print("\(#file) \(#line) \(#function)")
         
+        guard restartSessionTask == nil else {
+            printVerbose("NOTICE:\(self.className): \(#function) - Restart already in progress")
+            return
+        }
+        
         // Check user choosen input port (audio/video)
         // modify if required
         if manager == nil {
@@ -220,10 +225,13 @@ extension AppDelegate {
             return
         }
         
-        Task { @MainActor [weak self] in
+        restartSessionTask = Task { @MainActor [weak self] in
             guard let self = self else {
                 AppDelegate.printNilSelfWarning(#function)
                 return
+            }
+            defer {
+                self.restartSessionTask = nil
             }
             
             // Stop Session
@@ -250,7 +258,7 @@ extension AppDelegate {
             self.setVolume(-1)              // Update Popup Menu Selection
             
             // Update cached recording state after restart
-            self.updateCachedState()
+            await self.refreshCachedState()
         }
     }
     
