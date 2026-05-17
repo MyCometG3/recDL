@@ -39,6 +39,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil
     
+    internal var frameObserverToken: (any NSObjectProtocol)? = nil
+    
     internal var evalAutoQuitFlag : Bool = false
     internal var targetPath : String? = nil
     
@@ -357,10 +359,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 await self.updateCurrentScale()
             }
         }
-        notificationCenter.addObserver(forName: NSView.frameDidChangeNotification,
-                                       object: parentView,
-                                       queue: nil,
-                                       using: handler)
+        frameObserverToken = notificationCenter.addObserver(forName: NSView.frameDidChangeNotification,
+                                                            object: parentView,
+                                                            queue: nil,
+                                                            using: handler)
         
         // Initialize cached recording state
         updateCachedState()
@@ -438,6 +440,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Resign notification observer
         notificationCenter.removeObserver(self)
+        if let token = frameObserverToken {
+            notificationCenter.removeObserver(token)
+            frameObserverToken = nil
+        }
         
         //
         prepared = false
