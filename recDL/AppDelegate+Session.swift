@@ -516,6 +516,9 @@ extension AppDelegate {
         printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
     }
     
+    /// Synchronous stop path for AppleScript/script callers.
+    /// Timer-driven stops use `stopRecordingFromTimer()` so the main thread does not wait on
+    /// `performAsync { semaphore.wait() }`.
     public func stopRecording() {
         // print("\(#file) \(#line) \(#function)")
         
@@ -534,50 +537,72 @@ extension AppDelegate {
             updateCachedState()
             
             if recordingStopped {
-                
-                // Release StopTimer
-                invalidateStopTimer()
-                
-                // Update recording button as released state
-                recordingButton.state = NSControl.StateValue.off
-                
-                // Reset dock icon and badge
-                Task(priority: .background) {
-                    // Reset AppIcon badge to inactive state
-                    NSApp.dockTile.badgeLabel = nil
-                    
-                    // Reset AppIcon animation to inactive state
-                    NSApp.applicationIconImage = iconIdle
-                }
-                
-                // Post notification without userInfo
-                let notification = Notification(name: .recordingStoppedNotificationKey,
-                                                object: self,
-                                                userInfo: nil)
-                notificationCenter.post(notification)
-                
-                // Evaluate AutoQuit after finished
-                if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
-                    printVerbose("NOTICE:\(self.className): \(#function) - AutoQuit triggered")
-                    
-                    let selector = #selector(NSApplication.terminate(_:))
-                    NSApp.perform(selector,
-                                  with: nil,
-                                  afterDelay: 0.1,
-                                  inModes: [.common])
-                    /*
-                     * Calling NSApp.terminate() directly causes a deadlock with
-                     * NSApplication.TerminateReply.terminateLater.
-                     * Instead, trigger termination using performSelector method.
-                     * NSApp.terminate(self)
-                     */
-                }
-                
+                finishRecordingStop()
                 return
             }
         }
         
         printVerbose("ERROR:\(self.className): \(#function) - Failed to stop recording")
+    }
+    
+    @objc
+    private func stopRecordingFromTimer() {
+        Task { @MainActor [weak self] in
+            guard let self = self else {
+                AppDelegate.printNilSelfWarning(#function)
+                return
+            }
+            
+            let recordingStopped = await self.captureSession.stopRecording()
+            await self.refreshCachedState()
+            
+            if recordingStopped {
+                self.finishRecordingStop()
+                return
+            }
+            
+            self.printVerbose("ERROR:\(self.className): \(#function) - Failed to stop recording")
+        }
+    }
+    
+    private func finishRecordingStop() {
+        // Release StopTimer
+        invalidateStopTimer()
+        
+        // Update recording button as released state
+        recordingButton.state = NSControl.StateValue.off
+        
+        // Reset dock icon and badge
+        Task(priority: .background) {
+            // Reset AppIcon badge to inactive state
+            NSApp.dockTile.badgeLabel = nil
+            
+            // Reset AppIcon animation to inactive state
+            NSApp.applicationIconImage = iconIdle
+        }
+        
+        // Post notification without userInfo
+        let notification = Notification(name: .recordingStoppedNotificationKey,
+                                        object: self,
+                                        userInfo: nil)
+        notificationCenter.post(notification)
+        
+        // Evaluate AutoQuit after finished
+        if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
+            printVerbose("NOTICE:\(self.className): \(#function) - AutoQuit triggered")
+            
+            let selector = #selector(NSApplication.terminate(_:))
+            NSApp.perform(selector,
+                          with: nil,
+                          afterDelay: 0.1,
+                          inModes: [.common])
+            /*
+             * Calling NSApp.terminate() directly causes a deadlock with
+             * NSApplication.TerminateReply.terminateLater.
+             * Instead, trigger termination using performSelector method.
+             * NSApp.terminate(self)
+             */
+        }
     }
     
     private func scheduleStopTimer(_ sec: Int) {
@@ -598,7 +623,7 @@ extension AppDelegate {
             
             stopTimer = Timer.scheduledTimer(timeInterval: limit,
                                              target: self,
-                                             selector: #selector(stopRecording),
+                                             selector: #selector(stopRecordingFromTimer),
                                              userInfo: nil,
                                              repeats: false)
             
