@@ -234,31 +234,38 @@ extension AppDelegate {
                 self.restartSessionTask = nil
             }
             
-            // Stop Session
-            self.stopUpdateStatus()
-            self.defaults.set(false, forKey: Keys.showAlternate)
-            
-            self.removePreviewLayer()
-            self.manager?.videoPreview = nil
-            await self.stopSession()
-            
-            //
-            try? await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
-            
-            // Start Session
-            await self.startSession()
-            self.manager?.videoPreview = self.parentView
-            self.addPreviewLayer()
-            
-            self.defaults.set(false, forKey: Keys.showAlternate)
-            self.startUpdateStatus()
-            
-            // Update Toolbar button title
-            self.setScale(-1)               // Update Popup Menu Selection
-            self.setVolume(-1)              // Update Popup Menu Selection
-            
-            // Update cached recording state after restart
-            await self.refreshCachedState()
+            do {
+                // Stop Session
+                self.stopUpdateStatus()
+                self.defaults.set(false, forKey: Keys.showAlternate)
+                
+                self.removePreviewLayer()
+                self.manager?.videoPreview = nil
+                await self.stopSession()
+                
+                // Cancel before restarting to avoid leaving the session in a stopped state
+                try Task.checkCancellation()
+                
+                //
+                try await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
+                
+                // Start Session
+                await self.startSession()
+                self.manager?.videoPreview = self.parentView
+                self.addPreviewLayer()
+                
+                self.defaults.set(false, forKey: Keys.showAlternate)
+                self.startUpdateStatus()
+                
+                // Update Toolbar button title
+                self.setScale(-1)               // Update Popup Menu Selection
+                self.setVolume(-1)              // Update Popup Menu Selection
+                
+                // Update cached recording state after restart
+                await self.refreshCachedState()
+            } catch {
+                // Task was cancelled; defer block clears restartSessionTask
+            }
         }
     }
     
