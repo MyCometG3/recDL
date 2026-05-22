@@ -468,9 +468,16 @@ extension AppDelegate {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
             return
         }
+        
+        // Optimistically set cached state before the actor call so the 0.5s
+        // updateTimer sees the correct state immediately. The defer block
+        // reconciles the cache against the actor result on both success and
+        // failure paths.
         recordingStartInProgress = true
+        cachedRecordingState = true
         defer {
             recordingStartInProgress = false
+            updateCachedStateAsync()
         }
         
         let startedAt = CFAbsoluteTimeGetCurrent()
@@ -479,9 +486,6 @@ extension AppDelegate {
         applyRecordingParameters()
         
         let recordingStarted = await self.captureSession.startRecording(to: movieURL)
-        
-        // Refresh cache asynchronously to keep the hot path non-blocking.
-        updateCachedStateAsync()
         
         if recordingStarted {
             // Schedule StopTimer if required
@@ -508,12 +512,11 @@ extension AppDelegate {
             
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
             printVerbose("TRACE:\(self.className): \(#function) - success \(elapsedMs)ms ")
-            return
+        } else {
+            let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
+            printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
+            printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
         }
-        
-        let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
-        printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
-        printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
     }
     
     /// Synchronous stop path for AppleScript/script callers.
@@ -566,7 +569,9 @@ extension AppDelegate {
     }
     
     private func finishRecordingStop() {
-        // Release StopTimer
+        // Eagerly clear cached state so the 0.5s timer stops animation immediately.
+        cachedRecordingState = false
+        
         invalidateStopTimer()
         
         // Update recording button as released state
