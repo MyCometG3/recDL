@@ -451,6 +451,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Stop Session
         removePreviewLayer()
+        invalidateStopTimer()
         await stopSession()
         
         // Resign notification observer

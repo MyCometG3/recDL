@@ -233,20 +233,18 @@ extension AppDelegate {
             defer {
                 self.restartSessionTask = nil
             }
-            
+            // Stop Session
+            self.stopUpdateStatus()
+            self.defaults.set(false, forKey: Keys.showAlternate)
+
+            self.removePreviewLayer()
+            self.manager?.videoPreview = nil
+            await self.stopSession()
+
             do {
-                // Stop Session
-                self.stopUpdateStatus()
-                self.defaults.set(false, forKey: Keys.showAlternate)
-                
-                self.removePreviewLayer()
-                self.manager?.videoPreview = nil
-                await self.stopSession()
-                
                 // Cancel before restarting to avoid leaving the session in a stopped state
                 try Task.checkCancellation()
                 
-                //
                 try await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
                 
                 // Start Session
@@ -263,8 +261,10 @@ extension AppDelegate {
                 
                 // Update cached recording state after restart
                 await self.refreshCachedState()
-            } catch {
+            } catch is CancellationError {
                 // Task was cancelled; defer block clears restartSessionTask
+            } catch {
+                self.printVerbose("ERROR:\(self.className): \(#function) - Restart failed: \(error.localizedDescription)")
             }
         }
     }
