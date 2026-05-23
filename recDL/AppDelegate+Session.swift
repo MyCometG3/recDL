@@ -243,8 +243,8 @@ extension AppDelegate {
             self.manager?.videoPreview = nil
             await self.stopSession()
 
+            // Honor cancellation before starting a fresh session.
             do {
-                // Cancel before restarting to avoid leaving the session in a stopped state
                 try Task.checkCancellation()
                 
                 try await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
