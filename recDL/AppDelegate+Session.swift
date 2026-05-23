@@ -587,13 +587,8 @@ extension AppDelegate {
         recordingButton.state = NSControl.StateValue.off
         
         // Reset dock icon and badge
-        Task(priority: .background) {
-            // Reset AppIcon badge to inactive state
-            NSApp.dockTile.badgeLabel = nil
-            
-            // Reset AppIcon animation to inactive state
-            NSApp.applicationIconImage = iconIdle
-        }
+        NSApp.dockTile.badgeLabel = nil
+        NSApp.applicationIconImage = iconIdle
         
         // Post notification without userInfo
         let notification = Notification(name: .recordingStoppedNotificationKey,
