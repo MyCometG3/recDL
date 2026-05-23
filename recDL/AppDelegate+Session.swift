@@ -251,8 +251,6 @@ extension AppDelegate {
                 
                 // Start Session
                 await self.startSession()
-                self.manager?.videoPreview = self.parentView
-                self.addPreviewLayer()
                 
                 self.defaults.set(false, forKey: Keys.showAlternate)
                 self.startUpdateStatus()
@@ -478,12 +476,7 @@ extension AppDelegate {
             return
         }
         
-        // Optimistically set cached state before the actor call so the 0.5s
-        // updateTimer sees the correct state immediately. The defer block
-        // reconciles the cache against the actor result on both success and
-        // failure paths.
         recordingStartInProgress = true
-        cachedRecordingState = true
         defer {
             recordingStartInProgress = false
             updateCachedStateAsync()
@@ -649,7 +642,7 @@ extension AppDelegate {
         }
     }
     
-    internal func invalidateStopTimer() {
+    private func invalidateStopTimer() {
         // print("\(#file) \(#line) \(#function)")
         
         // Release StopTimer
