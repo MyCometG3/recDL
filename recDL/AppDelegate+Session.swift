@@ -195,6 +195,8 @@ extension AppDelegate {
         
         if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
+            invalidateStopTimer()
+            evalAutoQuitFlag = false
             let result = await self.captureSession.stopCaptureSession()
             if result {
                 printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
