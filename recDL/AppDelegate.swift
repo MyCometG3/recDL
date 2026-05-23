@@ -35,6 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     internal var recordingStartInProgress = false
     internal var recordingStartTask: Task<Void, Never>? = nil
     internal var restartSessionTask: Task<Void, Never>? = nil
+    internal var setupTask: Task<Void, Never>? = nil
     internal var terminationInProgress = false
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
@@ -105,13 +106,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private var requiresTerminationCleanup: Bool {
-        manager != nil || cachedRecordingState || cachedRunningState || recordingStartPending || restartSessionTask != nil
+        manager != nil || cachedRecordingState || cachedRunningState || recordingStartPending || restartSessionTask != nil || setupTask != nil
     }
     
     private func prepareForTermination() async {
         await recordingStartTask?.value
         restartSessionTask?.cancel()
         await restartSessionTask?.value
+        setupTask?.cancel()
+        await setupTask?.value
     }
     
     internal func scheduleRecordingStart(for sec: Int) {
@@ -295,7 +298,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Register defaults
         defaults.register(defaults: keyValues)
         
-        Task { await setup() }
+        setupTask = Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            defer { self.setupTask = nil }
+            await self.setup()
+        }
     }
     
     private func setup() async {
@@ -330,6 +337,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //
         parentView.verbose = false
         await startSession()
+        guard !Task.isCancelled else { return }
         
         // Update Toolbar button title
         setVolume(-1)                       // Update Popup Menu Selection
@@ -388,7 +396,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return .terminateLater
         }
         
-        guard prepared else {
+        guard prepared || setupTask != nil else {
             printVerbose("NOTICE:\(self.className): \(#function) - ready")
             return .terminateNow
         }

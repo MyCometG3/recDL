@@ -259,8 +259,6 @@ extension AppDelegate {
                 self.setScale(-1)               // Update Popup Menu Selection
                 self.setVolume(-1)              // Update Popup Menu Selection
                 
-                // Update cached recording state after restart
-                await self.refreshCachedState()
             } catch is CancellationError {
                 // Task was cancelled; defer block clears restartSessionTask
             } catch {
