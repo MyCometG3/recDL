@@ -649,7 +649,7 @@ extension AppDelegate {
         }
     }
     
-    private func invalidateStopTimer() {
+    internal func invalidateStopTimer() {
         // print("\(#file) \(#line) \(#function)")
         
         // Release StopTimer
