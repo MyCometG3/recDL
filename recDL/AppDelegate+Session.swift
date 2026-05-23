@@ -586,9 +586,12 @@ extension AppDelegate {
         // Update recording button as released state
         recordingButton.state = NSControl.StateValue.off
         
-        // Reset dock icon and badge
-        NSApp.dockTile.badgeLabel = nil
-        NSApp.applicationIconImage = iconIdle
+        // Reset dock icon and badge on the next main runloop turn.
+        RunLoop.main.perform(inModes: [.common]) { [weak self] in
+            guard let self = self else { return }
+            NSApp.dockTile.badgeLabel = nil
+            NSApp.applicationIconImage = self.iconIdle
+        }
         
         // Post notification without userInfo
         let notification = Notification(name: .recordingStoppedNotificationKey,
