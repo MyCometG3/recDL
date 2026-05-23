@@ -110,6 +110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private func prepareForTermination() async {
         await recordingStartTask?.value
+        restartSessionTask?.cancel()
         await restartSessionTask?.value
     }
     
@@ -406,7 +407,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup started")
-            await prepareForTermination()
             await cleanup()
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
             
