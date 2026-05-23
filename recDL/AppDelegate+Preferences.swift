@@ -423,8 +423,10 @@ extension AppDelegate {
     }
     
     private func fieldDominanceForTag(_ tag:Int) -> DLABFieldDominance {
-        let fdList:[DLABFieldDominance] =
-        [.progressiveFrame, .lowerFieldFirst, .upperFieldFirst]
+        let fdList:[DLABFieldDominance] = [.progressiveFrame, .lowerFieldFirst, .upperFieldFirst]
+        guard fdList.indices.contains(tag) else {
+            return .progressiveFrame
+        }
         let fd = fdList[tag]
         return fd
     }

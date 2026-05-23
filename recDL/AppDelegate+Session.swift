@@ -108,7 +108,7 @@ extension AppDelegate {
     // MARK: - Capture Session support
     /* ======================================================================================== */
     
-    private func applySessionParameters() {
+    private func applySessionParametersAsync() async {
         // Read parameters for session
         let displayModeRaw : UInt32 = UInt32(defaults.integer(forKey: Keys.displayMode))
         guard let displayMode = DLABDisplayMode(rawValue: displayModeRaw) else { return }
@@ -145,48 +145,42 @@ extension AppDelegate {
         }
         
         // Apply parameters through actor
-        performAsync {
-            await self.captureSession.applySessionParameters(
-                displayMode: displayMode,
-                videoConnection: videoConnection,
-                audioConnection: audioConnection,
-                pixelFormat: pixelFormat,
-                videoStyle: videoStyle,
-                audioDepth: audioDepth,
-                audioChannels: audioChannel,
-                hdmiAudioChannels: hdmiAudioChannels,
-                reverseCh3Ch4: reverseCh3Ch4,
-                timecodeSource: timecodeSource
-            )
-        }
+        await self.captureSession.applySessionParameters(
+            displayMode: displayMode,
+            videoConnection: videoConnection,
+            audioConnection: audioConnection,
+            pixelFormat: pixelFormat,
+            videoStyle: videoStyle,
+            audioDepth: audioDepth,
+            audioChannels: audioChannel,
+            hdmiAudioChannels: hdmiAudioChannels,
+            reverseCh3Ch4: reverseCh3Ch4,
+            timecodeSource: timecodeSource
+        )
     }
     
-    public func startSession() {
+    public func startSession() async {
         // print("\(#file) \(#line) \(#function)")
         
         // Create manager through actor and set as local reference
         let verbose = self.verbose
-        manager = performAsync {
-            await self.captureSession.setVerbose(verbose)
-            return await self.captureSession.createManager()
-        }
+        await self.captureSession.setVerbose(verbose)
+        manager = await self.captureSession.createManager()
         
         guard manager != nil else {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to create CaptureManager.")
             return
         }
         
-        applySessionParameters()
+        await applySessionParametersAsync()
         
         addPreviewLayer()
         
         printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session...")
-        let result = performAsync {
-            await self.captureSession.startCaptureSession()
-        }
+        let result = await self.captureSession.startCaptureSession()
         if result {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
-            updateCachedState()
+            await refreshCachedState()
             
             Task(priority: .utility) { [captureSession] in
                 _ = await captureSession.prewarmRecordingPath()
@@ -196,25 +190,23 @@ extension AppDelegate {
         }
     }
     
-    public func stopSession() {
+    public func stopSession() async {
         // print("\(#file) \(#line) \(#function)")
         
         if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
-            let result = performAsync {
-                await self.captureSession.stopCaptureSession()
-            }
+            invalidateStopTimer()
+            evalAutoQuitFlag = false
+            let result = await self.captureSession.stopCaptureSession()
             if result {
                 printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session completed.")
             } else {
                 printVerbose("ERROR:\(self.className): \(#function) - Stopping capture session failed.")
             }
             
-            performAsync {
-                await self.captureSession.destroyManager()
-            }
+            await self.captureSession.destroyManager()
             self.manager = nil
-            updateCachedState()
+            await refreshCachedState()
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - CaptureManager is nil.")
         }
@@ -223,6 +215,11 @@ extension AppDelegate {
     public func restartSession(_ notification: Notification) {
         // print("\(#file) \(#line) \(#function)")
         
+        guard restartSessionTask == nil else {
+            printVerbose("NOTICE:\(self.className): \(#function) - Restart already in progress")
+            return
+        }
+        
         // Check user choosen input port (audio/video)
         // modify if required
         if manager == nil {
@@ -230,37 +227,43 @@ extension AppDelegate {
             return
         }
         
-        Task { @MainActor [weak self] in
+        restartSessionTask = Task { @MainActor [weak self] in
             guard let self = self else {
                 AppDelegate.printNilSelfWarning(#function)
                 return
             }
-            
+            defer {
+                self.restartSessionTask = nil
+            }
             // Stop Session
             self.stopUpdateStatus()
             self.defaults.set(false, forKey: Keys.showAlternate)
-            
+
             self.removePreviewLayer()
             self.manager?.videoPreview = nil
-            self.stopSession()
-            
-            //
-            try? await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
-            
-            // Start Session
-            self.startSession()
-            self.manager?.videoPreview = self.parentView
-            self.addPreviewLayer()
-            
-            self.defaults.set(false, forKey: Keys.showAlternate)
-            self.startUpdateStatus()
-            
-            // Update Toolbar button title
-            self.setScale(-1)               // Update Popup Menu Selection
-            self.setVolume(-1)              // Update Popup Menu Selection
-            
-            // Update cached recording state after restart
-            self.updateCachedState()
+            await self.stopSession()
+
+            // Honor cancellation before starting a fresh session.
+            do {
+                try Task.checkCancellation()
+                
+                try await Task.sleep(nanoseconds: 100_000_000) // sleep for 0.1 seconds
+                
+                // Start Session
+                await self.startSession()
+                
+                self.defaults.set(false, forKey: Keys.showAlternate)
+                self.startUpdateStatus()
+                
+                // Update Toolbar button title
+                self.setScale(-1)               // Update Popup Menu Selection
+                self.setVolume(-1)              // Update Popup Menu Selection
+                
+            } catch is CancellationError {
+                // Task was cancelled; defer block clears restartSessionTask
+            } catch {
+                self.printVerbose("ERROR:\(self.className): \(#function) - Restart failed: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -470,9 +473,11 @@ extension AppDelegate {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
             return
         }
+        
         recordingStartInProgress = true
         defer {
             recordingStartInProgress = false
+            updateCachedStateAsync()
         }
         
         let startedAt = CFAbsoluteTimeGetCurrent()
@@ -481,9 +486,6 @@ extension AppDelegate {
         applyRecordingParameters()
         
         let recordingStarted = await self.captureSession.startRecording(to: movieURL)
-        
-        // Refresh cache asynchronously to keep the hot path non-blocking.
-        updateCachedStateAsync()
         
         if recordingStarted {
             // Schedule StopTimer if required
@@ -510,14 +512,16 @@ extension AppDelegate {
             
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
             printVerbose("TRACE:\(self.className): \(#function) - success \(elapsedMs)ms ")
-            return
+        } else {
+            let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
+            printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
+            printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
         }
-        
-        let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
-        printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
-        printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
     }
     
+    /// Synchronous stop path for AppleScript/script callers.
+    /// Timer-driven stops use `stopRecordingFromTimer()` so the main thread does not wait on
+    /// `performAsync { semaphore.wait() }`.
     public func stopRecording() {
         // print("\(#file) \(#line) \(#function)")
         
@@ -536,50 +540,72 @@ extension AppDelegate {
             updateCachedState()
             
             if recordingStopped {
-                
-                // Release StopTimer
-                invalidateStopTimer()
-                
-                // Update recording button as released state
-                recordingButton.state = NSControl.StateValue.off
-                
-                // Reset dock icon and badge
-                Task(priority: .background) {
-                    // Reset AppIcon badge to inactive state
-                    NSApp.dockTile.badgeLabel = nil
-                    
-                    // Reset AppIcon animation to inactive state
-                    NSApp.applicationIconImage = iconIdle
-                }
-                
-                // Post notification without userInfo
-                let notification = Notification(name: .recordingStoppedNotificationKey,
-                                                object: self,
-                                                userInfo: nil)
-                notificationCenter.post(notification)
-                
-                // Evaluate AutoQuit after finished
-                if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
-                    printVerbose("NOTICE:\(self.className): \(#function) - AutoQuit triggered")
-                    
-                    let selector = #selector(NSApplication.terminate(_:))
-                    NSApp.perform(selector,
-                                  with: nil,
-                                  afterDelay: 0.1,
-                                  inModes: [.common])
-                    /*
-                     * Calling NSApp.terminate() directly causes a deadlock with
-                     * NSApplication.TerminateReply.terminateLater.
-                     * Instead, trigger termination using performSelector method.
-                     * NSApp.terminate(self)
-                     */
-                }
-                
+                finishRecordingStop()
                 return
             }
         }
         
         printVerbose("ERROR:\(self.className): \(#function) - Failed to stop recording")
+    }
+    
+    @objc
+    private func stopRecordingFromTimer() {
+        Task { @MainActor [weak self] in
+            guard let self = self else {
+                AppDelegate.printNilSelfWarning(#function)
+                return
+            }
+            
+            let recordingStopped = await self.captureSession.stopRecording()
+            await self.refreshCachedState()
+            
+            if recordingStopped {
+                self.finishRecordingStop()
+                return
+            }
+            
+            self.printVerbose("ERROR:\(self.className): \(#function) - Failed to stop recording")
+        }
+    }
+    
+    private func finishRecordingStop() {
+        // Eagerly clear cached state so the 0.5s timer stops animation immediately.
+        cachedRecordingState = false
+        
+        invalidateStopTimer()
+        
+        // Update recording button as released state
+        recordingButton.state = NSControl.StateValue.off
+        
+        // Reset dock icon and badge on the next main queue turn.
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            NSApp.dockTile.badgeLabel = nil
+            NSApp.applicationIconImage = self.iconIdle
+        }
+        
+        // Post notification without userInfo
+        let notification = Notification(name: .recordingStoppedNotificationKey,
+                                        object: self,
+                                        userInfo: nil)
+        notificationCenter.post(notification)
+        
+        // Evaluate AutoQuit after finished
+        if evalAutoQuitFlag && defaults.bool(forKey: Keys.autoQuit) {
+            printVerbose("NOTICE:\(self.className): \(#function) - AutoQuit triggered")
+            
+            let selector = #selector(NSApplication.terminate(_:))
+            NSApp.perform(selector,
+                          with: nil,
+                          afterDelay: 0.1,
+                          inModes: [.common])
+            /*
+             * Calling NSApp.terminate() directly causes a deadlock with
+             * NSApplication.TerminateReply.terminateLater.
+             * Instead, trigger termination using performSelector method.
+             * NSApp.terminate(self)
+             */
+        }
     }
     
     private func scheduleStopTimer(_ sec: Int) {
@@ -600,7 +626,7 @@ extension AppDelegate {
             
             stopTimer = Timer.scheduledTimer(timeInterval: limit,
                                              target: self,
-                                             selector: #selector(stopRecording),
+                                             selector: #selector(stopRecordingFromTimer),
                                              userInfo: nil,
                                              repeats: false)
             

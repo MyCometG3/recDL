@@ -273,9 +273,9 @@ extension AppDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         // Resize Window using specified scale value
-        if let window = parentView.window, let manager = manager {
+        if let window = parentView.window, let manager = manager, let contentView = window.contentView {
             let nativeSize = manager.encodedSize
-            let contentSize = window.contentView!.bounds.size
+            let contentSize = contentView.bounds.size
             let topOffset: CGFloat = window.frame.size.height - contentSize.height
             
             let targetRatio: CGFloat = apertureRatio() * nativeSize.width / nativeSize.height

@@ -34,10 +34,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     internal var cachedRunningState = false
     internal var recordingStartInProgress = false
     internal var recordingStartTask: Task<Void, Never>? = nil
+    internal var restartSessionTask: Task<Void, Never>? = nil
+    internal var setupTask: Task<Void, Never>? = nil
     internal var terminationInProgress = false
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil
+    
+    internal var frameObserverToken: (any NSObjectProtocol)? = nil
     
     internal var evalAutoQuitFlag : Bool = false
     internal var targetPath : String? = nil
@@ -89,25 +93,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.cachedRunningState = running
         }
     }
-
+    
+    internal func refreshCachedState() async {
+        let recording = await captureSession.isRecording()
+        let running = await captureSession.isRunning()
+        cachedRecordingState = recording
+        cachedRunningState = running
+    }
+    
     internal var recordingStartPending: Bool {
         recordingStartTask != nil || recordingStartInProgress
     }
-
+    
     private var requiresTerminationCleanup: Bool {
-        manager != nil || cachedRecordingState || cachedRunningState || recordingStartPending
+        manager != nil || cachedRecordingState || cachedRunningState || recordingStartPending || restartSessionTask != nil || setupTask != nil
     }
-
+    
     private func prepareForTermination() async {
         await recordingStartTask?.value
+        restartSessionTask?.cancel()
+        await restartSessionTask?.value
+        setupTask?.cancel()
+        await setupTask?.value
     }
-
+    
     internal func scheduleRecordingStart(for sec: Int) {
         guard !recordingStartPending else {
             printVerbose("ERROR:\(self.className): \(#function) - Recording start already in progress")
             return
         }
-
+        
         recordingStartTask = Task { @MainActor [weak self] in
             guard let self = self else {
                 AppDelegate.printNilSelfWarning(#function)
@@ -283,10 +298,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Register defaults
         defaults.register(defaults: keyValues)
         
-        Task { setup() }
+        setupTask = Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            defer { self.setupTask = nil }
+            await self.setup()
+        }
     }
     
-    private func setup() {
+    private func setup() async {
         // print("\(#file) \(#line) \(#function)")
         
         // Register notification observer for Cocoa scripting support
@@ -317,7 +336,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         //
         parentView.verbose = false
-        startSession()
+        await startSession()
+        guard !Task.isCancelled else { return }
         
         // Update Toolbar button title
         setVolume(-1)                       // Update Popup Menu Selection
@@ -357,35 +377,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 await self.updateCurrentScale()
             }
         }
-        notificationCenter.addObserver(forName: NSView.frameDidChangeNotification,
-                                       object: parentView,
-                                       queue: nil,
-                                       using: handler)
+        frameObserverToken = notificationCenter.addObserver(forName: NSView.frameDidChangeNotification,
+                                                            object: parentView,
+                                                            queue: nil,
+                                                            using: handler)
         
         // Initialize cached recording state
-        updateCachedState()
+        await refreshCachedState()
         
         prepared = true
     }
     
     public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         // print("\(#file) \(#line) \(#function)")
-
+        
         guard terminationInProgress == false else {
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup already in progress")
             return .terminateLater
         }
-
-        guard prepared else {
+        
+        guard prepared || setupTask != nil else {
             printVerbose("NOTICE:\(self.className): \(#function) - ready")
             return .terminateNow
         }
-
+        
         guard requiresTerminationCleanup else {
             printVerbose("NOTICE:\(self.className): \(#function) - no session cleanup required")
             return .terminateNow
         }
-
+        
         terminationInProgress = true
         Task { @MainActor [weak self] in
             guard let self = self else {
@@ -393,12 +413,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 NSApp.reply(toApplicationShouldTerminate: true)
                 return
             }
-
+            
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup started")
-            await prepareForTermination()
-            cleanup()
+            await cleanup()
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
-
+            
             NSApp.reply(toApplicationShouldTerminate: true)
             self.terminationInProgress = false
         }
@@ -412,16 +431,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Force termination handler (NSApplicationDelegate method)
         if prepared {
             printVerbose("NOTICE:\(self.className): \(#function) - cleanup started")
-            cleanup()
-            printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                await cleanup()
+                printVerbose("NOTICE:\(self.className): \(#function) - cleanup done")
+            }
         }
     }
     
-    private func cleanup() {
+    private func cleanup() async {
         // print("\(#file) \(#line) \(#function)")
         
-        // Ensure that we are prepared
-        if prepared == false { return }
+        // Wait for any in-flight session transitions before cleanup
+        await prepareForTermination()
+        
+        // If setup never reached manager creation, there is nothing to tear down.
+        guard manager != nil else { return }
         
         // Reset AppIcon
         NSApp.applicationIconImage = nil
@@ -434,10 +459,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Stop Session
         removePreviewLayer()
-        stopSession()
+        await stopSession()
         
         // Resign notification observer
         notificationCenter.removeObserver(self)
+        if let token = frameObserverToken {
+            notificationCenter.removeObserver(token)
+            frameObserverToken = nil
+        }
         
         //
         prepared = false
