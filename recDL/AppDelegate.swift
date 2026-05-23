@@ -445,8 +445,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Wait for any in-flight session transitions before cleanup
         await prepareForTermination()
         
-        // Ensure that we are prepared
-        if prepared == false { return }
+        // If setup never reached manager creation, there is nothing to tear down.
+        guard manager != nil else { return }
         
         // Reset AppIcon
         NSApp.applicationIconImage = nil
