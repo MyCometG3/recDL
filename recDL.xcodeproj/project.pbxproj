@@ -7,30 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		160554022E4823B1008D05B5 /* CaptureSessionActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160554012E4823B1008D05B5 /* CaptureSessionActor.swift */; };
-		1647766E1F889C7D0024D780 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1647766D1F889C7D0024D780 /* AppDelegate.swift */; };
-		164776701F889C7D0024D780 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1647766F1F889C7D0024D780 /* Assets.xcassets */; };
-		164776731F889C7D0024D780 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 164776711F889C7D0024D780 /* MainMenu.xib */; };
-		1647767F1F88D6700024D780 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1647767E1F88D6700024D780 /* Constants.swift */; };
 		164F6A591FDD0A7700152716 /* DLABCaptureManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */; };
 		164F6A5A1FDD0A7700152716 /* DLABridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1647767D1F889CA70024D780 /* DLABridging.framework */; };
 		164F6A5C1FDD0B1A00152716 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F6A5B1FDD0B1A00152716 /* CoreVideo.framework */; };
 		164F6A5E1FDD0B2700152716 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F6A5D1FDD0B2700152716 /* CoreMedia.framework */; };
-		1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B1C31FDBF3B600EBA4DD /* PrefController.swift */; };
-		169327BC2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */; };
-		169327BE2DFDB12200F721E1 /* AppDelegate+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327BD2DFDB12200F721E1 /* AppDelegate+UI.swift */; };
-		169327C02DFDB46500F721E1 /* AppDelegate+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327BF2DFDB46500F721E1 /* AppDelegate+Session.swift */; };
-		169327C22DFDC2C400F721E1 /* AppDelegate+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169327C12DFDC2C400F721E1 /* AppDelegate+Preferences.swift */; };
-		16A4C6B31F89AF000027F5EA /* recDL.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 16A4C6B21F89AF000027F5EA /* recDL.sdef */; };
-		16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */; };
-		16A4C6B71F89B1390027F5EA /* RDL1Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */; };
-		16A4C6B91F89B14C0027F5EA /* RDL1DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6B81F89B14C0027F5EA /* RDL1DeviceInfo.swift */; };
-		16A4C6BB1F89BAF10027F5EA /* RDL1VideoSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6BA1F89BAF10027F5EA /* RDL1VideoSetting.swift */; };
-		16A4C6BD1F89BB050027F5EA /* RDL1AudioSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A4C6BC1F89BB050027F5EA /* RDL1AudioSetting.swift */; };
 		16ADBB901FE63CA000FB7747 /* DLABridging.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1647767D1F889CA70024D780 /* DLABridging.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		16ADBB921FE63CA000FB7747 /* DLABCaptureManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		16CF53841FA4890B003D16F6 /* CustomCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CF53831FA4890B003D16F6 /* CustomCommand.swift */; };
-		16CF53861FA4A305003D16F6 /* NSApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CF53851FA4A305003D16F6 /* NSApplicationExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,33 +29,39 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		160554012E4823B1008D05B5 /* CaptureSessionActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureSessionActor.swift; sourceTree = "<group>"; };
 		161AAB201FD28083007B4AE6 /* DLABCaptureManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DLABCaptureManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1647766A1F889C7D0024D780 /* recDL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = recDL.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1647766D1F889C7D0024D780 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1647766F1F889C7D0024D780 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		164776721F889C7D0024D780 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		164776741F889C7D0024D780 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		164776751F889C7D0024D780 /* recDL.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = recDL.entitlements; sourceTree = "<group>"; };
 		1647767D1F889CA70024D780 /* DLABridging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DLABridging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1647767E1F88D6700024D780 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		164F6A5B1FDD0B1A00152716 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		164F6A5D1FDD0B2700152716 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		1658B1C31FDBF3B600EBA4DD /* PrefController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefController.swift; sourceTree = "<group>"; };
 		1658B1C51FDD0A2400EBA4DD /* DeckLinkAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeckLinkAPI.framework; path = ../../../../../../Library/Frameworks/DeckLinkAPI.framework; sourceTree = "<group>"; };
-		169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1ScriptableObject.swift; sourceTree = "<group>"; };
-		169327BD2DFDB12200F721E1 /* AppDelegate+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UI.swift"; sourceTree = "<group>"; };
-		169327BF2DFDB46500F721E1 /* AppDelegate+Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Session.swift"; sourceTree = "<group>"; };
-		169327C12DFDC2C400F721E1 /* AppDelegate+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Preferences.swift"; sourceTree = "<group>"; };
-		16A4C6B21F89AF000027F5EA /* recDL.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = recDL.sdef; sourceTree = "<group>"; };
-		16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Session.swift; sourceTree = "<group>"; };
-		16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1Recording.swift; sourceTree = "<group>"; };
-		16A4C6B81F89B14C0027F5EA /* RDL1DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1DeviceInfo.swift; sourceTree = "<group>"; };
-		16A4C6BA1F89BAF10027F5EA /* RDL1VideoSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1VideoSetting.swift; sourceTree = "<group>"; };
-		16A4C6BC1F89BB050027F5EA /* RDL1AudioSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RDL1AudioSetting.swift; sourceTree = "<group>"; };
-		16CF53831FA4890B003D16F6 /* CustomCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCommand.swift; sourceTree = "<group>"; };
-		16CF53851FA4A305003D16F6 /* NSApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSApplicationExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		16ABF93C2FC304D3000C82E5 /* Exceptions for "recDL" folder in "recDL" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 164776691F889C7D0024D780 /* recDL */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		16ABF9282FC304D2000C82E5 /* recDL */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				16ABF93C2FC304D3000C82E5 /* Exceptions for "recDL" folder in "recDL" target */,
+			);
+			path = recDL;
+			sourceTree = "<group>";
+		};
+		16ABF93D2FC304D7000C82E5 /* Source */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Source;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		164776671F889C7D0024D780 /* Frameworks */ = {
@@ -91,7 +79,8 @@
 		164776611F889C7D0024D780 = {
 			isa = PBXGroup;
 			children = (
-				1647766C1F889C7D0024D780 /* recDL */,
+				16ABF93D2FC304D7000C82E5 /* Source */,
+				16ABF9282FC304D2000C82E5 /* recDL */,
 				1647766B1F889C7D0024D780 /* Products */,
 				1647767B1F889CA70024D780 /* Frameworks */,
 			);
@@ -105,25 +94,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1647766C1F889C7D0024D780 /* recDL */ = {
-			isa = PBXGroup;
-			children = (
-				1647766F1F889C7D0024D780 /* Assets.xcassets */,
-				164776711F889C7D0024D780 /* MainMenu.xib */,
-				164776741F889C7D0024D780 /* Info.plist */,
-				164776751F889C7D0024D780 /* recDL.entitlements */,
-				1647766D1F889C7D0024D780 /* AppDelegate.swift */,
-				169327BD2DFDB12200F721E1 /* AppDelegate+UI.swift */,
-				169327C12DFDC2C400F721E1 /* AppDelegate+Preferences.swift */,
-				169327BF2DFDB46500F721E1 /* AppDelegate+Session.swift */,
-				160554012E4823B1008D05B5 /* CaptureSessionActor.swift */,
-				1647767E1F88D6700024D780 /* Constants.swift */,
-				1658B1C31FDBF3B600EBA4DD /* PrefController.swift */,
-				16A4C6C41F8B7BD20027F5EA /* Scripting Support */,
-			);
-			path = recDL;
-			sourceTree = "<group>";
-		};
 		1647767B1F889CA70024D780 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,22 +104,6 @@
 				1647767D1F889CA70024D780 /* DLABridging.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		16A4C6C41F8B7BD20027F5EA /* Scripting Support */ = {
-			isa = PBXGroup;
-			children = (
-				16A4C6B21F89AF000027F5EA /* recDL.sdef */,
-				169327BB2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift */,
-				16A4C6B41F89B10B0027F5EA /* RDL1Session.swift */,
-				16A4C6B61F89B1390027F5EA /* RDL1Recording.swift */,
-				16A4C6B81F89B14C0027F5EA /* RDL1DeviceInfo.swift */,
-				16A4C6BA1F89BAF10027F5EA /* RDL1VideoSetting.swift */,
-				16A4C6BC1F89BB050027F5EA /* RDL1AudioSetting.swift */,
-				16CF53831FA4890B003D16F6 /* CustomCommand.swift */,
-				16CF53851FA4A305003D16F6 /* NSApplicationExtension.swift */,
-			);
-			path = "Scripting Support";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +119,10 @@
 				16ADBB931FE63CA000FB7747 /* Embed Frameworks */,
 			);
 			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				16ABF9282FC304D2000C82E5 /* recDL */,
+				16ABF93D2FC304D7000C82E5 /* Source */,
 			);
 			name = recDL;
 			productName = recDL;
@@ -219,9 +177,6 @@
 		164776681F889C7D0024D780 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
-				16A4C6B31F89AF000027F5EA /* recDL.sdef in Resources */,
-				164776701F889C7D0024D780 /* Assets.xcassets in Resources */,
-				164776731F889C7D0024D780 /* MainMenu.xib in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */
@@ -230,35 +185,9 @@
 		164776661F889C7D0024D780 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
-				16CF53841FA4890B003D16F6 /* CustomCommand.swift in Sources */,
-				169327BE2DFDB12200F721E1 /* AppDelegate+UI.swift in Sources */,
-				16A4C6B71F89B1390027F5EA /* RDL1Recording.swift in Sources */,
-				16CF53861FA4A305003D16F6 /* NSApplicationExtension.swift in Sources */,
-				16A4C6BD1F89BB050027F5EA /* RDL1AudioSetting.swift in Sources */,
-				16A4C6B91F89B14C0027F5EA /* RDL1DeviceInfo.swift in Sources */,
-				1647766E1F889C7D0024D780 /* AppDelegate.swift in Sources */,
-				1658B1C41FDBF3B600EBA4DD /* PrefController.swift in Sources */,
-				16A4C6BB1F89BAF10027F5EA /* RDL1VideoSetting.swift in Sources */,
-				169327C22DFDC2C400F721E1 /* AppDelegate+Preferences.swift in Sources */,
-				169327BC2DFD8D3C00F721E1 /* RDL1ScriptableObject.swift in Sources */,
-				169327C02DFDB46500F721E1 /* AppDelegate+Session.swift in Sources */,
-				160554022E4823B1008D05B5 /* CaptureSessionActor.swift in Sources */,
-				1647767F1F88D6700024D780 /* Constants.swift in Sources */,
-				16A4C6B51F89B10B0027F5EA /* RDL1Session.swift in Sources */,
 			);
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		164776711F889C7D0024D780 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				164776721F889C7D0024D780 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		164776761F889C7D0024D780 /* Debug configuration for PBXProject "recDL" */ = {
