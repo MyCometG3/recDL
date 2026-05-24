@@ -577,11 +577,10 @@ extension AppDelegate {
         // Update recording button as released state
         recordingButton.state = NSControl.StateValue.off
         
-        // Reset dock icon and badge on the next main queue turn.
-        DispatchQueue.main.async { [weak self] in
+        // Reset dock icon and badge on the next main actor turn.
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
-            NSApp.dockTile.badgeLabel = nil
-            NSApp.applicationIconImage = self.iconIdle
+            self.resetDockIcon()
         }
         
         // Post notification without userInfo

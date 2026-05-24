@@ -461,10 +461,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard manager != nil else { return }
         
         // Reset AppIcon
-        NSApp.applicationIconImage = nil
-        
-        // Reset AppIcon badge to inactive state
-        NSApp.dockTile.badgeLabel = nil
+        resetDockIcon()
         
         // Stop Status Update
         stopUpdateStatus()

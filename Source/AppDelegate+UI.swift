@@ -151,15 +151,19 @@ extension AppDelegate {
             iconAnimation = false   // Stop Icon Animation
             
             Task(priority: .background) {
-                // Reset AppIcon Badge state
-                NSApp.dockTile.badgeLabel = nil
-                
-                // Reset AppIcon Animation state
-                if useIconAnimation {
-                    NSApp.applicationIconImage = iconIdle
+                // Reset AppIcon state
+                if self.useIconAnimation {
+                    self.resetDockIcon()
+                } else {
+                    NSApp.dockTile.badgeLabel = nil
                 }
             }
         }
+    }
+
+    internal func resetDockIcon() {
+        NSApp.dockTile.badgeLabel = nil
+        NSApp.applicationIconImage = iconIdle
     }
     
     /* ============================================ */
