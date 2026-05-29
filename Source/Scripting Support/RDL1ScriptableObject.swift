@@ -26,21 +26,21 @@ class RDL1ScriptableObject: NSObject {
     }
     
     override nonisolated var objectSpecifier: NSScriptObjectSpecifier? {
-        let block: () -> ObjectSpecifierBox = {
+        if Thread.isMainThread {
+            MainActor.preconditionIsolated()
             return MainActor.assumeIsolated {
                 return self.objectSpecifierCore()
-            }
-        }
-        if Thread.isMainThread {
-            return block().specifier
+            }.specifier
         } else {
             return DispatchQueue.main.sync {
-                return block().specifier
+                return MainActor.assumeIsolated {
+                    return self.objectSpecifierCore()
+                }.specifier
             }
         }
     }
     
-    private func objectSpecifierCore() -> ObjectSpecifierBox{
+    private func objectSpecifierCore() -> ObjectSpecifierBox {
         let desc = container.classDescription as! NSScriptClassDescription
         let spec = (container == NSApp) ? nil : container.objectSpecifier
         let prop = containerProperty
