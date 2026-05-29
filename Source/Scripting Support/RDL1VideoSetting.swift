@@ -35,6 +35,7 @@ class RDL1VideoSetting: RDL1ScriptableObject {
     public var inputFlag :Int = 0
     public var outputFlag :Int = 0
     public var rowBytes :Int = 0
+    public var displayModeSupport :NSDictionary? = nil
     
     //
     
@@ -63,6 +64,15 @@ class RDL1VideoSetting: RDL1ScriptableObject {
         inputFlag = Int(videoSetting.inputFlag.rawValue)
         outputFlag = Int(videoSetting.outputFlag.rawValue)
         rowBytes = Int(videoSetting.rowBytes)
+        
+        let tempDict = NSMutableDictionary(dictionary: videoSetting.dictionaryOfDisplayModeObj())
+        for key in ["displayMode", "fieldDominance", "pixelFormat"] {
+            if let value = tempDict[key] as? NSNumber {
+                tempDict[key] = NSFileTypeForHFSTypeCode(value.uint32Value)
+            }
+        }
+        tempDict["objIdentifier"] = nil
+        displayModeSupport = NSDictionary(dictionary: tempDict)
     }
     
     /* ============================================================================== */

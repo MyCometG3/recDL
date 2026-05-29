@@ -241,7 +241,7 @@
             <property name="outputFlag" code="oFlg" type="integer" access="r" description="outputFlag">
                 <cocoa key="outputFlag"/>
             </property>
-            <property name="displayModeSupport" code="diMS" type="integer" access="r" description="displayModeSupport">
+            <property name="displayModeSupport" code="diMS" type="record" access="r" description="displayModeSupport">
                 <cocoa key="displayModeSupport"/>
             </property>
             <property name="rowBytes" code="rowB" type="integer" access="r" description="rowBytes">
