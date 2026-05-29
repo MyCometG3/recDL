@@ -155,9 +155,9 @@
             </property>
             
             <!--
-             <element type="supportedOutputVideoSetting" access="r">
-             <cocoa key="outputVideoSettingArray" />
-             </element>
+            <element type="supportedOutputVideoSetting" access="r" description="supportedOutputVideoSettings">
+                <cocoa key="outputVideoSettingArray" />
+            </element>
             <property name="outputVideoSetting" code="ouVS" type="videoSetting" access="r" description="outputVideoSetting">
                 <cocoa key="outputVideoSetting"/>
             </property>
@@ -166,7 +166,7 @@
             </property>
              -->
 
-            <element type="supportedInputVideoSetting" access="r">
+            <element type="supportedInputVideoSetting" access="r" description="supportedInputVideoSettings">
                 <cocoa key="inputVideoSettingArray" />
             </element>
             <property name="inputVideoSetting" code="inVS" type="videoSetting" access="r" description="inputVideoSetting">
@@ -178,12 +178,12 @@
         </class>
         
         <!--
-        <class name="supportedOutputVideoSetting" code="sOVS" description="supported output videoSetting." inherits="videoSetting">
+        <class name="supportedOutputVideoSetting" code="sOVS" description="supported output videoSetting." inherits="videoSetting" plural="supportedOutputVideoSettings">
             <cocoa class="recDL.RDL1VideoSetting" />
         </class>
          -->
 
-        <class name="supportedInputVideoSetting" code="sIVS" description="supported input videoSetting." inherits="videoSetting">
+        <class name="supportedInputVideoSetting" code="sIVS" description="supported input videoSetting." inherits="videoSetting" plural="supportedInputVideoSettings">
             <cocoa class="recDL.RDL1VideoSetting" />
         </class>
         
