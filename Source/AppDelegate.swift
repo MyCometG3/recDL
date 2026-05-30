@@ -729,35 +729,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // print("\(#file) \(#line) \(#function)")
         
         if let url = defaults.url(forKey: Keys.movieFolder) {
-            var error:NSError?
-            if (url as NSURL).checkResourceIsReachableAndReturnError(&error) {
-                var flagDirectory = false
-                var flagWritable = false
-                
-                // validate access
-                let resourceValues = try? url.resourceValues(forKeys: [.isDirectoryKey, .isWritableKey])
-                if let resourceValues = resourceValues {
-                    flagDirectory = resourceValues.isDirectory!
-                    flagWritable = resourceValues.isWritable!
-                }
-                
-                if flagDirectory && flagWritable {
-                    return url
-                }
+            var error: NSError?
+            if (url as NSURL).checkResourceIsReachableAndReturnError(&error),
+               let resourceValues = try? url.resourceValues(forKeys: [.isDirectoryKey, .isWritableKey]),
+               resourceValues.isDirectory == true,
+               resourceValues.isWritable == true {
+                return url
             }
         }
         
-        // Use Movie folder
-        let directory = FileManager.SearchPathDirectory.moviesDirectory
-        let domainMask = FileManager.SearchPathDomainMask.userDomainMask
-        let movieFolders = NSSearchPathForDirectoriesInDomains(directory, domainMask, true)
-        if let folderPath = movieFolders.first {
-            let folderURL = URL.init(fileURLWithPath: folderPath)
-            return folderURL
-        }
-        
-        // Fallback to user's home directory
-        return URL.init(fileURLWithPath: NSHomeDirectory())
+        return FileManager.default.urls(for: .moviesDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSHomeDirectory())
     }
     
     internal func movieName() -> String {
