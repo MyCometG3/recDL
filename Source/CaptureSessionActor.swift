@@ -40,6 +40,23 @@ actor CaptureSession {
     
     // MARK: - Properties
     
+    /// Small gate that resumes tasks waiting for the actor to become idle.
+    private struct IdleGate {
+        private var waiters: [CheckedContinuation<Void, Never>] = []
+        
+        mutating func wait(_ continuation: CheckedContinuation<Void, Never>) {
+            waiters.append(continuation)
+        }
+        
+        mutating func signal() {
+            let pending = waiters
+            waiters.removeAll(keepingCapacity: true)
+            for continuation in pending {
+                continuation.resume()
+            }
+        }
+    }
+    
     /// The underlying CaptureManager instance that handles the actual capture operations.
     private var manager: CaptureManager?
     
@@ -51,6 +68,9 @@ actor CaptureSession {
     
     /// True while start/stop recording transition is actively running.
     private var recordingTransitionInProgress: Bool = false
+    
+    /// Waiters blocked until both prewarm and recording-transition work is idle.
+    private var idleGate = IdleGate()
     
     // MARK: - Initialization
     
@@ -113,6 +133,21 @@ actor CaptureSession {
     /// - Note: Any active capture session or recording will be stopped before destruction.
     func destroyManager() {
         manager = nil
+    }
+    
+    /// Suspends until prewarm and recording-transition work are both idle.
+    private func waitUntilRecordingIdle() async {
+        while prewarmInProgress || recordingTransitionInProgress {
+            await withCheckedContinuation { continuation in
+                idleGate.wait(continuation)
+            }
+        }
+    }
+    
+    /// Resumes waiting tasks when the actor is idle.
+    private func signalIdleIfReady() {
+        guard !prewarmInProgress, !recordingTransitionInProgress else { return }
+        idleGate.signal()
     }
     
     // MARK: - Session Management
@@ -193,7 +228,10 @@ actor CaptureSession {
         guard let manager = manager else { return false }
         
         prewarmInProgress = true
-        defer { prewarmInProgress = false }
+        defer {
+            prewarmInProgress = false
+            signalIdleIfReady()
+        }
         return await manager.prewarmRecordingPathAsync()
     }
     
@@ -274,9 +312,7 @@ actor CaptureSession {
     
     /// Marks prewarmed recording state as stale.
     func invalidateRecordingPreparation() async {
-        while prewarmInProgress || recordingTransitionInProgress {
-            await Task.yield()
-        }
+        await waitUntilRecordingIdle()
         manager?.invalidateRecordingPreparation()
     }
     
@@ -291,9 +327,7 @@ actor CaptureSession {
     /// - Note: Recording will fail if the capture session is not active or if a recording is already in progress.
     /// - Important: Ensure the destination directory exists and is writable before calling this method.
     func startRecording(to movieURL: URL) async -> Bool {
-        while prewarmInProgress || recordingTransitionInProgress {
-            await Task.yield()
-        }
+        await waitUntilRecordingIdle()
         
         guard let manager = manager, !manager.recording else { return false }
         
@@ -303,7 +337,10 @@ actor CaptureSession {
         let startedAt = CFAbsoluteTimeGetCurrent()
         
         recordingTransitionInProgress = true
-        defer { recordingTransitionInProgress = false }
+        defer {
+            recordingTransitionInProgress = false
+            signalIdleIfReady()
+        }
         
         manager.movieURL = movieURL
         manager.trimsRecordedMovieTimeRangeAfterRecording = true
@@ -327,14 +364,15 @@ actor CaptureSession {
     /// - Note: This method has no effect if no recording is currently active.
     /// - Important: The movie file may not be immediately available after this call returns due to finalization processes.
     func stopRecording() async -> Bool {
-        while prewarmInProgress || recordingTransitionInProgress {
-            await Task.yield()
-        }
+        await waitUntilRecordingIdle()
         
         guard let manager = manager, manager.recording else { return false }
         
         recordingTransitionInProgress = true
-        defer { recordingTransitionInProgress = false }
+        defer {
+            recordingTransitionInProgress = false
+            signalIdleIfReady()
+        }
         
         await manager.recordToggleAsync()
         
