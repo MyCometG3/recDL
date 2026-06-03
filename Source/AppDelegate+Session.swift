@@ -75,7 +75,8 @@ extension AppDelegate {
     }
     
     /// Executes an asynchronous, throwing operation synchronously.
-    /// - Note: Uses an attached task to avoid detached-task sendability diagnostics.
+    /// - Note: Uses a detached task so the synchronous semaphore wait does not
+    ///   inherit `@MainActor` and deadlock the main thread.
     nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async throws -> T) throws -> T {
         let box = ThrowingAsyncResultBox<T>()
         
@@ -91,7 +92,8 @@ extension AppDelegate {
     }
     
     /// Executes an asynchronous, non-throwing operation synchronously.
-    /// - Note: Uses an attached task to avoid detached-task sendability diagnostics.
+    /// - Note: Uses a detached task so the synchronous semaphore wait does not
+    ///   inherit `@MainActor` and deadlock the main thread.
     nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
         let box = AsyncResultBox<T>()
         
