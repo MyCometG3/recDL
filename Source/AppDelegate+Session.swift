@@ -79,7 +79,7 @@ extension AppDelegate {
     nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async throws -> T) throws -> T {
         let box = ThrowingAsyncResultBox<T>()
         
-        Task(priority: .high) { [box, block] in
+        Task.detached(priority: .high) { [box, block] in
             do {
                 box.store(.success(try await block()))
             } catch {
@@ -95,7 +95,7 @@ extension AppDelegate {
     nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
         let box = AsyncResultBox<T>()
         
-        Task(priority: .high) { [box, block] in
+        Task.detached(priority: .high) { [box, block] in
             box.store(await block())
         }
         
@@ -393,8 +393,9 @@ extension AppDelegate {
             manager.encodeAudioBitrate = 0
         }
         
+        let session = self.captureSession
         performAsync {
-            await self.captureSession.invalidateRecordingPreparation()
+            await session.invalidateRecordingPreparation()
         }
     }
     
@@ -410,8 +411,9 @@ extension AppDelegate {
     public func startRecording(for sec: Int) {
         // print("\(#file) \(#line) \(#function)")
         
+        let session = self.captureSession
         let isRecording = performAsync {
-            await self.captureSession.isRecording()
+            await session.isRecording()
         }
         
         if manager != nil && !isRecording, let movieURL = createMovieURL() {
@@ -420,7 +422,7 @@ extension AppDelegate {
             
             // Start recording to specified URL
             let recordingStarted = performAsync {
-                await self.captureSession.startRecording(to: movieURL)
+                await session.startRecording(to: movieURL)
             }
             
             // Update cached state after operation
@@ -525,15 +527,16 @@ extension AppDelegate {
     public func stopRecording() {
         // print("\(#file) \(#line) \(#function)")
         
+        let session = self.captureSession
         let isRecording = performAsync {
-            await self.captureSession.isRecording()
+            await session.isRecording()
         }
         
         // Stop recording
         if manager != nil && isRecording {
             // Stop recording to specified URL
             let recordingStopped = performAsync {
-                await self.captureSession.stopRecording()
+                await session.stopRecording()
             }
             
             // Update cached state after operation

@@ -76,11 +76,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /* ============================================ */
     
     internal func updateCachedState() {
+        let session = self.captureSession
         cachedRecordingState = performAsync {
-            await self.captureSession.isRecording()
+            await session.isRecording()
         }
         cachedRunningState = performAsync {
-            await self.captureSession.isRunning()
+            await session.isRunning()
         }
     }
     
