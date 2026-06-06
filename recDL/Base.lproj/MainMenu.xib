@@ -31,6 +31,7 @@
         <viewController id="d3T-ds-NJz" customClass="PrefController" customModule="recDL" customModuleProvider="target">
             <connections>
                 <outlet property="appDelegate" destination="Voe-Tx-rLC" id="7qQ-tf-YdA"/>
+                <outlet property="audioBitRateErrorLabel" destination="5tJ-Ep-bLi" id="qge-GV-b6v"/>
                 <outlet property="btnAudioConnection" destination="AfU-p5-UXh" id="Aq7-uw-Bk7"/>
                 <outlet property="btnDisplayMode" destination="5Uz-vZ-I0V" id="3nr-BA-YTa"/>
                 <outlet property="btnRestartSession" destination="Q92-gt-71i" id="mHe-hU-8Ld"/>
@@ -1482,8 +1483,8 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" placeholderString="256" drawsBackground="YES" id="2Wp-vA-U14">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="RTW-tU-lMq">
-                                                                <real key="minimum" value="32"/>
-                                                                <real key="maximum" value="960"/>
+                                                                <real key="minimum" value="16"/>
+                                                                <real key="maximum" value="512"/>
                                                             </numberFormatter>
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1510,6 +1511,15 @@
                                                             <binding destination="aeJ-nD-3pN" name="value" keyPath="values.audioEncode" id="DEl-Yy-JJA"/>
                                                         </connections>
                                                     </button>
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5tJ-Ep-bLi">
+                                                        <rect key="frame" x="200" y="34" width="12" height="11"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="!" drawsBackground="YES" id="3Rk-2D-j2E">
+                                                            <font key="font" metaFont="menu" size="9"/>
+                                                            <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                             </view>
                                         </box>
