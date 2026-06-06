@@ -184,8 +184,45 @@ extension AppDelegate {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
             await refreshCachedState()
             
-            Task(priority: .utility) { [captureSession] in
+            // Track prewarm Task so stopSession() can wait for it to
+            // finish before proceeding with teardown. The actor-side
+            // `prewarmInProgress` gate still serializes calls, and
+            // M-11's `waitUntilRecordingIdle()` in `destroyManager()`
+            // already waits for any in-flight prewarm before nil-ing
+            // the manager. Storing the reference here gives stopSession
+            // an earlier, explicit "wait for prewarm to drain" point —
+            // a defense-in-depth layer on top of M-11.
+            //
+            // Note: `prewarmTask?.cancel()` in stopSession sets the
+            // Task's cancellation flag, but the actor's
+            // `prewarmRecordingPath()` does not currently poll
+            // `Task.isCancelled` / `Task.checkCancellation()`, so the
+            // prewarm body runs to completion regardless. The actual
+            // benefit is the `await prewarmTask?.value` wait, not the
+            // cancel itself.
+            //
+            // On completion (or cancellation) we hop back to the main actor
+            // and clear the property — but only if we are still the
+            // "current" prewarm. The capture-and-compare pattern against
+            // `prewarmGeneration` prevents an old prewarm's nil-out closure
+            // from wiping out a newer `prewarmTask` reference that has
+            // since been installed (e.g. a stopSession/startSession cycle
+            // before the old prewarm's MainActor.run fires). See L-01 §1.5
+            // for the exact race scenario.
+            prewarmGeneration += 1
+            let myGeneration = prewarmGeneration
+            prewarmTask = Task(priority: .utility) { [captureSession, weak self] in
                 _ = await captureSession.prewarmRecordingPath()
+                await MainActor.run {
+                    guard let self else { return }
+                    // Only clear the property if we are still the most
+                    // recent prewarm. A subsequent startSession has
+                    // bumped `prewarmGeneration`, and stopSession has
+                    // already cleared `prewarmTask` to nil; in either
+                    // case we must not touch the property.
+                    guard self.prewarmGeneration == myGeneration else { return }
+                    self.prewarmTask = nil
+                }
             }
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
@@ -197,6 +234,24 @@ extension AppDelegate {
         
         if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
+            
+            // Drain any in-flight prewarm Task before proceeding with
+            // teardown. The actor's `prewarmInProgress` gate + M-11's
+            // `waitUntilRecordingIdle()` in `destroyManager()` will also
+            // drain it, but waiting here is an earlier, explicit
+            // barrier: we don't start `stopCaptureSession` while the
+            // prewarm is still running.
+            //
+            // The `.cancel()` call sets the Task's cancellation flag as
+            // a best-effort signal, but the actor's
+            // `prewarmRecordingPath()` does not currently poll
+            // cancellation, so the prewarm body runs to completion
+            // regardless. The actual barrier is the
+            // `await prewarmTask?.value` below.
+            prewarmTask?.cancel()
+            _ = await prewarmTask?.value
+            prewarmTask = nil
+            
             invalidateStopTimer()
             evalAutoQuitFlag = false
             let result = await self.captureSession.stopCaptureSession()

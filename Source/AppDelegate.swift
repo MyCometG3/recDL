@@ -37,6 +37,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     internal var restartSessionTask: Task<Void, Never>? = nil
     internal var setupTask: Task<Void, Never>? = nil
     internal var terminationTask: Task<Void, Never>? = nil
+    internal var prewarmTask: Task<Void, Never>? = nil
+    /// Monotonic generation counter for `prewarmTask` so that an
+    /// in-flight prewarm Task's completion handler can detect whether
+    /// it is still the "current" prewarm. See L-01 §1.2 and §1.5
+    /// for the race scenario this protects against.
+    internal var prewarmGeneration: Int = 0
     internal var previewLayerReady : Bool = false
     internal var updateTimer : Timer? = nil
     internal var stopTimer : Timer? = nil
