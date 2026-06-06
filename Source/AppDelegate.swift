@@ -80,14 +80,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Cached State Management
     /* ============================================ */
     
+    private nonisolated static func readCachedState(
+        from session: CaptureSession
+    ) async -> (recording: Bool, running: Bool) {
+        let recording = await session.isRecording()
+        let running = await session.isRunning()
+        return (recording, running)
+    }
+
     /// Sync variant for AppleScript / script callers that need a synchronous
-    /// return value. Bridges the async `refreshCachedState()` via the
-    /// `performAsync` semaphore helper. Use this only from a sync context
-    /// (`@objc public func startRecording(for:)`, etc.).
+    /// return value. Bridges the async capture-session reads via the
+    /// `performAsync` semaphore helper, then assigns the cached fields on the
+    /// main actor. Use this only from a sync context (`@objc public func
+    /// startRecording(for:)`, etc.).
     internal func updateCachedState() {
-        performAsync {
-            await self.refreshCachedState()
+        let session = captureSession
+        let state = performAsync {
+            await Self.readCachedState(from: session)
         }
+        cachedRecordingState = state.recording
+        cachedRunningState = state.running
     }
 
     /// Fire-and-forget variant for use in `defer` blocks of async functions
@@ -105,16 +117,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// back-to-back in a single async context, then assigns the cached
     /// fields. The two reads are no longer split across independent
     /// `Task.detached` invocations, so the skew window between them is
-    /// essentially eliminated. All other variants (`updateCachedState()`,
-    /// `updateCachedStateAsync()`) are thin wrappers that adapt this
-    /// method to their calling context.
+    /// essentially eliminated. The sync variant uses the same
+    /// `readCachedState(from:)` helper to avoid re-entering the main actor
+    /// from a semaphore-backed `performAsync` call.
     ///
     /// To add a new cached field, update this method only.
     internal func refreshCachedState() async {
-        let recording = await captureSession.isRecording()
-        let running = await captureSession.isRunning()
-        cachedRecordingState = recording
-        cachedRunningState = running
+        let state = await Self.readCachedState(from: captureSession)
+        cachedRecordingState = state.recording
+        cachedRunningState = state.running
     }
     
     internal var recordingStartPending: Bool {
