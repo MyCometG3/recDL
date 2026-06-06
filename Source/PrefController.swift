@@ -204,7 +204,7 @@ class PrefController: NSViewController {
             appDelegate.printVerbose("ERROR:\(self.className): \(#function) - Audio bit rate out of range: \(useAudioBitRateKbps) kbps, clamped to \(clamped) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
         }
         
-        let normalizedAudioBitRate = textAudioBitRate.integerValue * 1000
+        let normalizedAudioBitRate = UInt(textAudioBitRate.integerValue * 1000)
         
         if normalizedAudioBitRate > AudioConstants.aacBitrateThreshold {
             defaults.set(1, forKey: Keys.audioEncoder)
