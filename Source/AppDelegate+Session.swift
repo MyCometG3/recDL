@@ -421,14 +421,9 @@ extension AppDelegate {
         // Update recording button as pressed state
         recordingButton.state = NSControl.StateValue.on
         
-        // Update dock icon and badge
-        Task(priority: .background) {
-            // Update AppIcon badge to active state
-            NSApp.dockTile.badgeLabel = "REC"
-            
-            // Update AppIcon animation to active state
-            NSApp.applicationIconImage = iconActive
-        }
+        // Update dock icon and badge on MainActor.
+        NSApp.dockTile.badgeLabel = "REC"
+        NSApp.applicationIconImage = iconActive
         
         // Post notification with userInfo
         let userInfo : [String:Any] = [Keys.fileURL : movieURL]
