@@ -80,26 +80,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Cached State Management
     /* ============================================ */
     
+    /// Sync variant for AppleScript / script callers that need a synchronous
+    /// return value. Bridges the async `refreshCachedState()` via the
+    /// `performAsync` semaphore helper. Use this only from a sync context
+    /// (`@objc public func startRecording(for:)`, etc.).
     internal func updateCachedState() {
-        let session = self.captureSession
-        cachedRecordingState = performAsync {
-            await session.isRecording()
-        }
-        cachedRunningState = performAsync {
-            await session.isRunning()
+        performAsync {
+            await self.refreshCachedState()
         }
     }
-    
+
+    /// Fire-and-forget variant for use in `defer` blocks of async functions
+    /// where the caller cannot await the refresh. Internally awaits
+    /// `refreshCachedState()` (the single source of truth).
     internal func updateCachedStateAsync() {
         Task(priority: .utility) { @MainActor [weak self] in
-            guard let self = self else { return }
-            let recording = await self.captureSession.isRecording()
-            let running = await self.captureSession.isRunning()
-            self.cachedRecordingState = recording
-            self.cachedRunningState = running
+            await self?.refreshCachedState()
         }
     }
-    
+
+    /// Single source of truth for cached session state.
+    ///
+    /// Reads `isRecording()` and `isRunning()` from the capture session
+    /// back-to-back in a single async context, then assigns the cached
+    /// fields. The two reads are no longer split across independent
+    /// `Task.detached` invocations, so the skew window between them is
+    /// essentially eliminated. All other variants (`updateCachedState()`,
+    /// `updateCachedStateAsync()`) are thin wrappers that adapt this
+    /// method to their calling context.
+    ///
+    /// To add a new cached field, update this method only.
     internal func refreshCachedState() async {
         let recording = await captureSession.isRecording()
         let running = await captureSession.isRunning()
