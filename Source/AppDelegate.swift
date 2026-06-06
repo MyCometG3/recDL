@@ -121,7 +121,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// `readCachedState(from:)` helper to avoid re-entering the main actor
     /// from a semaphore-backed `performAsync` call.
     ///
-    /// To add a new cached field, update this method only.
+    /// To add a new cached field, update the shared
+    /// `readCachedState(from:)` helper and the assignments in this method.
     internal func refreshCachedState() async {
         let state = await Self.readCachedState(from: captureSession)
         cachedRecordingState = state.recording

@@ -17,10 +17,11 @@ import Cocoa
 ///   held by `AppDelegate._recordingItem` (a `private lazy var`) and
 ///   exposed read-only through `AppDelegate.recordingItem`. Constructing
 ///   additional instances is unsupported: each new instance would
-///   register additional observers for `recordingStarted` /
-///   `recordingStopped` notification keys, leading to duplicate
-///   observer dispatches (and the AppleScript scripting model assumes
-///   a single `recording` entity per process). The class is never released
+///   register additional observers for
+///   `recordingStartedNotificationKey` /
+///   `recordingStoppedNotificationKey`, leading to duplicate observer
+///   dispatches (and the AppleScript scripting model assumes a single
+///   `recording` entity per process). The class is never released
 ///   during the app's lifetime; therefore the
 ///   `nonisolated deinit { removeObserver(self) }` below is a
 ///   **defense-in-depth** safety net, not an expected cleanup path.
