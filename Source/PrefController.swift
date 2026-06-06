@@ -87,18 +87,6 @@ class PrefController: NSViewController {
         // `AppDelegate+Session.swift`), the recording pipeline will
         // happily produce a movie with an invalid AAC bitrate.
         //
-        // Clamp the value here — both the text field and the defaults
-        // — so the recording pipeline never sees an out-of-range
-        // bitrate. The `adjustAudioEncoder()` call below then maps the
-        // (now in-range) value to the right AAC variant.
-        let kbps = textAudioBitRate.integerValue
-        if kbps < Self.audioBitRateMinKbps || kbps > Self.audioBitRateMaxKbps {
-            let clamped = min(max(kbps, Self.audioBitRateMinKbps), Self.audioBitRateMaxKbps)
-            textAudioBitRate.integerValue = clamped
-            defaults.set(clamped, forKey: Keys.audioBitRate)
-            appDelegate.printVerbose("ERROR:\(self.className): \(#function) - Audio bit rate out of range: \(kbps) kbps, clamped to \(clamped) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
-        }
-        
         adjustAudioEncoder()
         
         // Refresh the UI so the error label state reflects the new
@@ -204,26 +192,23 @@ class PrefController: NSViewController {
     
     private func adjustAudioEncoder() {
         let useAudioBitRateKbps: Int = textAudioBitRate.integerValue
-        let useAudioBitRate = useAudioBitRateKbps * 1000
         
-        // Reject out-of-range input (empty, non-numeric → 0, negative,
-        // or absurdly large). The previous implementation silently fell
-        // through to HE-AACv2 in the `else` branch, which would record
-        // near-silent audio with no feedback to the user.
+        // Clamp out-of-range input (empty, non-numeric → 0, negative,
+        // or absurdly large) back into the supported range before the
+        // value can reach `applyRecordingParameters()`.
         if useAudioBitRateKbps < Self.audioBitRateMinKbps
             || useAudioBitRateKbps > Self.audioBitRateMaxKbps {
-            // Leave the previous valid `audioEncoder` defaults value
-            // untouched and surface the error via the existing label
-            // infrastructure. `refreshUI()` → `updateErrorLabel()`
-            // (see below) takes care of show/hide.
-            //
-            appDelegate.printVerbose("ERROR:\(self.className): \(#function) - Audio bit rate out of range: \(useAudioBitRateKbps) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
-            return
+            let clamped = min(max(useAudioBitRateKbps, Self.audioBitRateMinKbps), Self.audioBitRateMaxKbps)
+            textAudioBitRate.integerValue = clamped
+            defaults.set(clamped, forKey: Keys.audioBitRate)
+            appDelegate.printVerbose("ERROR:\(self.className): \(#function) - Audio bit rate out of range: \(useAudioBitRateKbps) kbps, clamped to \(clamped) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
         }
         
-        if useAudioBitRate > AudioConstants.aacBitrateThreshold {
+        let normalizedAudioBitRate = textAudioBitRate.integerValue * 1000
+        
+        if normalizedAudioBitRate > AudioConstants.aacBitrateThreshold {
             defaults.set(1, forKey: Keys.audioEncoder)
-        } else if useAudioBitRate > AudioConstants.aacHEBitrateThreshold {
+        } else if normalizedAudioBitRate > AudioConstants.aacHEBitrateThreshold {
             defaults.set(2, forKey: Keys.audioEncoder)
         } else {
             defaults.set(3, forKey: Keys.audioEncoder)

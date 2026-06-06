@@ -246,9 +246,13 @@ extension AppDelegate {
             // cancellation, so the prewarm body runs to completion
             // regardless. The actual barrier is the
             // `await prewarmTask?.value` below.
-            prewarmTask?.cancel()
-            _ = await prewarmTask?.value
-            prewarmTask = nil
+            let drainingTask = prewarmTask
+            let drainingGeneration = prewarmGeneration
+            drainingTask?.cancel()
+            _ = await drainingTask?.value
+            if prewarmGeneration == drainingGeneration {
+                prewarmTask = nil
+            }
             
             invalidateStopTimer()
             evalAutoQuitFlag = false
