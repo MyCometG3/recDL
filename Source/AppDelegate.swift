@@ -664,8 +664,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.recordForMin.integerValue = min
         
         // Present as a sheet
-        panel.beginSheetModal(for: window, completionHandler: {[unowned self] result in
+        panel.beginSheetModal(for: window, completionHandler: {[weak self] result in
             // print("\(#file) \(#line) \(#function)")
+            
+            guard let self else { return }
             
             if result == NSApplication.ModalResponse.OK {
                 // Update movie file path
@@ -701,8 +703,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.directoryURL = folder
         
         // Present as a sheet
-        panel.beginSheetModal(for: window, completionHandler: {[unowned self] (result) in
+        panel.beginSheetModal(for: window, completionHandler: {[weak self] (result) in
             // print("\(#file) \(#line) \(#function)")
+            
+            guard let self else { return }
             
             if result == NSApplication.ModalResponse.OK, let url = panel.url {
                 self.defaults.set(url, forKey: Keys.movieFolder)
