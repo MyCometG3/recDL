@@ -178,15 +178,10 @@ class PrefController: NSViewController {
         clapErrorLabel.isHidden = clapOK
         fdErrorLabel.isHidden = fdOK
         
-        // Defensive guard for an outlet that is added together with the
-        // XIB edit (Step 5.3.2). If the XIB edit and the outlet are
-        // committed separately, the IBOutlet will be nil at runtime
-        // and any access to it would trap. We use `if let` (not an
-        // early `guard let` at the top of the function) so that the
-        // existing 3 error labels above are still updated even when
-        // the audio-bit-rate outlet is unwired — the wiring mismatch
-        // is then limited to "the audio bit rate error message does
-        // not appear", not "all error labels stop working".
+        // Keep the existing error labels updating even if the XIB outlet
+        // for the bitrate indicator is missing or mismatched. In that
+        // case only the audio-bitrate warning is skipped, rather than
+        // disabling every error label in the preferences window.
         if let audioBitRateErrorLabel = audioBitRateErrorLabel {
             // Validate the audio bit rate text field. Mirrors the
             // range check in `adjustAudioEncoder()` but is decoupled
@@ -206,13 +201,13 @@ class PrefController: NSViewController {
         btnReverse34.isEnabled = audioChannelLayoutOK
     }
     
-    /// Inclusive valid range for the audio bit rate text field, in kbps.
-    /// Chosen to cover all three AAC variants that `applyRecordingParameters()`
-    /// can select (HE-AACv2 ≥ 16, HE-AAC up to 80, AAC LC up to 512).
-    /// Values outside this range are treated as user-input errors and
-    /// suppress the `audioEncoder` defaults update + show an error label.
+    /// Inclusive broad valid range for the audio bit rate text field, in kbps.
+    /// This keeps the UI wide enough for the highest AAC LC bitrate accepted
+    /// by the current recording pipeline (7.1 without LFE = 1120 kbps).
+    /// Lower per-layout ceilings are still enforced later by
+    /// `applyRecordingParameters()` via `queryBitrateRange(channelCount:)`.
     private static let audioBitRateMinKbps: Int = 16
-    private static let audioBitRateMaxKbps: Int = 512
+    private static let audioBitRateMaxKbps: Int = 1120
     
     private func adjustAudioEncoder() {
         let useAudioBitRateKbps: Int = textAudioBitRate.integerValue
