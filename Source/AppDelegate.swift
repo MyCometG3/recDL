@@ -88,6 +88,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return (recording, running)
     }
 
+    private func applyCachedState(
+        _ state: (recording: Bool, running: Bool)
+    ) {
+        cachedRecordingState = state.recording
+        cachedRunningState = state.running
+    }
+
     /// Sync variant for AppleScript / script callers that need a synchronous
     /// return value. Bridges the async capture-session reads via the
     /// `performAsync` semaphore helper, then assigns the cached fields on the
@@ -98,8 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let state = performAsync {
             await Self.readCachedState(from: session)
         }
-        cachedRecordingState = state.recording
-        cachedRunningState = state.running
+        applyCachedState(state)
     }
 
     /// Fire-and-forget variant for use in `defer` blocks of async functions
@@ -122,11 +128,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// from a semaphore-backed `performAsync` call.
     ///
     /// To add a new cached field, update the shared
-    /// `readCachedState(from:)` helper and the assignments in this method.
+    /// `readCachedState(from:)` and `applyCachedState(_:)` helpers.
     internal func refreshCachedState() async {
         let state = await Self.readCachedState(from: captureSession)
-        cachedRecordingState = state.recording
-        cachedRunningState = state.running
+        applyCachedState(state)
     }
     
     internal var recordingStartPending: Bool {
