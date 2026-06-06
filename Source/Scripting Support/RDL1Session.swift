@@ -80,4 +80,17 @@ class RDL1Session: RDL1ScriptableObject {
                                        name: .restartSessionNotificationKey,
                                        object: nil)
     }
+    
+    /// Deregister from `NotificationCenter` on deallocation.
+    /// `addObserver(_:selector:name:object:)` does not return a token;
+    /// the standard cleanup for the selector-based API is
+    /// `removeObserver(_:)` (which removes every entry registered
+    /// against `self`). This class only registers its own observer in
+    /// `init()`, so `removeObserver(self)` is exactly equivalent to
+    /// per-token removal. The `deinit` is `nonisolated` because
+    /// `@MainActor` types require that form, and `removeObserver(_:)`
+    /// is thread-safe per Foundation's contract.
+    nonisolated deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }

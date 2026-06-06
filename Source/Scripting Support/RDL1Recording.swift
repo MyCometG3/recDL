@@ -99,4 +99,14 @@ class RDL1Recording: RDL1ScriptableObject {
                                        name: .recordingStoppedNotificationKey,
                                        object: nil)
     }
+    
+    /// Deregister from `NotificationCenter` on deallocation.
+    /// `addObserver(_:selector:name:object:)` does not return a token;
+    /// `removeObserver(self)` removes both observers registered in
+    /// `init()` (started / stopped). The `deinit` is `nonisolated`
+    /// because `@MainActor` types require that form, and
+    /// `removeObserver(_:)` is thread-safe per Foundation's contract.
+    nonisolated deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
