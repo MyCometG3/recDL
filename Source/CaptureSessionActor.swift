@@ -130,9 +130,44 @@ actor CaptureSession {
     /// This method releases the underlying capture manager, effectively terminating all
     /// capture and recording operations. The manager can be recreated later with `createManager()`.
     ///
-    /// - Note: Any active capture session or recording will be stopped before destruction.
-    func destroyManager() {
-        manager = nil
+    /// - Important: This method suspends until any in-flight prewarm or recording-transition
+    ///   work has completed, then stops any active recording and capture session on the
+    ///   captured target before clearing the manager reference (only if it has not been
+    ///   replaced by a concurrent `createManager()`). Callers can rely on
+    ///   `manager == nil` for the *original* target after this method returns, with no
+    ///   dangling references to a destroyed manager and no accidental destruction of a
+    ///   manager that was created mid-flight.
+    func destroyManager() async {
+        // Capture the current manager as `target`. All stop operations and the
+        // final nil-assignment use this captured reference (and an identity check)
+        // so that a concurrent createManager() during the awaits does not cause us
+        // to stop or nil out the freshly-created manager.
+        let target = manager
+        
+        // Wait for any in-flight prewarm / recording-transition work to drain,
+        // matching the pattern used by `invalidateRecordingPreparation()`.
+        await waitUntilRecordingIdle()
+        
+        // Stop any active recording first, then any active capture session, to
+        // satisfy the doc contract ("Any active capture session or recording
+        // will be stopped before destruction"). Both calls operate on `target`,
+        // NOT on `self.manager`, in case a concurrent createManager() has
+        // swapped in a new manager during the await above.
+        if let target {
+            if target.recording {
+                await target.recordToggleAsync()
+            }
+            if target.running {
+                await target.captureStopAsync()
+            }
+        }
+        
+        // Final identity check: only clear the slot if it still points at the
+        // original `target`. If a concurrent createManager() has installed a new
+        // manager, leave it alone — the caller can destroy it separately.
+        if manager === target {
+            manager = nil
+        }
     }
     
     /// Suspends until prewarm and recording-transition work are both idle.
