@@ -172,6 +172,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    // App-lifetime singletons. The classes are explicitly designed for
+    // single-instance use (see class-level doc on RDL1Session /
+    // RDL1Recording); constructing additional instances would cause
+    // duplicate observer registration, leading to duplicate notification
+    // dispatches. The computed `get` is intentionally read-only (no `set`).
     private lazy var _sessionItem :RDL1Session = RDL1Session()
     public var sessionItem :RDL1Session? {
         get { return _sessionItem }

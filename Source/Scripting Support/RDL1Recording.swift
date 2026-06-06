@@ -11,6 +11,19 @@
 import Cocoa
 @preconcurrency import DLABridging
 
+/// AppleScript-visible `recording` element (singleton).
+///
+/// - **Lifecycle policy (app-lifetime singleton):** A single instance is
+///   held by `AppDelegate._recordingItem` (a `private lazy var`) and
+///   exposed read-only through `AppDelegate.recordingItem`. Constructing
+///   additional instances is unsupported: each new instance would
+///   register additional observers for `recordingStarted` /
+///   `recordingStopped` notification keys, leading to duplicate
+///   observer dispatches (and the AppleScript scripting model assumes
+///   a single `recording` entity per process). The class is never released
+///   during the app's lifetime; therefore the
+///   `nonisolated deinit { removeObserver(self) }` below is a
+///   **defense-in-depth** safety net, not an expected cleanup path.
 @objcMembers
 @MainActor
 class RDL1Recording: RDL1ScriptableObject {
@@ -101,6 +114,12 @@ class RDL1Recording: RDL1ScriptableObject {
     }
     
     /// Deregister from `NotificationCenter` on deallocation.
+    ///
+    /// **Note:** As an app-lifetime singleton (see class doc), this
+    /// `deinit` is **defense-in-depth** — it is not reached during normal
+    /// app execution. It exists to keep the class safe if the lifecycle
+    /// policy is ever changed.
+    ///
     /// `addObserver(_:selector:name:object:)` does not return a token;
     /// `removeObserver(self)` removes both observers registered in
     /// `init()` (started / stopped). The `deinit` is `nonisolated`
