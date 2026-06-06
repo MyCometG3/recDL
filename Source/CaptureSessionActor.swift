@@ -148,6 +148,14 @@ actor CaptureSession {
         // matching the pattern used by `invalidateRecordingPreparation()`.
         await waitUntilRecordingIdle()
         
+        // Mark teardown as a recording-transition window so that methods relying on
+        // `waitUntilRecordingIdle()` cannot interleave while stop awaits are in-flight.
+        recordingTransitionInProgress = true
+        defer {
+            recordingTransitionInProgress = false
+            signalIdleIfReady()
+        }
+        
         // Stop any active recording first, then any active capture session, to
         // satisfy the doc contract ("Any active capture session or recording
         // will be stopped before destruction"). Both calls operate on `target`,
