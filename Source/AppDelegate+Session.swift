@@ -187,11 +187,10 @@ extension AppDelegate {
             // Track prewarm Task so stopSession() can wait for it to
             // finish before proceeding with teardown. The actor-side
             // `prewarmInProgress` gate still serializes calls, and
-            // M-11's `waitUntilRecordingIdle()` in `destroyManager()`
-            // already waits for any in-flight prewarm before nil-ing
-            // the manager. Storing the reference here gives stopSession
-            // an earlier, explicit "wait for prewarm to drain" point —
-            // a defense-in-depth layer on top of M-11.
+            // `destroyManager()` also waits for any in-flight prewarm
+            // before clearing the manager. Storing the reference here
+            // gives stopSession an earlier, explicit "wait for prewarm
+            // to drain" point.
             //
             // Note: `prewarmTask?.cancel()` in stopSession sets the
             // Task's cancellation flag, but the actor's
@@ -206,9 +205,9 @@ extension AppDelegate {
             // "current" prewarm. The capture-and-compare pattern against
             // `prewarmGeneration` prevents an old prewarm's nil-out closure
             // from wiping out a newer `prewarmTask` reference that has
-            // since been installed (e.g. a stopSession/startSession cycle
-            // before the old prewarm's MainActor.run fires). See L-01 §1.5
-            // for the exact race scenario.
+            // since been installed (for example, when stopSession and a
+            // subsequent startSession run before the old prewarm's
+            // MainActor.run block executes).
             prewarmGeneration += 1
             let myGeneration = prewarmGeneration
             prewarmTask = Task(priority: .utility) { [captureSession, weak self] in
@@ -236,11 +235,10 @@ extension AppDelegate {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
             
             // Drain any in-flight prewarm Task before proceeding with
-            // teardown. The actor's `prewarmInProgress` gate + M-11's
-            // `waitUntilRecordingIdle()` in `destroyManager()` will also
-            // drain it, but waiting here is an earlier, explicit
-            // barrier: we don't start `stopCaptureSession` while the
-            // prewarm is still running.
+            // teardown. The actor's `prewarmInProgress` gate and
+            // `destroyManager()` also wait for it, but waiting here is
+            // an earlier, explicit barrier: we do not start
+            // `stopCaptureSession` while the prewarm is still running.
             //
             // The `.cancel()` call sets the Task's cancellation flag as
             // a best-effort signal, but the actor's

@@ -38,7 +38,7 @@ class PrefController: NSViewController {
     @IBOutlet weak var vsErrorLabel: NSTextField!
     @IBOutlet weak var clapErrorLabel: NSTextField!
     @IBOutlet weak var fdErrorLabel: NSTextField!
-    @IBOutlet weak var audioBitRateErrorLabel: NSTextField!
+    @IBOutlet weak var audioBitRateErrorLabel: NSTextField?
 
     @IBOutlet weak var buttonAudioEncode: NSButton!
     @IBOutlet weak var textAudioBitRate: NSTextField!
@@ -96,7 +96,7 @@ class PrefController: NSViewController {
             let clamped = min(max(kbps, Self.audioBitRateMinKbps), Self.audioBitRateMaxKbps)
             textAudioBitRate.integerValue = clamped
             defaults.set(clamped, forKey: Keys.audioBitRate)
-            appDelegate.printVerbose("ERROR:PrefController: \(#function) - Audio bit rate out of range: \(kbps) kbps, clamped to \(clamped) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
+            appDelegate.printVerbose("ERROR:\(self.className): \(#function) - Audio bit rate out of range: \(kbps) kbps, clamped to \(clamped) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
         }
         
         adjustAudioEncoder()
@@ -178,10 +178,10 @@ class PrefController: NSViewController {
         clapErrorLabel.isHidden = clapOK
         fdErrorLabel.isHidden = fdOK
         
-        // Keep the existing error labels updating even if the XIB outlet
-        // for the bitrate indicator is missing or mismatched. In that
-        // case only the audio-bitrate warning is skipped, rather than
-        // disabling every error label in the preferences window.
+        // Keep the existing error labels updating even if the bitrate
+        // indicator outlet is nil at runtime. In that case only the
+        // audio-bitrate warning is skipped, rather than disabling every
+        // error label in the preferences window.
         if let audioBitRateErrorLabel = audioBitRateErrorLabel {
             // Validate the audio bit rate text field. Mirrors the
             // range check in `adjustAudioEncoder()` but is decoupled
@@ -224,12 +224,7 @@ class PrefController: NSViewController {
             // infrastructure. `refreshUI()` → `updateErrorLabel()`
             // (see below) takes care of show/hide.
             //
-            // Note: `printVerbose(_:)` and `className` are defined on
-            // `AppDelegate`, not on `PrefController`. Route the log
-            // through the existing `appDelegate` outlet to keep the
-            // verbose-log formatting consistent with the rest of the
-            // app.
-            appDelegate.printVerbose("ERROR:PrefController: \(#function) - Audio bit rate out of range: \(useAudioBitRateKbps) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
+            appDelegate.printVerbose("ERROR:\(self.className): \(#function) - Audio bit rate out of range: \(useAudioBitRateKbps) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
             return
         }
         
