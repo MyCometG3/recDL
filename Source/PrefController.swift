@@ -39,7 +39,7 @@ class PrefController: NSViewController {
     @IBOutlet weak var clapErrorLabel: NSTextField!
     @IBOutlet weak var fdErrorLabel: NSTextField!
     @IBOutlet weak var audioBitRateErrorLabel: NSTextField!
-
+    
     @IBOutlet weak var buttonAudioEncode: NSButton!
     @IBOutlet weak var textAudioBitRate: NSTextField!
     
@@ -77,7 +77,7 @@ class PrefController: NSViewController {
             refreshUI()
         }
     }
-
+    
     @IBAction func updateAudioEncoder(_ sender: Any) {
         // The XIB binds `textAudioBitRate.value` to
         // `values.audioBitRate`, so by the time this IBAction fires the
