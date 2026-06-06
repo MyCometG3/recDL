@@ -38,7 +38,7 @@ class PrefController: NSViewController {
     @IBOutlet weak var vsErrorLabel: NSTextField!
     @IBOutlet weak var clapErrorLabel: NSTextField!
     @IBOutlet weak var fdErrorLabel: NSTextField!
-    @IBOutlet weak var audioBitRateErrorLabel: NSTextField?
+    @IBOutlet weak var audioBitRateErrorLabel: NSTextField!
 
     @IBOutlet weak var buttonAudioEncode: NSButton!
     @IBOutlet weak var textAudioBitRate: NSTextField!
@@ -178,21 +178,14 @@ class PrefController: NSViewController {
         clapErrorLabel.isHidden = clapOK
         fdErrorLabel.isHidden = fdOK
         
-        // Keep the existing error labels updating even if the bitrate
-        // indicator outlet is nil at runtime. In that case only the
-        // audio-bitrate warning is skipped, rather than disabling every
-        // error label in the preferences window.
-        if let audioBitRateErrorLabel = audioBitRateErrorLabel {
-            // Validate the audio bit rate text field. Mirrors the
-            // range check in `adjustAudioEncoder()` but is decoupled
-            // so the label reflects the current field state even
-            // when the user is mid-edit and the IBAction has not yet
-            // fired.
-            let kbps = textAudioBitRate.integerValue
-            let audioBitRateOK = kbps >= Self.audioBitRateMinKbps
-                && kbps <= Self.audioBitRateMaxKbps
-            audioBitRateErrorLabel.isHidden = audioBitRateOK
-        }
+        // Validate the audio bit rate text field. Mirrors the range
+        // check in `adjustAudioEncoder()` but is decoupled so the
+        // label reflects the current field state even when the user
+        // is mid-edit and the IBAction has not yet fired.
+        let kbps = textAudioBitRate.integerValue
+        let audioBitRateOK = kbps >= Self.audioBitRateMinKbps
+            && kbps <= Self.audioBitRateMaxKbps
+        audioBitRateErrorLabel.isHidden = audioBitRateOK
     }
     
     private func updateAudioLayout() {
