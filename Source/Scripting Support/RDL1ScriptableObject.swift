@@ -41,7 +41,21 @@ class RDL1ScriptableObject: NSObject {
     }
     
     private func objectSpecifierCore() -> ObjectSpecifierBox {
-        let desc = container.classDescription as! NSScriptClassDescription
+        guard let container else {
+            return ObjectSpecifierBox(specifier: nil)
+        }
+        // `classDescription` is declared non-optional in the AppKit
+        // bridge but the actual returned object must be an
+        // NSScriptClassDescription to build a property specifier.
+        // Force-casting (`as!`) would crash if the container's class
+        // description were ever something else (e.g. an sdef mismatch
+        // during scripting reload). Fall back to a nil specifier in
+        // that defensive path so the failure surfaces as a "no
+        // object specifier" to the scripting runtime rather than a
+        // hard crash.
+        guard let desc = container.classDescription as? NSScriptClassDescription else {
+            return ObjectSpecifierBox(specifier: nil)
+        }
         let spec = (container == NSApp) ? nil : container.objectSpecifier
         let prop = containerProperty
         let specifier = NSPropertySpecifier(containerClassDescription: desc,

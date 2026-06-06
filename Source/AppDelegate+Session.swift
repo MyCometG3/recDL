@@ -184,8 +184,44 @@ extension AppDelegate {
             printVerbose("NOTICE:\(self.className): \(#function) - Starting capture session completed.")
             await refreshCachedState()
             
-            Task(priority: .utility) { [captureSession] in
+            // Track prewarm Task so stopSession() can wait for it to
+            // finish before proceeding with teardown. The actor-side
+            // `prewarmInProgress` gate still serializes calls, and
+            // `destroyManager()` also waits for any in-flight prewarm
+            // before clearing the manager. Storing the reference here
+            // gives stopSession an earlier, explicit "wait for prewarm
+            // to drain" point.
+            //
+            // Note: `prewarmTask?.cancel()` in stopSession sets the
+            // Task's cancellation flag, but the actor's
+            // `prewarmRecordingPath()` does not currently poll
+            // `Task.isCancelled` / `Task.checkCancellation()`, so the
+            // prewarm body runs to completion regardless. The actual
+            // benefit is the `await prewarmTask?.value` wait, not the
+            // cancel itself.
+            //
+            // On completion (or cancellation) we hop back to the main actor
+            // and clear the property — but only if we are still the
+            // "current" prewarm. The capture-and-compare pattern against
+            // `prewarmGeneration` prevents an old prewarm's nil-out closure
+            // from wiping out a newer `prewarmTask` reference that has
+            // since been installed (for example, when stopSession and a
+            // subsequent startSession run before the old prewarm's
+            // MainActor.run block executes).
+            prewarmGeneration += 1
+            let myGeneration = prewarmGeneration
+            prewarmTask = Task(priority: .utility) { [captureSession, weak self] in
                 _ = await captureSession.prewarmRecordingPath()
+                await MainActor.run {
+                    guard let self else { return }
+                    // Only clear the property if we are still the most
+                    // recent prewarm. A subsequent startSession has
+                    // bumped `prewarmGeneration`, and stopSession has
+                    // already cleared `prewarmTask` to nil; in either
+                    // case we must not touch the property.
+                    guard self.prewarmGeneration == myGeneration else { return }
+                    self.prewarmTask = nil
+                }
             }
         } else {
             printVerbose("ERROR:\(self.className): \(#function) - Starting capture session failed.")
@@ -197,6 +233,27 @@ extension AppDelegate {
         
         if manager != nil {
             printVerbose("NOTICE:\(self.className): \(#function) - Stopping capture session...")
+            
+            // Drain any in-flight prewarm Task before proceeding with
+            // teardown. The actor's `prewarmInProgress` gate and
+            // `destroyManager()` also wait for it, but waiting here is
+            // an earlier, explicit barrier: we do not start
+            // `stopCaptureSession` while the prewarm is still running.
+            //
+            // The `.cancel()` call sets the Task's cancellation flag as
+            // a best-effort signal, but the actor's
+            // `prewarmRecordingPath()` does not currently poll
+            // cancellation, so the prewarm body runs to completion
+            // regardless. The actual barrier is the
+            // `await prewarmTask?.value` below.
+            let drainingTask = prewarmTask
+            let drainingGeneration = prewarmGeneration
+            drainingTask?.cancel()
+            _ = await drainingTask?.value
+            if prewarmGeneration == drainingGeneration {
+                prewarmTask = nil
+            }
+            
             invalidateStopTimer()
             evalAutoQuitFlag = false
             let result = await self.captureSession.stopCaptureSession()
@@ -237,12 +294,23 @@ extension AppDelegate {
             defer {
                 self.restartSessionTask = nil
             }
+            // Honor cancellation as early as possible so that termination
+            // (which calls `restartSessionTask?.cancel()` then `await`s the
+            // value) does not have to wait for stopSession() to complete.
+            if Task.isCancelled {
+                return
+            }
             // Stop Session
             self.stopUpdateStatus()
             self.defaults.set(false, forKey: Keys.showAlternate)
             
             self.removePreviewLayer()
             self.manager?.videoPreview = nil
+            
+            // Re-check before the expensive async teardown.
+            if Task.isCancelled {
+                return
+            }
             await self.stopSession()
             
             // Honor cancellation before starting a fresh session.

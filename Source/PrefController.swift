@@ -38,7 +38,8 @@ class PrefController: NSViewController {
     @IBOutlet weak var vsErrorLabel: NSTextField!
     @IBOutlet weak var clapErrorLabel: NSTextField!
     @IBOutlet weak var fdErrorLabel: NSTextField!
-
+    @IBOutlet weak var audioBitRateErrorLabel: NSTextField!
+    
     @IBOutlet weak var buttonAudioEncode: NSButton!
     @IBOutlet weak var textAudioBitRate: NSTextField!
     
@@ -76,9 +77,22 @@ class PrefController: NSViewController {
             refreshUI()
         }
     }
-
+    
     @IBAction func updateAudioEncoder(_ sender: Any) {
+        // The XIB binds `textAudioBitRate.value` to
+        // `values.audioBitRate`, so by the time this IBAction fires the
+        // (possibly invalid) value has already been written to
+        // `Keys.audioBitRate` via `NSUserDefaultsController`. If we let
+        // an out-of-range value reach `applyRecordingParameters()` (in
+        // `AppDelegate+Session.swift`), the recording pipeline will
+        // happily produce a movie with an invalid AAC bitrate.
+        //
         adjustAudioEncoder()
+        
+        // Refresh the UI so the error label state reflects the new
+        // value immediately (without this, the user would have to
+        // toggle another control to see the error / non-error state).
+        refreshUI()
     }
     
     @IBAction func restartSession(_ sender: Any) {
@@ -151,6 +165,15 @@ class PrefController: NSViewController {
         vsErrorLabel.isHidden = videoStyleOK
         clapErrorLabel.isHidden = clapOK
         fdErrorLabel.isHidden = fdOK
+        
+        // Validate the audio bit rate text field. Mirrors the range
+        // check in `adjustAudioEncoder()` but is decoupled so the
+        // label reflects the current field state even when the user
+        // is mid-edit and the IBAction has not yet fired.
+        let kbps = textAudioBitRate.integerValue
+        let audioBitRateOK = kbps >= Self.audioBitRateMinKbps
+            && kbps <= Self.audioBitRateMaxKbps
+        audioBitRateErrorLabel.isHidden = audioBitRateOK
     }
     
     private func updateAudioLayout() {
@@ -159,13 +182,33 @@ class PrefController: NSViewController {
         btnReverse34.isEnabled = audioChannelLayoutOK
     }
     
+    /// Inclusive broad valid range for the audio bit rate text field, in kbps.
+    /// This keeps the UI wide enough for the highest AAC LC bitrate accepted
+    /// by the current recording pipeline (7.1 without LFE = 1120 kbps).
+    /// Lower per-layout ceilings are still enforced later by
+    /// `applyRecordingParameters()` via `queryBitrateRange(channelCount:)`.
+    private static let audioBitRateMinKbps: Int = 16
+    private static let audioBitRateMaxKbps: Int = 1120
+    
     private func adjustAudioEncoder() {
-        let useAudioBitRateKbps :Int = textAudioBitRate.integerValue
-        let useAudioBitRate = useAudioBitRateKbps * 1000
+        let useAudioBitRateKbps: Int = textAudioBitRate.integerValue
         
-        if useAudioBitRate > AudioConstants.aacBitrateThreshold {
+        // Clamp out-of-range input (empty, non-numeric → 0, negative,
+        // or absurdly large) back into the supported range before the
+        // value can reach `applyRecordingParameters()`.
+        if useAudioBitRateKbps < Self.audioBitRateMinKbps
+            || useAudioBitRateKbps > Self.audioBitRateMaxKbps {
+            let clamped = min(max(useAudioBitRateKbps, Self.audioBitRateMinKbps), Self.audioBitRateMaxKbps)
+            textAudioBitRate.integerValue = clamped
+            defaults.set(clamped, forKey: Keys.audioBitRate)
+            appDelegate.printVerbose("ERROR:\(self.className): \(#function) - Audio bit rate out of range: \(useAudioBitRateKbps) kbps, clamped to \(clamped) kbps (valid: \(Self.audioBitRateMinKbps)–\(Self.audioBitRateMaxKbps))")
+        }
+        
+        let normalizedAudioBitRate = UInt(textAudioBitRate.integerValue * 1000)
+        
+        if normalizedAudioBitRate > AudioConstants.aacBitrateThreshold {
             defaults.set(1, forKey: Keys.audioEncoder)
-        } else if useAudioBitRate > AudioConstants.aacHEBitrateThreshold {
+        } else if normalizedAudioBitRate > AudioConstants.aacHEBitrateThreshold {
             defaults.set(2, forKey: Keys.audioEncoder)
         } else {
             defaults.set(3, forKey: Keys.audioEncoder)
