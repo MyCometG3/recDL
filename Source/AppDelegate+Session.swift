@@ -292,12 +292,23 @@ extension AppDelegate {
             defer {
                 self.restartSessionTask = nil
             }
+            // Honor cancellation as early as possible so that termination
+            // (which calls `restartSessionTask?.cancel()` then `await`s the
+            // value) does not have to wait for stopSession() to complete.
+            if Task.isCancelled {
+                return
+            }
             // Stop Session
             self.stopUpdateStatus()
             self.defaults.set(false, forKey: Keys.showAlternate)
             
             self.removePreviewLayer()
             self.manager?.videoPreview = nil
+            
+            // Re-check before the expensive async teardown.
+            if Task.isCancelled {
+                return
+            }
             await self.stopSession()
             
             // Honor cancellation before starting a fresh session.
