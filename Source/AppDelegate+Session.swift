@@ -240,11 +240,11 @@ extension AppDelegate {
             // Stop Session
             self.stopUpdateStatus()
             self.defaults.set(false, forKey: Keys.showAlternate)
-
+            
             self.removePreviewLayer()
             self.manager?.videoPreview = nil
             await self.stopSession()
-
+            
             // Honor cancellation before starting a fresh session.
             do {
                 try Task.checkCancellation()

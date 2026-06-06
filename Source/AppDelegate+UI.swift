@@ -160,7 +160,7 @@ extension AppDelegate {
             }
         }
     }
-
+    
     internal func resetDockIcon() {
         NSApp.dockTile.badgeLabel = nil
         NSApp.applicationIconImage = iconIdle
