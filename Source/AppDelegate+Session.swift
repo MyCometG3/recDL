@@ -421,9 +421,14 @@ extension AppDelegate {
         // Update recording button as pressed state
         recordingButton.state = NSControl.StateValue.on
         
-        // Update dock icon and badge on MainActor.
-        NSApp.dockTile.badgeLabel = "REC"
-        NSApp.applicationIconImage = iconActive
+        // Intentionally enqueue these AppKit updates on the next turn of the
+        // main-actor executor to avoid adding synchronous UI work to the
+        // recording-start critical path. Keep this as `Task { @MainActor ... }`
+        // to preserve deferred execution while staying concurrency-safe.
+        Task { @MainActor in
+            NSApp.dockTile.badgeLabel = "REC"
+            NSApp.applicationIconImage = iconActive
+        }
         
         // Post notification with userInfo
         let userInfo : [String:Any] = [Keys.fileURL : movieURL]
