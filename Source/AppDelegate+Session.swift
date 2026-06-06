@@ -410,6 +410,34 @@ extension AppDelegate {
         return (min: minRate, max: maxRate)
     }
     
+    /// Apply common post-recording-start UI/state updates.
+    /// Used by both `startRecording(for:)` and `startRecordingNonBlocking(for:)`
+    /// to keep the scheduleStopTimer / button / dock / notification sequence
+    /// in a single place.
+    private func finalizeRecordingStart(sec: Int, movieURL: URL) {
+        // Schedule StopTimer if required
+        scheduleStopTimer(sec)
+        
+        // Update recording button as pressed state
+        recordingButton.state = NSControl.StateValue.on
+        
+        // Update dock icon and badge
+        Task(priority: .background) {
+            // Update AppIcon badge to active state
+            NSApp.dockTile.badgeLabel = "REC"
+            
+            // Update AppIcon animation to active state
+            NSApp.applicationIconImage = iconActive
+        }
+        
+        // Post notification with userInfo
+        let userInfo : [String:Any] = [Keys.fileURL : movieURL]
+        let notification = Notification(name: .recordingStartedNotificationKey,
+                                        object: self,
+                                        userInfo: userInfo)
+        notificationCenter.post(notification)
+    }
+    
     public func startRecording(for sec: Int) {
         // print("\(#file) \(#line) \(#function)")
         
@@ -431,29 +459,7 @@ extension AppDelegate {
             updateCachedState()
             
             if recordingStarted {
-                
-                // Schedule StopTimer if required
-                scheduleStopTimer(sec)
-                
-                // Update recording button as pressed state
-                recordingButton.state = NSControl.StateValue.on
-                
-                // Update dock icon and badge
-                Task(priority: .background) {
-                    // Update AppIcon badge to active state
-                    NSApp.dockTile.badgeLabel = "REC"
-                    
-                    // Update AppIcon animation to active state
-                    NSApp.applicationIconImage = iconActive
-                }
-                
-                // Post notification with userInfo
-                let userInfo : [String:Any] = [Keys.fileURL : movieURL]
-                let notification = Notification(name: .recordingStartedNotificationKey,
-                                                object: self,
-                                                userInfo: userInfo)
-                notificationCenter.post(notification)
-                
+                finalizeRecordingStart(sec: sec, movieURL: movieURL)
                 return
             }
         }
@@ -492,27 +498,7 @@ extension AppDelegate {
         let recordingStarted = await self.captureSession.startRecording(to: movieURL)
         
         if recordingStarted {
-            // Schedule StopTimer if required
-            scheduleStopTimer(sec)
-            
-            // Update recording button as pressed state
-            recordingButton.state = NSControl.StateValue.on
-            
-            // Update dock icon and badge
-            Task(priority: .background) {
-                // Update AppIcon badge to active state
-                NSApp.dockTile.badgeLabel = "REC"
-                
-                // Update AppIcon animation to active state
-                NSApp.applicationIconImage = iconActive
-            }
-            
-            // Post notification with userInfo
-            let userInfo : [String:Any] = [Keys.fileURL : movieURL]
-            let notification = Notification(name: .recordingStartedNotificationKey,
-                                            object: self,
-                                            userInfo: userInfo)
-            notificationCenter.post(notification)
+            finalizeRecordingStart(sec: sec, movieURL: movieURL)
             
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
             printVerbose("TRACE:\(self.className): \(#function) - success \(elapsedMs)ms ")
