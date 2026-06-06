@@ -80,31 +80,58 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Cached State Management
     /* ============================================ */
     
-    internal func updateCachedState() {
-        let session = self.captureSession
-        cachedRecordingState = performAsync {
-            await session.isRecording()
-        }
-        cachedRunningState = performAsync {
-            await session.isRunning()
-        }
+    private nonisolated static func readCachedState(
+        from session: CaptureSession
+    ) async -> (recording: Bool, running: Bool) {
+        let recording = await session.isRecording()
+        let running = await session.isRunning()
+        return (recording, running)
     }
-    
+
+    private func applyCachedState(
+        _ state: (recording: Bool, running: Bool)
+    ) {
+        cachedRecordingState = state.recording
+        cachedRunningState = state.running
+    }
+
+    /// Sync variant for AppleScript / script callers that need a synchronous
+    /// return value. Bridges the async capture-session reads via the
+    /// `performAsync` semaphore helper, then assigns the cached fields on the
+    /// main actor. Use this only from a sync context (`@objc public func
+    /// startRecording(for:)`, etc.).
+    internal func updateCachedState() {
+        let session = captureSession
+        let state = performAsync {
+            await Self.readCachedState(from: session)
+        }
+        applyCachedState(state)
+    }
+
+    /// Fire-and-forget variant for use in `defer` blocks of async functions
+    /// where the caller cannot await the refresh. Internally awaits
+    /// `refreshCachedState()` (the single source of truth).
     internal func updateCachedStateAsync() {
         Task(priority: .utility) { @MainActor [weak self] in
-            guard let self = self else { return }
-            let recording = await self.captureSession.isRecording()
-            let running = await self.captureSession.isRunning()
-            self.cachedRecordingState = recording
-            self.cachedRunningState = running
+            await self?.refreshCachedState()
         }
     }
-    
+
+    /// Single source of truth for cached session state.
+    ///
+    /// Reads `isRecording()` and `isRunning()` from the capture session
+    /// back-to-back in a single async context, then assigns the cached
+    /// fields. The two reads are no longer split across independent
+    /// `Task.detached` invocations, so the skew window between them is
+    /// essentially eliminated. The sync variant uses the same
+    /// `readCachedState(from:)` helper to avoid re-entering the main actor
+    /// from a semaphore-backed `performAsync` call.
+    ///
+    /// To add a new cached field, update the shared
+    /// `readCachedState(from:)` and `applyCachedState(_:)` helpers.
     internal func refreshCachedState() async {
-        let recording = await captureSession.isRecording()
-        let running = await captureSession.isRunning()
-        cachedRecordingState = recording
-        cachedRunningState = running
+        let state = await Self.readCachedState(from: captureSession)
+        applyCachedState(state)
     }
     
     internal var recordingStartPending: Bool {
@@ -162,6 +189,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    // App-lifetime singletons. The classes are explicitly designed for
+    // single-instance use (see class-level doc on RDL1Session /
+    // RDL1Recording); constructing additional instances would cause
+    // duplicate observer registration, leading to duplicate notification
+    // dispatches. The computed `get` is intentionally read-only (no `set`).
     private lazy var _sessionItem :RDL1Session = RDL1Session()
     public var sessionItem :RDL1Session? {
         get { return _sessionItem }
