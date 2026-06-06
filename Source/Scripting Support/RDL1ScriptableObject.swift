@@ -41,6 +41,9 @@ class RDL1ScriptableObject: NSObject {
     }
     
     private func objectSpecifierCore() -> ObjectSpecifierBox {
+        guard let container else {
+            return ObjectSpecifierBox(specifier: nil)
+        }
         // `classDescription` is declared non-optional in the AppKit
         // bridge but the actual returned object must be an
         // NSScriptClassDescription to build a property specifier.
