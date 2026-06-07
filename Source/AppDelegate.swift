@@ -87,14 +87,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let running = await session.isRunning()
         return (recording, running)
     }
-
+    
     private func applyCachedState(
         _ state: (recording: Bool, running: Bool)
     ) {
         cachedRecordingState = state.recording
         cachedRunningState = state.running
     }
-
+    
     /// Sync variant for AppleScript / script callers that need a synchronous
     /// return value. Bridges the async capture-session reads via the
     /// `performAsync` semaphore helper, then assigns the cached fields on the
@@ -107,7 +107,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         applyCachedState(state)
     }
-
+    
     /// Fire-and-forget variant for use in `defer` blocks of async functions
     /// where the caller cannot await the refresh. Internally awaits
     /// `refreshCachedState()` (the single source of truth).
@@ -116,7 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             await self?.refreshCachedState()
         }
     }
-
+    
     /// Single source of truth for cached session state.
     ///
     /// Reads `isRecording()` and `isRunning()` from the capture session

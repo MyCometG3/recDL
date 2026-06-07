@@ -52,14 +52,14 @@ enum Keys {
     
     static let newSessionData = "newSessionData"
     static let newRecordingData = "newRecordingData"
-
+    
     /* ==================================================== */
     
     // Extra control
     static let showAlternate = "showAlternate"
     static let forceMute = "forceMute"
     static let hideInvisible = "hideInvisible"
-
+    
     // Control Recordings
     static let prefix = "prefix"
     static let autoQuit = "autoQuit"
@@ -68,7 +68,7 @@ enum Keys {
     static let maxDuration = "maxDuration"
     
     static let movieFolder = "movieFolder"
-
+    
     /* ==================================================== */
     
     // Control Menus
@@ -89,12 +89,12 @@ enum Keys {
     static let timeCodeSource = "timeCodeSource"
     static let videoConnection = "videoConnection"
     static let audioConnection = "audioConnection"
-
+    
     static let videoEncode = "videoEncode"
     static let videoEncoder = "videoEncoder"
     static let videoBitRate = "videoBitRate"
     static let videoFieldDetail = "videoFieldDetail"
-
+    
     static let audioDepth = "audioDepth"
     static let audioEncode = "audioEncode"
     static let audioEncoder = "audioEncoder"
@@ -120,7 +120,7 @@ enum Keys {
     static let idle = "idle"
     static let inactive = "inactive"
     static let active = "active"
-
+    
     // Pref popup buttons
     static let enableDisplayMode = "enableDisplayMode"
     static let enableVideoConnection = "enableVideoConnection"

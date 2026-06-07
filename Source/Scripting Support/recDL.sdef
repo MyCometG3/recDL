@@ -12,7 +12,7 @@
 -->
 <dictionary xmlns:xi="http://www.w3.org/2003/XInclude" title="recDL Terminology">
     <xi:include href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef" xpointer="xpointer(/dictionary/suite)"/>
-
+    
     <!-- ###################################################################################################### -->
     
     <suite name="recDL Suite" code="RecD" description="recDL Script Suite">
@@ -40,7 +40,7 @@
                 <cocoa key="autoQuit"/>
             </parameter>
         </command>
-
+        
         <class-extension extends="application">
             <cocoa class="NSApplication" />
             
@@ -111,9 +111,9 @@
             </property>
             
             <!-- TODO -->
-<!--        <element type="deviceInfo" access="r">-->
-<!--            <cocoa key="deviceList" />-->
-<!--        </element>-->
+            <!--        <element type="deviceInfo" access="r">-->
+            <!--            <cocoa key="deviceList" />-->
+            <!--        </element>-->
         </class>
         
         <class name="deviceInfo" code="dInf" description="AVCaptureDevice information." inherits="item">
@@ -124,7 +124,7 @@
             <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the item.">
                 <cocoa key="uniqueID" />
             </property>
-
+            
             <property name="modelName" code="ModN" type="text" access="r" description="modelName">
                 <cocoa key="modelName"/>
             </property>
@@ -164,8 +164,8 @@
             <property name="outputAudioSetting" code="ouAS" type="audioSetting" access="r" description="outputAudioSetting">
                 <cocoa key="outputAudioSetting"/>
             </property>
-             -->
-
+            -->
+            
             <element type="supportedInputVideoSetting" access="r" description="supportedInputVideoSettings">
                 <cocoa key="inputVideoSettingArray" />
             </element>
@@ -181,8 +181,8 @@
         <class name="supportedOutputVideoSetting" code="sOVS" description="supported output videoSetting." inherits="videoSetting" plural="supportedOutputVideoSettings">
             <cocoa class="recDL.RDL1VideoSetting" />
         </class>
-         -->
-
+        -->
+        
         <class name="supportedInputVideoSetting" code="sIVS" description="supported input videoSetting." inherits="videoSetting" plural="supportedInputVideoSettings">
             <cocoa class="recDL.RDL1VideoSetting" />
         </class>
@@ -195,7 +195,7 @@
             <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the item.">
                 <cocoa key="uniqueID" />
             </property>
-
+            
             <property name="width" code="Widt" type="integer" access="r" description="width">
                 <cocoa key="width"/>
             </property>
@@ -257,7 +257,7 @@
             <property name="id" code="ID  " type="text" access="r" description="The unique identifier of the item.">
                 <cocoa key="uniqueID" />
             </property>
-
+            
             <property name="sampleSize" code="sSiz" type="integer" access="r" description="sampleSize">
                 <cocoa key="sampleSize"/>
             </property>
@@ -271,7 +271,7 @@
                 <cocoa key="sampleRate"/>
             </property>
         </class>
-
+        
     </suite>
     
 </dictionary>
