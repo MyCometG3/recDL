@@ -35,7 +35,7 @@ recDL is a simple, AV capture application for Blackmagic DeckLink devices.
 - SMPTE timecode ready (* Depends on video source - VANC)
 
 #### Development environment
-- macOS 26.5 Tahoe
+- macOS 26.5.1 Tahoe
 - Xcode 26.5
 - Swift 6.3.2
 
