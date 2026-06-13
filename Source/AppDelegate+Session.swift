@@ -517,10 +517,12 @@ extension AppDelegate {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
             // Best-effort cleanup: when startRecording returns false and cancel
             // has been observed, the recording may have left a partial file at
-            // movieURL. Remove it best-effort. Failure is tolerated to keep the
-            // terminate path responsive.
+            // movieURL. Run the removal off the main actor so the terminate
+            // path returns immediately even on slow I/O. Failure is tolerated.
             if Task.isCancelled {
-                try? FileManager.default.removeItem(at: movieURL)
+                Task.detached(priority: .background) {
+                    try? FileManager.default.removeItem(at: movieURL)
+                }
             }
         }
     }
