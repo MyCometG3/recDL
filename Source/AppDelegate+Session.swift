@@ -501,7 +501,8 @@ extension AppDelegate {
         printVerbose("TRACE:\(self.className): \(#function) - begin ")
         
         applyRecordingParameters()
-        
+        guard !Task.isCancelled else { return }
+
         let recordingStarted = await self.captureSession.startRecording(to: movieURL)
         
         if recordingStarted {
@@ -513,6 +514,11 @@ extension AppDelegate {
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
             printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
+            // Best-effort cleanup: startRecording が成功し、かつ cancel 観測された稀ケースで
+            // movieURL 上の録画ファイルを削除。失敗しても terminate 経路を遅延させない。
+            if Task.isCancelled {
+                try? FileManager.default.removeItem(at: movieURL)
+            }
         }
     }
     

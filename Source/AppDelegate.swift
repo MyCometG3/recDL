@@ -143,6 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func prepareForTermination() async {
+        recordingStartTask?.cancel()
         await recordingStartTask?.value
         restartSessionTask?.cancel()
         await restartSessionTask?.value
@@ -164,6 +165,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             defer {
                 self.recordingStartTask = nil
             }
+            guard !Task.isCancelled else { return }
             await self.startRecordingNonBlocking(for: sec)
         }
     }
