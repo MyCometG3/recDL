@@ -506,9 +506,9 @@ extension AppDelegate {
         guard !Task.isCancelled else { return }
 
         let recordingStarted = await self.captureSession.startRecording(to: movieURL)
-        guard !Task.isCancelled else { return }
 
         if recordingStarted {
+            guard !Task.isCancelled else { return }
             finalizeRecordingStart(sec: sec, movieURL: movieURL)
             
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
