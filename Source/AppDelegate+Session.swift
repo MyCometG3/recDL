@@ -485,7 +485,8 @@ extension AppDelegate {
         }
         
         let isRecording = await self.captureSession.isRecording()
-        
+        guard !Task.isCancelled else { return }
+
         guard manager != nil, !isRecording, let movieURL = createMovieURL() else {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
             return
@@ -499,12 +500,15 @@ extension AppDelegate {
         
         let startedAt = CFAbsoluteTimeGetCurrent()
         printVerbose("TRACE:\(self.className): \(#function) - begin ")
-        
+
+        guard !Task.isCancelled else { return }
         applyRecordingParameters()
-        
+        guard !Task.isCancelled else { return }
+
         let recordingStarted = await self.captureSession.startRecording(to: movieURL)
-        
+
         if recordingStarted {
+            guard !Task.isCancelled else { return }
             finalizeRecordingStart(sec: sec, movieURL: movieURL)
             
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
@@ -513,6 +517,15 @@ extension AppDelegate {
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
             printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
+            // Best-effort cleanup: when startRecording returns false and cancel
+            // has been observed, the recording may have left a partial file at
+            // movieURL. Run the removal off the main actor so the terminate
+            // path returns immediately even on slow I/O. Failure is tolerated.
+            if Task.isCancelled {
+                Task.detached(priority: .background) {
+                    try? FileManager.default.removeItem(at: movieURL)
+                }
+            }
         }
     }
     
