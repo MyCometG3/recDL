@@ -514,8 +514,10 @@ extension AppDelegate {
             let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000.0)
             printVerbose("TRACE:\(self.className): \(#function) - failed \(elapsedMs)ms ")
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
-            // Best-effort cleanup: startRecording が成功し、かつ cancel 観測された稀ケースで
-            // movieURL 上の録画ファイルを削除。失敗しても terminate 経路を遅延させない。
+            // Best-effort cleanup: when startRecording returns false and cancel
+            // has been observed, the recording may have left a partial file at
+            // movieURL. Remove it best-effort. Failure is tolerated to keep the
+            // terminate path responsive.
             if Task.isCancelled {
                 try? FileManager.default.removeItem(at: movieURL)
             }
