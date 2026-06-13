@@ -499,7 +499,8 @@ extension AppDelegate {
         
         let startedAt = CFAbsoluteTimeGetCurrent()
         printVerbose("TRACE:\(self.className): \(#function) - begin ")
-        
+
+        guard !Task.isCancelled else { return }
         applyRecordingParameters()
         guard !Task.isCancelled else { return }
 
