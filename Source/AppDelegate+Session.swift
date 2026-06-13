@@ -30,7 +30,11 @@ extension AppDelegate {
     
     /// Executes an asynchronous, non-throwing operation synchronously.
     /// - Note: A `() async -> T` block satisfies `() async throws -> T`,
-    ///   so the throwing variant of `AsyncBridge.perform` is reused.
+    ///   so the throwing variant of `AsyncBridge.perform` is reused. The
+    ///   `catch` is intentionally fatal: a non-throwing block cannot
+    ///   produce a `PerformAsyncError` (.timeout / .operationFailed) under
+    ///   normal operation, so reaching it indicates an internal bridge
+    ///   bug rather than a recoverable caller error.
     nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
         do {
             return try AsyncBridge.perform(allowMainThread: true, block)
