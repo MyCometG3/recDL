@@ -485,7 +485,8 @@ extension AppDelegate {
         }
         
         let isRecording = await self.captureSession.isRecording()
-        
+        guard !Task.isCancelled else { return }
+
         guard manager != nil, !isRecording, let movieURL = createMovieURL() else {
             printVerbose("ERROR:\(self.className): \(#function) - Failed to start recording")
             return
@@ -505,7 +506,8 @@ extension AppDelegate {
         guard !Task.isCancelled else { return }
 
         let recordingStarted = await self.captureSession.startRecording(to: movieURL)
-        
+        guard !Task.isCancelled else { return }
+
         if recordingStarted {
             finalizeRecordingStart(sec: sec, movieURL: movieURL)
             
