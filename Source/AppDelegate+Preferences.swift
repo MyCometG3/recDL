@@ -123,8 +123,11 @@ extension AppDelegate {
             }
             
             if menu.item(withTag: selectedTag) == nil {
-                let menuItem = menu.item(at: 0)!
-                selectedTag = menuItem.tag
+                if let menuItem = menu.item(at: 0) {
+                    selectedTag = menuItem.tag
+                }
+                // If no items at all, leave selectedTag as-is; the menu will
+                // be empty and selectedTag will be the previous value.
             }
             
             defaults.setValue(true, forKey: Keys.enableDisplayMode)
@@ -464,11 +467,10 @@ extension AppDelegate {
     }
     
     private func defaultVideoStyleFrom(_ settingInfo:[String:Any]) -> VideoStyle? {
-        if let list = videoStyleListFor(settingInfo), list.count > 0 {
-            let defaultStyle = list.first!
-            return defaultStyle
+        guard let list = videoStyleListFor(settingInfo), let defaultStyle = list.first else {
+            return nil
         }
-        return nil
+        return defaultStyle
     }
     
     private func verifyFieldDominanceOf(_ fd:DLABFieldDominance, for targetDisplayMode:DLABDisplayMode) -> Bool {
