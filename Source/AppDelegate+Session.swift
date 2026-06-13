@@ -10,7 +10,6 @@
 
 import Cocoa
 import CoreVideo
-import os.lock
 @preconcurrency import DLABridging
 import DLABCaptureManager
 
@@ -20,88 +19,28 @@ extension Comparable {
     }
 }
 
-private final class UnfairLockBox: @unchecked Sendable {
-    private var rawLock = os_unfair_lock_s()
-    
-    @inline(__always)
-    func withLock<T>(_ body: () throws -> T) rethrows -> T {
-        os_unfair_lock_lock(&rawLock)
-        defer { os_unfair_lock_unlock(&rawLock) }
-        return try body()
-    }
-}
-
 extension AppDelegate {
-    private final class ThrowingAsyncResultBox<T>: @unchecked Sendable {
-        private let lock = UnfairLockBox()
-        private let semaphore = DispatchSemaphore(value: 0)
-        private var result: Result<T, Error>?
-        
-        func store(_ result: Result<T, Error>) {
-            lock.withLock { self.result = result }
-            semaphore.signal()
-        }
-        
-        func waitAndGet() throws -> T {
-            semaphore.wait()
-            return try lock.withLock {
-                guard let result = result else {
-                    fatalError("Async operation failed to complete - this should never happen")
-                }
-                return try result.get()
-            }
-        }
-    }
-    
-    private final class AsyncResultBox<T>: @unchecked Sendable {
-        private let lock = UnfairLockBox()
-        private let semaphore = DispatchSemaphore(value: 0)
-        private var value: T?
-        
-        func store(_ value: T) {
-            lock.withLock { self.value = value }
-            semaphore.signal()
-        }
-        
-        func waitAndGet() -> T {
-            semaphore.wait()
-            return lock.withLock {
-                guard let value = value else {
-                    fatalError("Async operation failed to complete - this should never happen for non-throwing operations")
-                }
-                return value
-            }
-        }
-    }
-    
     /// Executes an asynchronous, throwing operation synchronously.
-    /// - Note: Uses a detached task so the synchronous semaphore wait does not
-    ///   inherit `@MainActor` and deadlock the main thread.
+    /// - Note: AppleScript handlers invoke this on the main thread, so
+    ///   `allowMainThread: true` is required. Block bodies must not await
+    ///   `@MainActor`-isolated work to avoid deadlock.
     nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async throws -> T) throws -> T {
-        let box = ThrowingAsyncResultBox<T>()
-        
-        Task.detached(priority: .high) { [box, block] in
-            do {
-                box.store(.success(try await block()))
-            } catch {
-                box.store(.failure(error))
-            }
-        }
-        
-        return try box.waitAndGet()
+        return try AsyncBridge.perform(allowMainThread: true, block)
     }
     
     /// Executes an asynchronous, non-throwing operation synchronously.
-    /// - Note: Uses a detached task so the synchronous semaphore wait does not
-    ///   inherit `@MainActor` and deadlock the main thread.
+    /// - Note: A `() async -> T` block satisfies `() async throws -> T`,
+    ///   so the throwing variant of `AsyncBridge.perform` is reused. The
+    ///   `catch` is intentionally fatal: a non-throwing block cannot
+    ///   produce a `PerformAsyncError` (.timeout / .operationFailed) under
+    ///   normal operation, so reaching it indicates an internal bridge
+    ///   bug rather than a recoverable caller error.
     nonisolated func performAsync<T: Sendable>(_ block: @Sendable @escaping () async -> T) -> T {
-        let box = AsyncResultBox<T>()
-        
-        Task.detached(priority: .high) { [box, block] in
-            box.store(await block())
+        do {
+            return try AsyncBridge.perform(allowMainThread: true, block)
+        } catch {
+            fatalError("Non-throwing performAsync unexpectedly threw: \(error)")
         }
-        
-        return box.waitAndGet()
     }
 }
 
